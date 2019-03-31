@@ -2,12 +2,14 @@
 
 namespace app\controllers;
 
-use Yii;
 use app\models\Personas;
 use app\models\PersonasSearch;
+use app\models\Tarifas;
+use Yii;
+use yii\db\Expression;
+use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 
 /**
  * PersonasController implements the CRUD actions for Personas model.
@@ -45,8 +47,23 @@ class PersonasController extends Controller
     }
 
     /**
+     * Lista todos los clientes.
+     * @return mixed
+     */
+    public function actionClientes()
+    {
+        $searchModel = new PersonasSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        return $this->render('clientes', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    /**
      * Displays a single Personas model.
-     * @param integer $id
+     * @param int $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
@@ -76,9 +93,31 @@ class PersonasController extends Controller
     }
 
     /**
+     * Creates a new Clientes model.
+     * If creation is successful, the browser will be redirected to the 'view' page.
+     * @return mixed
+     */
+    public function actionAltaCliente()
+    {
+        $model = new Personas();
+        $model->fecha_alta = new Expression('NOW()');
+        $model->tipo = 'Cliente';
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
+        }
+
+        return $this->render('altaCliente', [
+            'model' => $model,
+            'listaTarifas' => $this->listaTarifas(),
+            'listaMonitores' => $this->listaMonitores(),
+        ]);
+    }
+
+    /**
      * Updates an existing Personas model.
      * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
+     * @param int $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
@@ -98,7 +137,7 @@ class PersonasController extends Controller
     /**
      * Deletes an existing Personas model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
+     * @param int $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
@@ -112,7 +151,7 @@ class PersonasController extends Controller
     /**
      * Finds the Personas model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
+     * @param int $id
      * @return Personas the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
@@ -123,5 +162,27 @@ class PersonasController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    /**
+     * Devuelve un listado de las tarifas.
+     * @return Tarifas
+     */
+    private function listaTarifas()
+    {
+        return Tarifas::find()->select('tarifa')->indexBy('id')->column();
+    }
+
+    /**
+     * Devuelve un listado de personas.
+     * @return Personas que son de tipo monitor
+     */
+    private function listaMonitores()
+    {
+        return Personas::find()
+            ->select('nombre')
+            ->where(['tipo' => 'monitor'])
+            ->indexBy('id')
+            ->column();
     }
 }
