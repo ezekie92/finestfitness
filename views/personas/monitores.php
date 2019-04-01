@@ -44,7 +44,13 @@ $this->params['breadcrumbs'][] = $this->title;
                     return null;
                 },
                 'update'=>function ($url, $model) {
-                    return null;
+                    return Html::a(
+                        'Modificar',
+                        ['personas/modificar-monitor', 'id' => $model->id],
+                        [
+                            'class' => 'btn btn-warning btn-xs'
+                        ]
+                    );
                 },
                 'delete'=>function ($url, $model) {
                     return Html::a(

@@ -6,16 +6,16 @@ use yii\widgets\DetailView;
 /* @var $this yii\web\View */
 /* @var $model app\models\Personas */
 
-if ($model->tipo = 'cliente') {
+if ($model->tipo == 'Cliente') {
     $url = 'clientes';
-} elseif ($model->tipo = 'monitor') {
+} elseif ($model->tipo == 'Monitor') {
     $url = 'monitores';
 } else {
     $url = 'index';
 }
 
 $this->title = $model->nombre;
-$this->params['breadcrumbs'][] = ['label' => ucfirst($url), 'url' => ["$url"]];
+$this->params['breadcrumbs'][] = ['label' => ucfirst($url), 'url' => [$url]];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 ?>
@@ -24,7 +24,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Modificar', ['modificar-' . $model->tipo, 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a('Modificar', ['modificar-' . lcfirst($model->tipo), 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
         <?= Html::a('Dar de baja', ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [
