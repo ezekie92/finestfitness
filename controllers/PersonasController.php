@@ -54,8 +54,25 @@ class PersonasController extends Controller
     {
         $searchModel = new PersonasSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->query->andWhere(['tipo' => 'Cliente']);
 
         return $this->render('clientes', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    /**
+     * Lista todos los monitores.
+     * @return mixed
+     */
+    public function actionMonitores()
+    {
+        $searchModel = new PersonasSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->query->andWhere(['tipo' => 'Monitor']);
+
+        return $this->render('monitores', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
@@ -111,6 +128,26 @@ class PersonasController extends Controller
             'model' => $model,
             'listaTarifas' => $this->listaTarifas(),
             'listaMonitores' => $this->listaMonitores(),
+        ]);
+    }
+
+    /**
+     * Creates a new Monitor model.
+     * If creation is successful, the browser will be redirected to the 'view' page.
+     * @return mixed
+     */
+    public function actionAltaMonitor()
+    {
+        $model = new Personas();
+        $model->fecha_alta = new Expression('NOW()');
+        $model->tipo = 'Monitor';
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
+        }
+
+        return $this->render('altaMonitor', [
+            'model' => $model,
         ]);
     }
 

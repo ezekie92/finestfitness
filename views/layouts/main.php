@@ -46,7 +46,13 @@ AppAsset::register($this);
                     ['label' => 'Alta Clientes', 'url' => ['/personas/alta-cliente']],
                 ],
             ],
-            ['label' => 'Contact', 'url' => ['/site/contact']],
+            [
+                'label' => 'Monitores',
+                'items' => [
+                    ['label' => 'Gestionar', 'url' => ['/personas/monitores']],
+                    ['label' => 'Alta Monitores', 'url' => ['/personas/alta-monitor']],
+                ],
+            ],
             Yii::$app->user->isGuest ? (
                 ['label' => 'Login', 'url' => ['/site/login']]
             ) : (
