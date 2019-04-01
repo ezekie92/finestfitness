@@ -44,17 +44,25 @@ $this->params['breadcrumbs'][] = $this->title;
                     return null;
                 },
                 'update'=>function ($url, $model) {
-                    return null;
+                    return Html::a(
+                        'Modificar',
+                        ['personas/modificar-cliente', 'id' => $model->id],
+                        [
+                            'class' => 'btn btn-warning btn-xs'
+                        ]
+                    );
                 },
                 'delete'=>function ($url, $model) {
                     return Html::a(
                         'Dar de baja',
                         ['personas/delete', 'id' => $model->id],
                         [
-                            'data-method' => 'post',
-                            'data-confirm' => '¿Seguro que desea dar de baja a este cliente?',
-                            'class' => 'btn btn-danger btn-xs'
-                        ]
+                            'class' => 'btn btn-danger',
+                            'data' => [
+                                'confirm' => '¿Seguro que desea dar de baja a este cliente?',
+                                'method' => 'post',
+                            ],
+                        ],
                     );
                 }
             ],],

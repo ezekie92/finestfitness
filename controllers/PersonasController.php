@@ -116,7 +116,7 @@ class PersonasController extends Controller
      */
     public function actionAltaCliente()
     {
-        $model = new Personas();
+        $model = new Personas(['scenario' => Personas::SCENARIO_CREATE]);
         $model->fecha_alta = new Expression('NOW()');
         $model->tipo = 'Cliente';
 
@@ -138,7 +138,7 @@ class PersonasController extends Controller
      */
     public function actionAltaMonitor()
     {
-        $model = new Personas();
+        $model = new Personas(['scenario' => Personas::SCENARIO_CREATE]);
         $model->fecha_alta = new Expression('NOW()');
         $model->tipo = 'Monitor';
 
@@ -168,6 +168,31 @@ class PersonasController extends Controller
 
         return $this->render('update', [
             'model' => $model,
+        ]);
+    }
+
+    /**
+     * Updates an existing Personas model.
+     * If update is successful, the browser will be redirected to the 'view' page.
+     * @param int $id
+     * @return mixed
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    public function actionModificarCliente($id)
+    {
+        $model = $this->findModel($id);
+        $model->scenario = Personas::SCENARIO_UPDATE;
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
+        }
+
+        $model->contrasena = '';
+
+        return $this->render('modificarCliente', [
+            'model' => $model,
+            'listaTarifas' => $this->listaTarifas(),
+            'listaMonitores' => $this->listaMonitores(),
         ]);
     }
 

@@ -2,6 +2,8 @@
 
 namespace app\models;
 
+use Yii;
+
 /**
  * This is the model class for table "personas".
  *
@@ -34,6 +36,8 @@ namespace app\models;
  */
 class Personas extends \yii\db\ActiveRecord
 {
+    const SCENARIO_CREATE = 'create';
+    const SCENARIO_UPDATE = 'update';
     /**
      * {@inheritdoc}
      */
@@ -48,7 +52,9 @@ class Personas extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['nombre', 'email', 'contrasena', 'fecha_nac', 'tipo'], 'required'],
+            [['nombre', 'email', 'fecha_nac', 'tipo'], 'required'],
+            [['contrasena'], 'required', 'on' => [self::SCENARIO_CREATE]],
+            [['contrasena'], 'safe', 'on' => [self::SCENARIO_UPDATE]], // quitar cuando comparemos contraseñas
             [['fecha_nac', 'fecha_alta', 'horario_entrada', 'horario_salida'], 'safe'],
             [['peso', 'altura', 'tarifa', 'monitor'], 'default', 'value' => null],
             [['peso', 'altura', 'tarifa', 'monitor'], 'integer'],
@@ -158,5 +164,26 @@ class Personas extends \yii\db\ActiveRecord
     public function getRutinas()
     {
         return $this->hasMany(Rutinas::className(), ['autor' => 'id'])->inverseOf('autor');
+    }
+
+    public function beforeSave($insert)
+    {
+        if (!parent::beforeSave($insert)) {
+            return false;
+        }
+        if ($insert) {
+            if ($this->scenario === self::SCENARIO_CREATE) {
+                goto salto;
+            }
+        } elseif ($this->scenario === self::SCENARIO_UPDATE) {
+            if ($this->contrasena === '') {
+                $this->contrasena = $this->getOldAttribute('contrasena');
+            } else {
+                salto:
+                $this->contrasena = Yii::$app->security
+                    ->generatePasswordHash($this->contrasena);
+            }
+        }
+        return true;
     }
 }
