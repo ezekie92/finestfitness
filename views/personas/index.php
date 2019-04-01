@@ -37,7 +37,7 @@ $this->params['breadcrumbs'][] = $this->title;
             //'telefono',
             //'tarifa',
             //'fecha_alta',
-            //'tipo',
+            'tipo',
             //'monitor',
             //'horario_entrada',
             //'horario_salida',

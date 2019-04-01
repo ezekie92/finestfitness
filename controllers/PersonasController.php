@@ -197,6 +197,29 @@ class PersonasController extends Controller
     }
 
     /**
+     * Updates an existing Personas model.
+     * If update is successful, the browser will be redirected to the 'view' page.
+     * @param int $id
+     * @return mixed
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    public function actionModificarMonitor($id)
+    {
+        $model = $this->findModel($id);
+        $model->scenario = Personas::SCENARIO_UPDATE;
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
+        }
+
+        $model->contrasena = '';
+
+        return $this->render('modificarMonitor', [
+            'model' => $model,
+        ]);
+    }
+
+    /**
      * Deletes an existing Personas model.
      * Si se realiza el borrado, redirige a la vista del tipo borrado, o a index
      * si fuese otro tipo distinto a Cliente o Monitor.

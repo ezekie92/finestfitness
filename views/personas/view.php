@@ -6,9 +6,9 @@ use yii\widgets\DetailView;
 /* @var $this yii\web\View */
 /* @var $model app\models\Personas */
 
-if ($model->tipo = 'cliente') {
+if ($model->tipo == 'Cliente') {
     $url = 'clientes';
-} elseif ($model->tipo = 'monitor') {
+} elseif ($model->tipo == 'Monitor') {
     $url = 'monitores';
 } else {
     $url = 'index';
