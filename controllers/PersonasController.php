@@ -173,15 +173,21 @@ class PersonasController extends Controller
 
     /**
      * Deletes an existing Personas model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
+     * Si se realiza el borrado, redirige a la vista del tipo borrado, o a index
+     * si fuese otro tipo distinto a Cliente o Monitor.
      * @param int $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
-
+        if ($this->findModel($id)->tipo == 'Cliente') {
+            $this->findModel($id)->delete();
+            return $this->redirect(['clientes']);
+        } elseif ($this->findModel($id)->tipo == 'Monitor') {
+            $this->findModel($id)->delete();
+            return $this->redirect(['monitores']);
+        }
         return $this->redirect(['index']);
     }
 
