@@ -883,6 +883,15 @@
 | **Entrega**     | v1             |
 | **Incidencia**  | [98](https://github.com/ezekie92/finestfitness/issues/98) |
 
+| **R99**     | **Login y Logout**         |
+| --------------: | :------------------- |
+| **Descripción** | Un usuario creado podrá loguearse y cerrar sesión en la aplicación.             |
+| **Prioridad**   | Importante           |
+| **Tipo**        | Funcional                |
+| **Complejidad** | Fácil         |
+| **Entrega**     | v1             |
+| **Incidencia**  | [107](https://github.com/ezekie92/finestfitness/issues/107) |
+
 
 ## Cuadro resumen
 
@@ -986,3 +995,4 @@
 | (**R96**) Ejercicios | Importante | Información | Fácil | v1 | [96](https://github.com/ezekie92/finestfitness/issues/96) |
 | (**R97**) Horarios | Importante | Información | Fácil | v1 | [97](https://github.com/ezekie92/finestfitness/issues/97) |
 | (**R98**) Tarifas | Importante | Información | Fácil | v1 | [98](https://github.com/ezekie92/finestfitness/issues/98) |
+| (**R99**) Login y Logout | Importante | Funcional | Fácil | v1 | [107](https://github.com/ezekie92/finestfitness/issues/107) |
