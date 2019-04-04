@@ -7,11 +7,11 @@ namespace app\models;
  *
  * @property int $id
  * @property string $nombre
- * @property int $ejercicios
- * @property int $autor
+ * @property int $ejercicio
+ * @property int $dia
  *
- * @property Ejercicios $ejercicios0
- * @property Personas $autor0
+ * @property Dias $dia
+ * @property Ejercicios $ejercicio
  */
 class Rutinas extends \yii\db\ActiveRecord
 {
@@ -29,12 +29,12 @@ class Rutinas extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['nombre', 'ejercicios', 'autor'], 'required'],
-            [['ejercicios', 'autor'], 'default', 'value' => null],
-            [['ejercicios', 'autor'], 'integer'],
+            [['nombre', 'ejercicio', 'dia'], 'required'],
+            [['ejercicio', 'dia'], 'default', 'value' => null],
+            [['ejercicio', 'dia'], 'integer'],
             [['nombre'], 'string', 'max' => 25],
-            [['ejercicios'], 'exist', 'skipOnError' => true, 'targetClass' => Ejercicios::className(), 'targetAttribute' => ['ejercicios' => 'id']],
-            [['autor'], 'exist', 'skipOnError' => true, 'targetClass' => Personas::className(), 'targetAttribute' => ['autor' => 'id']],
+            [['dia'], 'exist', 'skipOnError' => true, 'targetClass' => Dias::className(), 'targetAttribute' => ['dia' => 'id']],
+            [['ejercicio'], 'exist', 'skipOnError' => true, 'targetClass' => Ejercicios::className(), 'targetAttribute' => ['ejercicio' => 'id']],
         ];
     }
 
@@ -46,9 +46,17 @@ class Rutinas extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'nombre' => 'Nombre',
-            'ejercicios' => 'Ejercicios',
-            'autor' => 'Autor',
+            'ejercicio' => 'Ejercicio',
+            'dia' => 'Dia',
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getDia()
+    {
+        return $this->hasOne(Dias::className(), ['id' => 'dia'])->inverseOf('rutinas');
     }
 
     /**
@@ -56,14 +64,6 @@ class Rutinas extends \yii\db\ActiveRecord
      */
     public function getEjercicio()
     {
-        return $this->hasOne(Ejercicios::className(), ['id' => 'ejercicios'])->inverseOf('rutinas');
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getAutor()
-    {
-        return $this->hasOne(Personas::className(), ['id' => 'autor'])->inverseOf('rutinas');
+        return $this->hasOne(Ejercicios::className(), ['id' => 'ejercicio'])->inverseOf('rutinas');
     }
 }

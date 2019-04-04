@@ -2,6 +2,8 @@
 
 namespace app\models;
 
+use Yii;
+
 /**
  * This is the model class for table "tarifas".
  *
@@ -11,7 +13,7 @@ namespace app\models;
  * @property string $hora_entrada_min
  * @property string $hora_entrada_max
  *
- * @property Personas[] $personas
+ * @property Clientes[] $clientes
  */
 class Tarifas extends \yii\db\ActiveRecord
 {
@@ -54,8 +56,8 @@ class Tarifas extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getPersonas()
+    public function getClientes()
     {
-        return $this->hasMany(Personas::className(), ['tarifa' => 'id'])->inverseOf('tarifa');
+        return $this->hasMany(Clientes::className(), ['tarifa' => 'id'])->inverseOf('tarifa');
     }
 }

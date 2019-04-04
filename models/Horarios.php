@@ -2,15 +2,15 @@
 
 namespace app\models;
 
-use Yii;
-
 /**
  * This is the model class for table "horarios".
  *
  * @property int $id
- * @property string $dia
+ * @property int $dia
  * @property string $apertura
  * @property string $cierre
+ *
+ * @property Dias $dia
  */
 class Horarios extends \yii\db\ActiveRecord
 {
@@ -29,8 +29,10 @@ class Horarios extends \yii\db\ActiveRecord
     {
         return [
             [['dia', 'apertura', 'cierre'], 'required'],
+            [['dia'], 'default', 'value' => null],
+            [['dia'], 'integer'],
             [['apertura', 'cierre'], 'safe'],
-            [['dia'], 'string', 'max' => 15],
+            [['dia'], 'exist', 'skipOnError' => true, 'targetClass' => Dias::className(), 'targetAttribute' => ['dia' => 'id']],
         ];
     }
 
@@ -45,5 +47,13 @@ class Horarios extends \yii\db\ActiveRecord
             'apertura' => 'Apertura',
             'cierre' => 'Cierre',
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getDia()
+    {
+        return $this->hasOne(Dias::className(), ['id' => 'dia'])->inverseOf('horarios');
     }
 }
