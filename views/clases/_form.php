@@ -18,6 +18,8 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'hora_fin')->textInput() ?>
 
+    <?= $form->field($model, 'dia')->textInput() ?>
+
     <?= $form->field($model, 'monitor')->textInput() ?>
 
     <?= $form->field($model, 'plazas')->textInput() ?>

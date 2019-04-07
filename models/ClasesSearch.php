@@ -17,7 +17,7 @@ class ClasesSearch extends Clases
     public function rules()
     {
         return [
-            [['id', 'monitor', 'plazas'], 'integer'],
+            [['id', 'dia', 'monitor', 'plazas'], 'integer'],
             [['nombre', 'hora_inicio', 'hora_fin'], 'safe'],
         ];
     }
@@ -61,6 +61,7 @@ class ClasesSearch extends Clases
             'id' => $this->id,
             'hora_inicio' => $this->hora_inicio,
             'hora_fin' => $this->hora_fin,
+            'dia' => $this->dia,
             'monitor' => $this->monitor,
             'plazas' => $this->plazas,
         ]);

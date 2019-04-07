@@ -4,12 +4,11 @@ namespace app\models;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\Personas;
 
 /**
- * PersonasSearch represents the model behind the search form of `app\models\Personas`.
+ * ClientesSearch represents the model behind the search form of `app\models\Clientes`.
  */
-class PersonasSearch extends Personas
+class ClientesSearch extends Clientes
 {
     /**
      * {@inheritdoc}
@@ -18,7 +17,7 @@ class PersonasSearch extends Personas
     {
         return [
             [['id', 'peso', 'altura', 'tarifa', 'monitor'], 'integer'],
-            [['nombre', 'email', 'contrasena', 'fecha_nac', 'foto', 'fecha_alta', 'tipo', 'horario_entrada', 'horario_salida', 'especialidad'], 'safe'],
+            [['nombre', 'email', 'contrasena', 'fecha_nac', 'foto', 'fecha_alta'], 'safe'],
             [['telefono'], 'number'],
         ];
     }
@@ -33,7 +32,7 @@ class PersonasSearch extends Personas
     }
 
     /**
-     * Creates data provider instance with search query applied
+     * Creates data provider instance with search query applied.
      *
      * @param array $params
      *
@@ -41,7 +40,7 @@ class PersonasSearch extends Personas
      */
     public function search($params)
     {
-        $query = Personas::find();
+        $query = Clientes::find();
 
         // add conditions that should always apply here
 
@@ -67,16 +66,12 @@ class PersonasSearch extends Personas
             'tarifa' => $this->tarifa,
             'fecha_alta' => $this->fecha_alta,
             'monitor' => $this->monitor,
-            'horario_entrada' => $this->horario_entrada,
-            'horario_salida' => $this->horario_salida,
         ]);
 
         $query->andFilterWhere(['ilike', 'nombre', $this->nombre])
             ->andFilterWhere(['ilike', 'email', $this->email])
             ->andFilterWhere(['ilike', 'contrasena', $this->contrasena])
-            ->andFilterWhere(['ilike', 'foto', $this->foto])
-            ->andFilterWhere(['ilike', 'tipo', $this->tipo])
-            ->andFilterWhere(['ilike', 'especialidad', $this->especialidad]);
+            ->andFilterWhere(['ilike', 'foto', $this->foto]);
 
         return $dataProvider;
     }

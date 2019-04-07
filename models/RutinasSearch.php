@@ -17,7 +17,7 @@ class RutinasSearch extends Rutinas
     public function rules()
     {
         return [
-            [['id', 'ejercicios', 'autor'], 'integer'],
+            [['id', 'ejercicio', 'dia'], 'integer'],
             [['nombre'], 'safe'],
         ];
     }
@@ -59,8 +59,8 @@ class RutinasSearch extends Rutinas
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'ejercicios' => $this->ejercicios,
-            'autor' => $this->autor,
+            'ejercicio' => $this->ejercicio,
+            'dia' => $this->dia,
         ]);
 
         $query->andFilterWhere(['ilike', 'nombre', $this->nombre]);

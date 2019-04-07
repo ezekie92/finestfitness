@@ -1,0 +1,146 @@
+<?php
+
+namespace app\models;
+
+use Yii;
+
+/**
+ * This is the model class for table "monitores".
+ *
+ * @property int $id
+ * @property string $nombre
+ * @property string $email
+ * @property string $contrasena
+ * @property string $fecha_nac
+ * @property string $foto
+ * @property string $telefono
+ * @property string $horario_entrada
+ * @property string $horario_salida
+ * @property int $especialidad
+ *
+ * @property Clases[] $clases
+ * @property Clientes[] $clientes
+ * @property Entrenamientos[] $entrenamientos
+ * @property Clientes[] $clientes0
+ */
+class Monitores extends \yii\db\ActiveRecord
+{
+    /**
+     * Escenario para la creación de clientes.
+     * @var string
+     */
+    const SCENARIO_CREATE = 'create';
+    /**
+     * Escenario para la modificación de clientes.
+     * @var string
+     */
+    const SCENARIO_UPDATE = 'update';
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function tableName()
+    {
+        return 'monitores';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function rules()
+    {
+        return [
+            [['nombre', 'email', 'fecha_nac', 'especialidad'], 'required'],
+            [['contrasena'], 'required', 'on' => [self::SCENARIO_CREATE]],
+            [['contrasena'], 'safe', 'on' => [self::SCENARIO_UPDATE]], // quitar en el futuro si comparamos contraseñas
+            [['fecha_nac', 'horario_entrada', 'horario_salida'], 'safe'],
+            [['telefono'], 'number'],
+            [['especialidad'], 'default', 'value' => null],
+            [['especialidad'], 'integer'],
+            [['nombre'], 'string', 'max' => 32],
+            [['email', 'contrasena'], 'string', 'max' => 60],
+            [['foto'], 'string', 'max' => 255],
+            [['email'], 'unique'],
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function attributeLabels()
+    {
+        return [
+            'id' => 'ID',
+            'nombre' => 'Nombre',
+            'email' => 'Email',
+            'contrasena' => 'Contraseña',
+            'fecha_nac' => 'Fecha de nacimiento',
+            'foto' => 'Foto',
+            'telefono' => 'Telefono',
+            'horario_entrada' => 'Inicio jornada',
+            'horario_salida' => 'Fin jornada',
+            'especialidad' => 'Especialidad',
+        ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getClases()
+    {
+        return $this->hasMany(Clases::className(), ['monitor' => 'id'])->inverseOf('monitor');
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getClientes()
+    {
+        return $this->hasMany(Clientes::className(), ['monitor' => 'id'])->inverseOf('monitor');
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getEntrenamientos()
+    {
+        return $this->hasMany(Entrenamientos::className(), ['monitor_id' => 'id'])->inverseOf('monitor');
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getClientesEntrenamientos()
+    {
+        return $this->hasMany(Clientes::className(), ['id' => 'cliente_id'])->viaTable('entrenamientos', ['monitor_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getEsp()
+    {
+        return $this->hasOne(Especialidades::className(), ['id' => 'especialidad'])->inverseOf('monitores');
+    }
+
+    public function beforeSave($insert)
+    {
+        if (!parent::beforeSave($insert)) {
+            return false;
+        }
+        if ($insert) {
+            if ($this->scenario === self::SCENARIO_CREATE) {
+                goto salto;
+            }
+        } elseif ($this->scenario === self::SCENARIO_UPDATE) {
+            if ($this->contrasena === '') {
+                $this->contrasena = $this->getOldAttribute('contrasena');
+            } else {
+                salto:
+                $this->contrasena = Yii::$app->security
+                    ->generatePasswordHash($this->contrasena);
+            }
+        }
+        return true;
+    }
+}

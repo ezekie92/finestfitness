@@ -6,12 +6,14 @@ namespace app\models;
  * This is the model class for table "entrenamientos".
  *
  * @property int $cliente_id
- * @property int $entrenador_id
+ * @property int $monitor_id
  * @property string $hora_inicio
  * @property string $hora_fin
+ * @property int $dia
  *
- * @property Personas $cliente
- * @property Personas $entrenador
+ * @property Clientes $cliente
+ * @property Dias $dia
+ * @property Monitores $monitor
  */
 class Entrenamientos extends \yii\db\ActiveRecord
 {
@@ -29,13 +31,14 @@ class Entrenamientos extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['cliente_id', 'entrenador_id'], 'required'],
-            [['cliente_id', 'entrenador_id'], 'default', 'value' => null],
-            [['cliente_id', 'entrenador_id'], 'integer'],
+            [['cliente_id', 'monitor_id', 'dia'], 'required'],
+            [['cliente_id', 'monitor_id', 'dia'], 'default', 'value' => null],
+            [['cliente_id', 'monitor_id', 'dia'], 'integer'],
             [['hora_inicio', 'hora_fin'], 'safe'],
-            [['cliente_id', 'entrenador_id'], 'unique', 'targetAttribute' => ['cliente_id', 'entrenador_id']],
-            [['cliente_id'], 'exist', 'skipOnError' => true, 'targetClass' => Personas::className(), 'targetAttribute' => ['cliente_id' => 'id']],
-            [['entrenador_id'], 'exist', 'skipOnError' => true, 'targetClass' => Personas::className(), 'targetAttribute' => ['entrenador_id' => 'id']],
+            [['cliente_id', 'monitor_id'], 'unique', 'targetAttribute' => ['cliente_id', 'monitor_id']],
+            [['cliente_id'], 'exist', 'skipOnError' => true, 'targetClass' => Clientes::className(), 'targetAttribute' => ['cliente_id' => 'id']],
+            [['dia'], 'exist', 'skipOnError' => true, 'targetClass' => Dias::className(), 'targetAttribute' => ['dia' => 'id']],
+            [['monitor_id'], 'exist', 'skipOnError' => true, 'targetClass' => Monitores::className(), 'targetAttribute' => ['monitor_id' => 'id']],
         ];
     }
 
@@ -46,9 +49,10 @@ class Entrenamientos extends \yii\db\ActiveRecord
     {
         return [
             'cliente_id' => 'Cliente ID',
-            'entrenador_id' => 'Entrenador ID',
+            'monitor_id' => 'Monitor ID',
             'hora_inicio' => 'Hora Inicio',
             'hora_fin' => 'Hora Fin',
+            'dia' => 'Dia',
         ];
     }
 
@@ -57,14 +61,22 @@ class Entrenamientos extends \yii\db\ActiveRecord
      */
     public function getCliente()
     {
-        return $this->hasOne(Personas::className(), ['id' => 'cliente_id'])->inverseOf('entrenamientosCliente');
+        return $this->hasOne(Clientes::className(), ['id' => 'cliente_id'])->inverseOf('entrenamientos');
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getEntrenador()
+    public function getDia()
     {
-        return $this->hasOne(Personas::className(), ['id' => 'entrenador_id'])->inverseOf('entrenamientosEntrenador');
+        return $this->hasOne(Dias::className(), ['id' => 'dia'])->inverseOf('entrenamientos');
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getMonitor()
+    {
+        return $this->hasOne(Monitores::className(), ['id' => 'monitor_id'])->inverseOf('entrenamientos');
     }
 }

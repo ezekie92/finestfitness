@@ -9,10 +9,12 @@ namespace app\models;
  * @property string $nombre
  * @property string $hora_inicio
  * @property string $hora_fin
+ * @property int $dia
  * @property int $monitor
  * @property int $plazas
  *
- * @property Personas $monitor0
+ * @property Dias $dia
+ * @property Monitores $monitor
  */
 class Clases extends \yii\db\ActiveRecord
 {
@@ -30,12 +32,13 @@ class Clases extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['nombre', 'hora_inicio', 'hora_fin', 'monitor'], 'required'],
+            [['nombre', 'hora_inicio', 'hora_fin', 'dia', 'monitor'], 'required'],
             [['hora_inicio', 'hora_fin'], 'safe'],
-            [['monitor', 'plazas'], 'default', 'value' => null],
-            [['monitor', 'plazas'], 'integer'],
+            [['dia', 'monitor', 'plazas'], 'default', 'value' => null],
+            [['dia', 'monitor', 'plazas'], 'integer'],
             [['nombre'], 'string', 'max' => 32],
-            [['monitor'], 'exist', 'skipOnError' => true, 'targetClass' => Personas::className(), 'targetAttribute' => ['monitor' => 'id']],
+            [['dia'], 'exist', 'skipOnError' => true, 'targetClass' => Dias::className(), 'targetAttribute' => ['dia' => 'id']],
+            [['monitor'], 'exist', 'skipOnError' => true, 'targetClass' => Monitores::className(), 'targetAttribute' => ['monitor' => 'id']],
         ];
     }
 
@@ -49,6 +52,7 @@ class Clases extends \yii\db\ActiveRecord
             'nombre' => 'Nombre',
             'hora_inicio' => 'Hora Inicio',
             'hora_fin' => 'Hora Fin',
+            'dia' => 'Dia',
             'monitor' => 'Monitor',
             'plazas' => 'Plazas',
         ];
@@ -57,8 +61,16 @@ class Clases extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getMonitorClase()
+    public function getDia()
     {
-        return $this->hasOne(Personas::className(), ['id' => 'monitor'])->inverseOf('clases');
+        return $this->hasOne(Dias::className(), ['id' => 'dia'])->inverseOf('clases');
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getMonitor()
+    {
+        return $this->hasOne(Monitores::className(), ['id' => 'monitor'])->inverseOf('clases');
     }
 }

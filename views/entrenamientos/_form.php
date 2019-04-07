@@ -14,11 +14,13 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'cliente_id')->textInput() ?>
 
-    <?= $form->field($model, 'entrenador_id')->textInput() ?>
+    <?= $form->field($model, 'monitor_id')->textInput() ?>
 
     <?= $form->field($model, 'hora_inicio')->textInput() ?>
 
     <?= $form->field($model, 'hora_fin')->textInput() ?>
+
+    <?= $form->field($model, 'dia')->textInput() ?>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>

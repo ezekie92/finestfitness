@@ -4,12 +4,12 @@ namespace app\models;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\Horarios;
+use app\models\Dias;
 
 /**
- * HorariosSearch represents the model behind the search form of `app\models\Horarios`.
+ * DiasSearch represents the model behind the search form of `app\models\Dias`.
  */
-class HorariosSearch extends Horarios
+class DiasSearch extends Dias
 {
     /**
      * {@inheritdoc}
@@ -17,8 +17,8 @@ class HorariosSearch extends Horarios
     public function rules()
     {
         return [
-            [['id', 'dia'], 'integer'],
-            [['apertura', 'cierre'], 'safe'],
+            [['id'], 'integer'],
+            [['dia'], 'safe'],
         ];
     }
 
@@ -40,7 +40,7 @@ class HorariosSearch extends Horarios
      */
     public function search($params)
     {
-        $query = Horarios::find();
+        $query = Dias::find();
 
         // add conditions that should always apply here
 
@@ -59,10 +59,9 @@ class HorariosSearch extends Horarios
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'dia' => $this->dia,
-            'apertura' => $this->apertura,
-            'cierre' => $this->cierre,
         ]);
+
+        $query->andFilterWhere(['ilike', 'dia', $this->dia]);
 
         return $dataProvider;
     }
