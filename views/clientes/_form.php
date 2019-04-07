@@ -24,15 +24,11 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'altura')->textInput() ?>
 
-    <?= $form->field($model, 'foto')->textInput(['maxlength' => true]) ?>
-
     <?= $form->field($model, 'telefono')->textInput() ?>
 
-    <?= $form->field($model, 'tarifa')->textInput() ?>
+    <?= $form->field($model, 'tarifa')->dropDownList($listaTarifas) ?>
 
-    <?= $form->field($model, 'fecha_alta')->textInput() ?>
-
-    <?= $form->field($model, 'monitor')->textInput() ?>
+    <?= $form->field($model, 'monitor')->dropDownList($listaMonitores, ['prompt' => 'Sin monitor']) ?>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>

@@ -24,6 +24,17 @@ namespace app\models;
 class Monitores extends \yii\db\ActiveRecord
 {
     /**
+     * Escenario para la creación de clientes.
+     * @var string
+     */
+    const SCENARIO_CREATE = 'create';
+    /**
+     * Escenario para la modificación de clientes.
+     * @var string
+     */
+    const SCENARIO_UPDATE = 'update';
+
+    /**
      * {@inheritdoc}
      */
     public static function tableName()
@@ -37,7 +48,9 @@ class Monitores extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['nombre', 'email', 'contrasena', 'fecha_nac', 'especialidad'], 'required'],
+            [['nombre', 'email', 'fecha_nac', 'especialidad'], 'required'],
+            [['contrasena'], 'required', 'on' => [self::SCENARIO_CREATE]],
+            [['contrasena'], 'safe', 'on' => [self::SCENARIO_UPDATE]], // quitar en el futuro si comparamos contraseñas
             [['fecha_nac', 'horario_entrada', 'horario_salida'], 'safe'],
             [['telefono'], 'number'],
             [['especialidad'], 'default', 'value' => null],
@@ -58,12 +71,12 @@ class Monitores extends \yii\db\ActiveRecord
             'id' => 'ID',
             'nombre' => 'Nombre',
             'email' => 'Email',
-            'contrasena' => 'Contrasena',
-            'fecha_nac' => 'Fecha Nac',
+            'contrasena' => 'Contraseña',
+            'fecha_nac' => 'Fecha de nacimiento',
             'foto' => 'Foto',
             'telefono' => 'Telefono',
-            'horario_entrada' => 'Horario Entrada',
-            'horario_salida' => 'Horario Salida',
+            'horario_entrada' => 'Inicio jornada',
+            'horario_salida' => 'Fin jornada',
             'especialidad' => 'Especialidad',
         ];
     }
@@ -106,5 +119,26 @@ class Monitores extends \yii\db\ActiveRecord
     public function getEsp()
     {
         return $this->hasOne(Especialidades::className(), ['id' => 'especialidad'])->inverseOf('monitores');
+    }
+
+    public function beforeSave($insert)
+    {
+        if (!parent::beforeSave($insert)) {
+            return false;
+        }
+        if ($insert) {
+            if ($this->scenario === self::SCENARIO_CREATE) {
+                goto salto;
+            }
+        } elseif ($this->scenario === self::SCENARIO_UPDATE) {
+            if ($this->contrasena === '') {
+                $this->contrasena = $this->getOldAttribute('contrasena');
+            } else {
+                salto:
+                $this->contrasena = Yii::$app->security
+                    ->generatePasswordHash($this->contrasena);
+            }
+        }
+        return true;
     }
 }

@@ -2,6 +2,8 @@
 
 namespace app\models;
 
+use Yii;
+
 /**
  * This is the model class for table "clientes".
  *
@@ -26,6 +28,17 @@ namespace app\models;
 class Clientes extends \yii\db\ActiveRecord
 {
     /**
+     * Escenario para la creación de clientes.
+     * @var string
+     */
+    const SCENARIO_CREATE = 'create';
+    /**
+     * Escenario para la modificación de clientes.
+     * @var string
+     */
+    const SCENARIO_UPDATE = 'update';
+
+    /**
      * {@inheritdoc}
      */
     public static function tableName()
@@ -39,7 +52,9 @@ class Clientes extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['nombre', 'email', 'contrasena', 'fecha_nac', 'tarifa'], 'required'],
+            [['nombre', 'email', 'fecha_nac', 'tarifa'], 'required'],
+            [['contrasena'], 'required', 'on' => [self::SCENARIO_CREATE]],
+            [['contrasena'], 'safe', 'on' => [self::SCENARIO_UPDATE]], // quitar en el futuro si comparamos contraseñas
             [['fecha_nac', 'fecha_alta'], 'safe'],
             [['peso', 'altura', 'tarifa', 'monitor'], 'default', 'value' => null],
             [['peso', 'altura', 'tarifa', 'monitor'], 'integer'],
@@ -104,5 +119,26 @@ class Clientes extends \yii\db\ActiveRecord
     public function getMonitores()
     {
         return $this->hasMany(Monitores::className(), ['id' => 'monitor_id'])->viaTable('entrenamientos', ['cliente_id' => 'id']);
+    }
+
+    public function beforeSave($insert)
+    {
+        if (!parent::beforeSave($insert)) {
+            return false;
+        }
+        if ($insert) {
+            if ($this->scenario === self::SCENARIO_CREATE) {
+                goto salto;
+            }
+        } elseif ($this->scenario === self::SCENARIO_UPDATE) {
+            if ($this->contrasena === '') {
+                $this->contrasena = $this->getOldAttribute('contrasena');
+            } else {
+                salto:
+                $this->contrasena = Yii::$app->security
+                    ->generatePasswordHash($this->contrasena);
+            }
+        }
+        return true;
     }
 }

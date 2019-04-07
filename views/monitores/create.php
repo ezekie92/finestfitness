@@ -5,7 +5,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\Monitores */
 
-$this->title = 'Create Monitores';
+$this->title = 'Alta de monitor';
 $this->params['breadcrumbs'][] = ['label' => 'Monitores', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -15,6 +15,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= $this->render('_form', [
         'model' => $model,
+        'listaEsp' => $listaEsp,
     ]) ?>
 
 </div>
