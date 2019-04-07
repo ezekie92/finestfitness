@@ -34,7 +34,35 @@ $this->params['breadcrumbs'][] = $this->title;
             'horario_salida:time',
             'esp.especialidad',
 
-            ['class' => 'yii\grid\ActionColumn'],
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'header' => 'Acciones',
+                'buttons'=>[
+                    'view'=>function ($url, $model) {
+                        return null;
+                    },
+                    'update'=>function ($url, $model) {
+                        return Html::a(
+                            'Modificar',
+                            ['monitores/update', 'id' => $model->id],
+                            ['class' => 'btn btn-warning btn-xs']
+                        );
+                    },
+                    'delete'=>function ($url, $model) {
+                        return Html::a(
+                            'Dar de baja',
+                            ['monitores/delete', 'id' => $model->id],
+                            [
+                                'class' => 'btn btn-danger btn-xs',
+                                'data' => [
+                                    'confirm' => '¿Seguro que desea dar de baja a ' . $model->nombre . '?',
+                                    'method' => 'post',
+                                ],
+                            ],
+                        );
+                    }
+                ]
+            ],
         ],
     ]); ?>
 

@@ -36,7 +36,35 @@ $this->params['breadcrumbs'][] = $this->title;
             'fecha_alta:date',
             'entrenador.nombre:text:Monitor',
 
-            ['class' => 'yii\grid\ActionColumn'],
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'header' => 'Acciones',
+                'buttons'=>[
+                    'view'=>function ($url, $model) {
+                        return null;
+                    },
+                    'update'=>function ($url, $model) {
+                        return Html::a(
+                            'Modificar',
+                            ['clientes/update', 'id' => $model->id],
+                            ['class' => 'btn btn-warning btn-xs']
+                        );
+                    },
+                    'delete'=>function ($url, $model) {
+                        return Html::a(
+                            'Dar de baja',
+                            ['clientes/delete', 'id' => $model->id],
+                            [
+                                'class' => 'btn btn-danger btn-xs',
+                                'data' => [
+                                    'confirm' => '¿Seguro que desea dar de baja a ' . $model->nombre . '?',
+                                    'method' => 'post',
+                                ],
+                            ],
+                        );
+                    }
+                ]
+            ],
         ],
     ]); ?>
 
