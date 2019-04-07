@@ -30,7 +30,8 @@ $this->params['breadcrumbs'][] = $this->title;
             'nombre',
             'hora_inicio',
             'hora_fin',
-            'monitor',
+            'dia',
+            //'monitor',
             //'plazas',
 
             ['class' => 'yii\grid\ActionColumn'],

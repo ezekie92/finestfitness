@@ -4,12 +4,12 @@ namespace app\models;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\Horarios;
+use app\models\Monitores;
 
 /**
- * HorariosSearch represents the model behind the search form of `app\models\Horarios`.
+ * MonitoresSearch represents the model behind the search form of `app\models\Monitores`.
  */
-class HorariosSearch extends Horarios
+class MonitoresSearch extends Monitores
 {
     /**
      * {@inheritdoc}
@@ -17,8 +17,9 @@ class HorariosSearch extends Horarios
     public function rules()
     {
         return [
-            [['id', 'dia'], 'integer'],
-            [['apertura', 'cierre'], 'safe'],
+            [['id', 'especialidad'], 'integer'],
+            [['nombre', 'email', 'contrasena', 'fecha_nac', 'foto', 'horario_entrada', 'horario_salida'], 'safe'],
+            [['telefono'], 'number'],
         ];
     }
 
@@ -40,7 +41,7 @@ class HorariosSearch extends Horarios
      */
     public function search($params)
     {
-        $query = Horarios::find();
+        $query = Monitores::find();
 
         // add conditions that should always apply here
 
@@ -59,10 +60,17 @@ class HorariosSearch extends Horarios
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'dia' => $this->dia,
-            'apertura' => $this->apertura,
-            'cierre' => $this->cierre,
+            'fecha_nac' => $this->fecha_nac,
+            'telefono' => $this->telefono,
+            'horario_entrada' => $this->horario_entrada,
+            'horario_salida' => $this->horario_salida,
+            'especialidad' => $this->especialidad,
         ]);
+
+        $query->andFilterWhere(['ilike', 'nombre', $this->nombre])
+            ->andFilterWhere(['ilike', 'email', $this->email])
+            ->andFilterWhere(['ilike', 'contrasena', $this->contrasena])
+            ->andFilterWhere(['ilike', 'foto', $this->foto]);
 
         return $dataProvider;
     }

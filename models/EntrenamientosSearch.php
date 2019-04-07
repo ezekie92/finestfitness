@@ -17,7 +17,7 @@ class EntrenamientosSearch extends Entrenamientos
     public function rules()
     {
         return [
-            [['cliente_id', 'entrenador_id'], 'integer'],
+            [['cliente_id', 'monitor_id', 'dia'], 'integer'],
             [['hora_inicio', 'hora_fin'], 'safe'],
         ];
     }
@@ -59,9 +59,10 @@ class EntrenamientosSearch extends Entrenamientos
         // grid filtering conditions
         $query->andFilterWhere([
             'cliente_id' => $this->cliente_id,
-            'entrenador_id' => $this->entrenador_id,
+            'monitor_id' => $this->monitor_id,
             'hora_inicio' => $this->hora_inicio,
             'hora_fin' => $this->hora_fin,
+            'dia' => $this->dia,
         ]);
 
         return $dataProvider;

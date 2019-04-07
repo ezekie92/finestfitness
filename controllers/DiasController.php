@@ -2,17 +2,17 @@
 
 namespace app\controllers;
 
-use app\models\Entrenamientos;
-use app\models\EntrenamientosSearch;
 use Yii;
-use yii\filters\VerbFilter;
+use app\models\Dias;
+use app\models\DiasSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use yii\filters\VerbFilter;
 
 /**
- * EntrenamientosController implements the CRUD actions for Entrenamientos model.
+ * DiasController implements the CRUD actions for Dias model.
  */
-class EntrenamientosController extends Controller
+class DiasController extends Controller
 {
     /**
      * {@inheritdoc}
@@ -30,12 +30,12 @@ class EntrenamientosController extends Controller
     }
 
     /**
-     * Lists all Entrenamientos models.
+     * Lists all Dias models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new EntrenamientosSearch();
+        $searchModel = new DiasSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -45,30 +45,29 @@ class EntrenamientosController extends Controller
     }
 
     /**
-     * Displays a single Entrenamientos model.
-     * @param int $cliente_id
-     * @param int $monitor_id
+     * Displays a single Dias model.
+     * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionView($cliente_id, $monitor_id)
+    public function actionView($id)
     {
         return $this->render('view', [
-            'model' => $this->findModel($cliente_id, $monitor_id),
+            'model' => $this->findModel($id),
         ]);
     }
 
     /**
-     * Creates a new Entrenamientos model.
+     * Creates a new Dias model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Entrenamientos();
+        $model = new Dias();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'cliente_id' => $model->cliente_id, 'monitor_id' => $model->monitor_id]);
+            return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('create', [
@@ -77,19 +76,18 @@ class EntrenamientosController extends Controller
     }
 
     /**
-     * Updates an existing Entrenamientos model.
+     * Updates an existing Dias model.
      * If update is successful, the browser will be redirected to the 'view' page.
-     * @param int $cliente_id
-     * @param int $monitor_id
+     * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdate($cliente_id, $monitor_id)
+    public function actionUpdate($id)
     {
-        $model = $this->findModel($cliente_id, $monitor_id);
+        $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'cliente_id' => $model->cliente_id, 'monitor_id' => $model->monitor_id]);
+            return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('update', [
@@ -98,31 +96,29 @@ class EntrenamientosController extends Controller
     }
 
     /**
-     * Deletes an existing Entrenamientos model.
+     * Deletes an existing Dias model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param int $cliente_id
-     * @param int $monitor_id
+     * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionDelete($cliente_id, $monitor_id)
+    public function actionDelete($id)
     {
-        $this->findModel($cliente_id, $monitor_id)->delete();
+        $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
     }
 
     /**
-     * Finds the Entrenamientos model based on its primary key value.
+     * Finds the Dias model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param int $cliente_id
-     * @param int $monitor_id
-     * @return Entrenamientos the loaded model
+     * @param integer $id
+     * @return Dias the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($cliente_id, $monitor_id)
+    protected function findModel($id)
     {
-        if (($model = Entrenamientos::findOne(['cliente_id' => $cliente_id, 'monitor_id' => $monitor_id])) !== null) {
+        if (($model = Dias::findOne($id)) !== null) {
             return $model;
         }
 
