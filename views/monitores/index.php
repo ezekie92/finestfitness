@@ -26,16 +26,13 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
             'nombre',
             'email:email',
-            'contrasena',
-            'fecha_nac',
-            //'foto',
-            //'telefono',
-            //'horario_entrada',
-            //'horario_salida',
-            //'especialidad',
+            'fecha_nac:date',
+            'telefono',
+            'horario_entrada:time',
+            'horario_salida:time',
+            'esp.especialidad',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

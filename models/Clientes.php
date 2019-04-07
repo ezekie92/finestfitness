@@ -62,14 +62,14 @@ class Clientes extends \yii\db\ActiveRecord
             'id' => 'ID',
             'nombre' => 'Nombre',
             'email' => 'Email',
-            'contrasena' => 'Contrasena',
-            'fecha_nac' => 'Fecha Nac',
+            'contrasena' => 'Contraseña',
+            'fecha_nac' => 'Fecha de nacimiento',
             'peso' => 'Peso',
             'altura' => 'Altura',
             'foto' => 'Foto',
-            'telefono' => 'Telefono',
+            'telefono' => 'Teléfono',
             'tarifa' => 'Tarifa',
-            'fecha_alta' => 'Fecha Alta',
+            'fecha_alta' => 'Fecha de alta',
             'monitor' => 'Monitor',
         ];
     }
@@ -77,7 +77,7 @@ class Clientes extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getMonitor()
+    public function getEntrenador()
     {
         return $this->hasOne(Monitores::className(), ['id' => 'monitor'])->inverseOf('clientes');
     }

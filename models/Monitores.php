@@ -99,4 +99,12 @@ class Monitores extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Clientes::className(), ['id' => 'cliente_id'])->viaTable('entrenamientos', ['monitor_id' => 'id']);
     }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getEsp()
+    {
+        return $this->hasOne(Especialidades::className(), ['id' => 'especialidad'])->inverseOf('monitores');
+    }
 }

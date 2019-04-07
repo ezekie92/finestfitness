@@ -2,8 +2,6 @@
 
 namespace app\models;
 
-use Yii;
-
 /**
  * This is the model class for table "especialidades".
  *
@@ -39,5 +37,13 @@ class Especialidades extends \yii\db\ActiveRecord
             'id' => 'ID',
             'especialidad' => 'Especialidad',
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getMonitores()
+    {
+        return $this->hasMany(Monitores::className(), ['especialidad' => 'id'])->inverseOf('esp');
     }
 }

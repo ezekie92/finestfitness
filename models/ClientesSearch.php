@@ -4,7 +4,6 @@ namespace app\models;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\Clientes;
 
 /**
  * ClientesSearch represents the model behind the search form of `app\models\Clientes`.
@@ -33,7 +32,7 @@ class ClientesSearch extends Clientes
     }
 
     /**
-     * Creates data provider instance with search query applied
+     * Creates data provider instance with search query applied.
      *
      * @param array $params
      *
