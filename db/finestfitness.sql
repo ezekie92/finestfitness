@@ -12,6 +12,14 @@ CREATE TABLE tarifas
     , hora_entrada_max TIME            NOT NULL
 );
 
+DROP TABLE IF EXISTS especialidades CASCADE;
+
+CREATE TABLE especialidades
+(
+    id            BIGSERIAL PRIMARY KEY
+  , especialidad  VARCHAR(25)
+);
+
 DROP TABLE IF EXISTS monitores CASCADE;
 
 CREATE TABLE monitores
@@ -137,13 +145,6 @@ CREATE TABLE rutinas
                             ON UPDATE CASCADE */
 );
 
-DROP TABLE IF EXISTS especialidades CASCADE;
-
-CREATE TABLE especialidades
-(
-    id            BIGSERIAL PRIMARY KEY
-  , especialidad  VARCHAR(25)
-);
 
 DROP TABLE IF EXISTS horarios CASCADE;
 
