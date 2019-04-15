@@ -39,25 +39,32 @@
 <a class="list-group-item" href="#navigation-47" data-toggle="collapse" data-parent="#navigation">app\commands <b class="caret"></b></a><div id="navigation-47" class="submenu panel-collapse collapse"><a class="list-group-item" href="./app-commands-hellocontroller.html">HelloController</a></div>
 <a class="list-group-item" href="#navigation-48" data-toggle="collapse" data-parent="#navigation">app\components <b class="caret"></b></a><div id="navigation-48" class="submenu panel-collapse collapse"><a class="list-group-item" href="./app-components-herokutarget.html">HerokuTarget</a></div>
 <a class="list-group-item" href="#navigation-49" data-toggle="collapse" data-parent="#navigation">app\controllers <b class="caret"></b></a><div id="navigation-49" class="submenu panel-collapse collapse"><a class="list-group-item" href="./app-controllers-clasescontroller.html">ClasesController</a>
+<a class="list-group-item" href="./app-controllers-clientescontroller.html">ClientesController</a>
+<a class="list-group-item" href="./app-controllers-diascontroller.html">DiasController</a>
 <a class="list-group-item" href="./app-controllers-ejercicioscontroller.html">EjerciciosController</a>
 <a class="list-group-item" href="./app-controllers-entrenamientoscontroller.html">EntrenamientosController</a>
 <a class="list-group-item" href="./app-controllers-horarioscontroller.html">HorariosController</a>
-<a class="list-group-item" href="./app-controllers-personascontroller.html">PersonasController</a>
+<a class="list-group-item" href="./app-controllers-monitorescontroller.html">MonitoresController</a>
 <a class="list-group-item" href="./app-controllers-rutinascontroller.html">RutinasController</a>
 <a class="list-group-item" href="./app-controllers-sitecontroller.html">SiteController</a>
 <a class="list-group-item" href="./app-controllers-tarifascontroller.html">TarifasController</a></div>
 <a class="list-group-item active" href="#navigation-50" data-toggle="collapse" data-parent="#navigation">app\models <b class="caret"></b></a><div id="navigation-50" class="submenu panel-collapse collapse in"><a class="list-group-item active" href="./app-models-clases.html">Clases</a>
 <a class="list-group-item" href="./app-models-clasessearch.html">ClasesSearch</a>
+<a class="list-group-item" href="./app-models-clientes.html">Clientes</a>
+<a class="list-group-item" href="./app-models-clientessearch.html">ClientesSearch</a>
 <a class="list-group-item" href="./app-models-contactform.html">ContactForm</a>
+<a class="list-group-item" href="./app-models-dias.html">Dias</a>
+<a class="list-group-item" href="./app-models-diassearch.html">DiasSearch</a>
 <a class="list-group-item" href="./app-models-ejercicios.html">Ejercicios</a>
 <a class="list-group-item" href="./app-models-ejerciciossearch.html">EjerciciosSearch</a>
 <a class="list-group-item" href="./app-models-entrenamientos.html">Entrenamientos</a>
 <a class="list-group-item" href="./app-models-entrenamientossearch.html">EntrenamientosSearch</a>
+<a class="list-group-item" href="./app-models-especialidades.html">Especialidades</a>
 <a class="list-group-item" href="./app-models-horarios.html">Horarios</a>
 <a class="list-group-item" href="./app-models-horariossearch.html">HorariosSearch</a>
 <a class="list-group-item" href="./app-models-loginform.html">LoginForm</a>
-<a class="list-group-item" href="./app-models-personas.html">Personas</a>
-<a class="list-group-item" href="./app-models-personassearch.html">PersonasSearch</a>
+<a class="list-group-item" href="./app-models-monitores.html">Monitores</a>
+<a class="list-group-item" href="./app-models-monitoressearch.html">MonitoresSearch</a>
 <a class="list-group-item" href="./app-models-rutinas.html">Rutinas</a>
 <a class="list-group-item" href="./app-models-rutinassearch.html">RutinasSearch</a>
 <a class="list-group-item" href="./app-models-tarifas.html">Tarifas</a>
@@ -130,6 +137,12 @@
         <td>List of behaviors attached to this component</td>
         <td><a href="yii-base-component.html">yii\base\Component</a></td>
     </tr>
+            <tr id="$dia">
+        <td><a href="app-models-clases.html#$dia-detail">$dia</a></td>
+        <td><a href="yii-db-activequery.html">yii\db\ActiveQuery</a></td>
+        <td></td>
+        <td><a href="app-models-clases.html">app\models\Clases</a></td>
+    </tr>
             <tr class="inherited" id="$dirtyAttributes">
         <td><a href="yii-db-baseactiverecord.html#$dirtyAttributes-detail">$dirtyAttributes</a></td>
         <td><a href="http://www.php.net/language.types.array">array</a></td>
@@ -160,8 +173,8 @@
         <td>An iterator for traversing the items in the list.</td>
         <td><a href="yii-base-model.html">yii\base\Model</a></td>
     </tr>
-            <tr id="$monitorClase">
-        <td><a href="app-models-clases.html#$monitorClase-detail">$monitorClase</a></td>
+            <tr id="$monitor">
+        <td><a href="app-models-clases.html#$monitor-detail">$monitor</a></td>
         <td><a href="yii-db-activequery.html">yii\db\ActiveQuery</a></td>
         <td></td>
         <td><a href="app-models-clases.html">app\models\Clases</a></td>
@@ -476,6 +489,11 @@
         <td>Returns the connection used by this AR class.</td>
         <td><a href="yii-db-activerecordinterface.html">yii\db\ActiveRecordInterface</a></td>
     </tr>
+            <tr id="getDia()">
+        <td><a href="app-models-clases.html#getDia()-detail">getDia()</a></td>
+        <td></td>
+        <td><a href="app-models-clases.html">app\models\Clases</a></td>
+    </tr>
             <tr class="inherited" id="getDirtyAttributes()">
         <td><a href="yii-db-baseactiverecord.html#getDirtyAttributes()-detail">getDirtyAttributes()</a></td>
         <td>Returns the attribute values that have been modified since they are loaded or saved most recently.</td>
@@ -511,8 +529,8 @@
         <td>Returns an iterator for traversing the attributes in the model.</td>
         <td><a href="yii-base-model.html">yii\base\Model</a></td>
     </tr>
-            <tr id="getMonitorClase()">
-        <td><a href="app-models-clases.html#getMonitorClase()-detail">getMonitorClase()</a></td>
+            <tr id="getMonitor()">
+        <td><a href="app-models-clases.html#getMonitor()-detail">getMonitor()</a></td>
         <td></td>
         <td><a href="app-models-clases.html">app\models\Clases</a></td>
     </tr>
@@ -900,7 +918,7 @@ The previous example would extract "id".</td>
         <td>Finds ActiveRecord instance(s) by the given condition.</td>
         <td><a href="yii-db-baseactiverecord.html">yii\db\BaseActiveRecord</a></td>
     </tr>
-                                                                                                                                                                    <tr class="inherited" id="insertInternal()">
+                                                                                                                                                                        <tr class="inherited" id="insertInternal()">
         <td><a href="yii-db-activerecord.html#insertInternal()-detail">insertInternal()</a></td>
         <td>Inserts an ActiveRecord into DB without considering transaction.</td>
         <td><a href="yii-db-activerecord.html">yii\db\ActiveRecord</a></td>
@@ -1078,11 +1096,11 @@ This is a shortcut of the expression: OP_INSERT | OP_UPDATE | OP_DELETE.        
 
 <div class="property-doc">
 
-    <div class="detail-header h3" id="$monitorClase-detail">
+    <div class="detail-header h3" id="$dia-detail">
         <a href="#" class="tool-link" title="go to top"><span class="glyphicon glyphicon-arrow-up"></span></a>
-        <a class="tool-link hash" href="app-models-clases.html#$monitorClase-detail" title="direct link to this method"><span class="glyphicon icon-hash"></span></a>
+        <a class="tool-link hash" href="app-models-clases.html#$dia-detail" title="direct link to this method"><span class="glyphicon icon-hash"></span></a>
         
-        $monitorClase        <span class="detail-header-tag small">
+        $dia        <span class="detail-header-tag small">
             public                         <em>read-only</em>                         property
                     </span>
     </div>
@@ -1092,7 +1110,24 @@ This is a shortcut of the expression: OP_INSERT | OP_UPDATE | OP_DELETE.        
         
             </div>
 
-    <div class="signature"><span class="signature-defs">public</span> <span class="signature-type"><a href="yii-db-activequery.html">yii\db\ActiveQuery</a></span> <strong><a href="app-models-clases.html#getMonitorClase()-detail">getMonitorClase</a></strong> ( )</div>
+    <div class="signature"><span class="signature-defs">public</span> <span class="signature-type"><a href="yii-db-activequery.html">yii\db\ActiveQuery</a></span> <strong><a href="app-models-clases.html#getDia()-detail">getDia</a></strong> ( )</div>
+
+
+    <div class="detail-header h3" id="$monitor-detail">
+        <a href="#" class="tool-link" title="go to top"><span class="glyphicon glyphicon-arrow-up"></span></a>
+        <a class="tool-link hash" href="app-models-clases.html#$monitor-detail" title="direct link to this method"><span class="glyphicon icon-hash"></span></a>
+        
+        $monitor        <span class="detail-header-tag small">
+            public                         <em>read-only</em>                         property
+                    </span>
+    </div>
+
+    
+    <div class="doc-description">
+        
+            </div>
+
+    <div class="signature"><span class="signature-defs">public</span> <span class="signature-type"><a href="yii-db-activequery.html">yii\db\ActiveQuery</a></span> <strong><a href="app-models-clases.html#getMonitor()-detail">getMonitor</a></strong> ( )</div>
 
 </div>
 <h2>Method Details</h2>
@@ -1135,11 +1170,11 @@ merge the parent labels with child labels using functions such as <code>array_me
 
 <!--	-->
 
-    <div class="detail-header h3" id="getMonitorClase()-detail">
+    <div class="detail-header h3" id="getDia()-detail">
         <a href="#" class="tool-link" title="go to top"><span class="glyphicon glyphicon-arrow-up"></span></a>
-        <a class="tool-link hash" href="app-models-clases.html#getMonitorClase()-detail" title="direct link to this method"><span class="glyphicon icon-hash"></span></a>
+        <a class="tool-link hash" href="app-models-clases.html#getDia()-detail" title="direct link to this method"><span class="glyphicon icon-hash"></span></a>
         
-        getMonitorClase()
+        getDia()
         <span class="detail-header-tag small">
             public                                    method
                     </span>
@@ -1153,7 +1188,30 @@ merge the parent labels with child labels using functions such as <code>array_me
             </div>
 
     <table class="detail-table table table-striped table-bordered table-hover">
-        <tr><td colspan="3" class="signature"><span class="signature-defs">public</span> <span class="signature-type"><a href="yii-db-activequery.html">yii\db\ActiveQuery</a></span> <strong><a href="app-models-clases.html#getMonitorClase()-detail">getMonitorClase</a></strong> ( )</td></tr>
+        <tr><td colspan="3" class="signature"><span class="signature-defs">public</span> <span class="signature-type"><a href="yii-db-activequery.html">yii\db\ActiveQuery</a></span> <strong><a href="app-models-clases.html#getDia()-detail">getDia</a></strong> ( )</td></tr>
+            </table>
+
+<!--	-->
+
+    <div class="detail-header h3" id="getMonitor()-detail">
+        <a href="#" class="tool-link" title="go to top"><span class="glyphicon glyphicon-arrow-up"></span></a>
+        <a class="tool-link hash" href="app-models-clases.html#getMonitor()-detail" title="direct link to this method"><span class="glyphicon icon-hash"></span></a>
+        
+        getMonitor()
+        <span class="detail-header-tag small">
+            public                                    method
+                    </span>
+    </div>
+
+    
+    <div class="doc-description">
+        <p><strong></strong></p>
+
+        
+            </div>
+
+    <table class="detail-table table table-striped table-bordered table-hover">
+        <tr><td colspan="3" class="signature"><span class="signature-defs">public</span> <span class="signature-type"><a href="yii-db-activequery.html">yii\db\ActiveQuery</a></span> <strong><a href="app-models-clases.html#getMonitor()-detail">getMonitor</a></strong> ( )</td></tr>
             </table>
 
 <!--	-->
@@ -1305,7 +1363,7 @@ if the table is not named after this convention.</p>
 </div>
 
 <footer class="footer">
-        <p class="pull-right"><small>Page generated on Thu, 04 Apr 2019 19:51:48 +0000</small></p>
+        <p class="pull-right"><small>Page generated on Mon, 15 Apr 2019 16:38:26 +0000</small></p>
     Powered by <a href="http://www.yiiframework.com/" rel="external">Yii Framework</a></footer>
 
 <script>jQuery(function ($) {
