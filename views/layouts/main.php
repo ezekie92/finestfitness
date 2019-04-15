@@ -40,6 +40,13 @@ AppAsset::register($this);
         'items' => [
             ['label' => 'Home', 'url' => ['/site/index']],
             [
+                'label' => 'Administradores',
+                'items' => [
+                    ['label' => 'Gestionar', 'url' => ['/administradores/index']],
+                    ['label' => 'Alta Administradores', 'url' => ['/administradores/create']],
+                ],
+            ],
+            [
                 'label' => 'Clientes',
                 'items' => [
                     ['label' => 'Gestionar', 'url' => ['/clientes/index']],
