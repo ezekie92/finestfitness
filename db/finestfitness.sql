@@ -20,6 +20,17 @@ CREATE TABLE especialidades
   , especialidad  VARCHAR(25)
 );
 
+DROP TABLE IF EXISTS administradores CASCADE;
+
+CREATE TABLE administradores
+(
+    id              BIGSERIAL   PRIMARY KEY
+  , nombre          VARCHAR(32) NOT NULL
+  , email           VARCHAR(60) NOT NULL UNIQUE CONSTRAINT ck_administradores_email_valido
+                                CHECK (email ~ '^[a-zA-Z0-9.!#$%&''*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$')
+  , contrasena      VARCHAR(60) NOT NULL
+);
+
 DROP TABLE IF EXISTS monitores CASCADE;
 
 CREATE TABLE monitores
@@ -172,6 +183,10 @@ VALUES('Spinning')
     , ('Boxeo')
     , ('Musculación')
     , ('Yoga');
+
+INSERT INTO administradores (nombre, email, contrasena)
+VALUES('Z', 'z@z.com', crypt('z', gen_salt('bf', 10)))
+    , ('Ezequiel', 'Ezequiel@ezequiel.com', crypt('ezequiel', gen_salt('bf', 10)));
 
 INSERT INTO monitores (nombre, email, contrasena, fecha_nac, telefono, horario_entrada, horario_salida, especialidad)
 VALUES('Blas', 'blas@blas.com', crypt('blas', gen_salt('bf', 10)), '1978-1-1', 666999888, '7:00:00', '15:00:00', 1)

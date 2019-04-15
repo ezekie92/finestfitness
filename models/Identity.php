@@ -23,10 +23,15 @@ final class Identity implements IdentityInterface
      */
     const TIPO_MONITOR = 'monitores';
     /**
+     * Define un de los tipos permitidos, en este caso: administradores.
+     * @var string
+     */
+    const TIPO_ADMIN = 'admininistradores';
+    /**
      * Los tipos permitidos.
      * @var array
      */
-    const TIPOS_PERMITIDOS = [self::TIPO_CLIENTE, self::TIPO_MONITOR];
+    const TIPOS_PERMITIDOS = [self::TIPO_CLIENTE, self::TIPO_MONITOR, self::TIPO_ADMIN];
 
     /**
      * El id del usuario.
@@ -69,6 +74,9 @@ final class Identity implements IdentityInterface
             case self::TIPO_MONITOR:
                 $model = Monitores::find()->where(['id' => $digito])->one();
                 break;
+            case self::TIPO_ADMIN:
+                $model = Administradores::find()->where(['id' => $digito])->one();
+                break;
         }
 
         if ($model === null) {
@@ -107,6 +115,9 @@ final class Identity implements IdentityInterface
         if (!$model) {
             $model = Monitores::find()->where(['email' => $email])->one();
         }
+        if (!$model) {
+            $model = Administradores::find()->where(['email' => $email])->one();
+        }
 
         if (!$model) {
             return false;
@@ -114,8 +125,10 @@ final class Identity implements IdentityInterface
 
         if ($model instanceof Clientes) {
             $tipo = self::TIPO_CLIENTE;
-        } else {
+        } elseif ($model instanceof Monitores) {
             $tipo = self::TIPO_MONITOR;
+        } else {
+            $tipo = self::TIPO_ADMIN;
         }
 
         $identity = new self();
