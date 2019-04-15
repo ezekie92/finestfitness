@@ -892,6 +892,24 @@
 | **Entrega**     | v1             |
 | **Incidencia**  | [107](https://github.com/ezekie92/finestfitness/issues/107) |
 
+| **R100**     | **Dar de alta a un administrador**         |
+| --------------: | :------------------- |
+| **Descripción** | Un administrador podrá dar de alta a otro administrador mediante un formulario sencillo.             |
+| **Prioridad**   | Importante           |
+| **Tipo**        | Funcional                |
+| **Complejidad** | Fácil         |
+| **Entrega**     | v1             |
+| **Incidencia**  | [111](https://github.com/ezekie92/finestfitness/issues/111) |
+
+| **R101**     | **Dar de baja a un administrador**         |
+| --------------: | :------------------- |
+| **Descripción** | Un administrador podrá dar de baja a otro administrador             |
+| **Prioridad**   | Importante           |
+| **Tipo**        | Funcional                |
+| **Complejidad** | Fácil         |
+| **Entrega**     | v1             |
+| **Incidencia**  | [112](https://github.com/ezekie92/finestfitness/issues/112) |
+
 
 ## Cuadro resumen
 
@@ -996,3 +1014,5 @@
 | (**R97**) Horarios | Importante | Información | Fácil | v1 | [97](https://github.com/ezekie92/finestfitness/issues/97) |
 | (**R98**) Tarifas | Importante | Información | Fácil | v1 | [98](https://github.com/ezekie92/finestfitness/issues/98) |
 | (**R99**) Login y Logout | Importante | Funcional | Fácil | v1 | [107](https://github.com/ezekie92/finestfitness/issues/107) |
+| (**R100**) Dar de alta a un administrador | Importante | Funcional | Fácil | v1 | [111](https://github.com/ezekie92/finestfitness/issues/111) |
+| (**R101**) Dar de baja a un administrador | Importante | Funcional | Fácil | v1 | [112](https://github.com/ezekie92/finestfitness/issues/112) |
