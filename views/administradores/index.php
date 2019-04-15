@@ -15,7 +15,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Create Administradores', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Alta administrador', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
@@ -24,14 +24,35 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
             'nombre',
             'email:email',
-            'contrasena',
 
-            ['class' => 'yii\grid\ActionColumn'],
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'header' => 'Acciones',
+                'buttons'=>[
+                    'view'=>function ($url, $model) {
+                        return null;
+                    },
+                    'update'=>function ($url, $model) {
+                        return null;
+                    },
+                    'delete'=>function ($url, $model) {
+                        return Html::a(
+                            'Dar de baja',
+                            ['administradores/delete', 'id' => $model->id],
+                            [
+                                'class' => 'btn btn-danger btn-xs',
+                                'data' => [
+                                    'confirm' => '¿Seguro que desea dar de baja a ' . $model->nombre . '? Se trata de un administrador',
+                                    'method' => 'post',
+                                ],
+                            ],
+                        );
+                    }
+                ]
+            ],
         ],
     ]); ?>
 

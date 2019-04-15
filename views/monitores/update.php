@@ -5,9 +5,9 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\Monitores */
 
-$this->title = 'Modificar: ' . $model->nombre;
+$this->title = 'Modificar monitor: ' . $model->nombre;
 $this->params['breadcrumbs'][] = ['label' => 'Monitores', 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
+$this->params['breadcrumbs'][] = ['label' => $model->nombre, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Update';
 ?>
 <div class="monitores-update">
