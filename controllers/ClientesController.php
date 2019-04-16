@@ -8,6 +8,7 @@ use app\models\Monitores;
 use app\models\Tarifas;
 use Yii;
 use yii\filters\VerbFilter;
+use yii\helpers\Url;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 
@@ -68,8 +69,10 @@ class ClientesController extends Controller
     {
         $model = new Clientes(['scenario' => Clientes::SCENARIO_CREATE]);
         $model->fecha_alta = date('d/m/y');
+        $model->token = Yii::$app->security->generateRandomString();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            $this->actionEmail($model);
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
@@ -117,6 +120,43 @@ class ClientesController extends Controller
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
+    }
+
+    public function actionEmail($model)
+    {
+        $url = Url::to([
+            'clientes/confirmar',
+            'id' => $model->id,
+            'token' => $model->token,
+        ], true);
+
+        if (Yii::$app->mailer->compose()
+            ->setFrom('finestfitnessdaw@gmail.com')
+            ->setTo($model->email)
+            ->setSubject('Confirmar registro FinestFitness')
+            ->setTextBody("Clique en el siguiente enlace para confirmar su registro: $url")
+            ->send()
+        ) {
+            Yii::$app->session->setFlash('success', 'Se ha enviado un correo para la confirmación de registro al cliente.');
+        } else {
+            Yii::$app->session->setFlash('error', 'No se ha podido enviar el correo de verificación.');
+        }
+    }
+
+    public function actionConfirmar($id, $token)
+    {
+        $model = $this->findModel($id);
+        if ($model->token === $token) {
+            $model->confirmado = true;
+            if ($model->save()) {
+                Yii::$app->session->setFlash('success', 'Registro confirmado. Bienvenido.');
+            } else {
+                Yii::$app->session->setFlash('error', 'No se ha podido confirmar el registro.');
+            }
+        } else {
+            Yii::$app->session->setFlash('error', 'Error de confirmación, póngase en contacto con el administrador de su gimnasio.');
+        }
+        return $this->redirect(['site/login']);
     }
 
     /**

@@ -34,6 +34,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'tarifa',
             'fecha_alta:date',
             'entrenador.nombre:text:Monitor',
+            'confirmado:boolean',
 
             [
                 'class' => 'yii\grid\ActionColumn',
@@ -66,6 +67,4 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ],
     ]); ?>
-
-
 </div>

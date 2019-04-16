@@ -143,4 +143,12 @@ class Monitores extends \yii\db\ActiveRecord
         }
         return true;
     }
+
+    /**
+     * Genera un token aleatorio para comprobar que el usuario a verificado su cuenta.
+     */
+    public function setToken()
+    {
+        $this->token = Yii::$app->security->generateRandomString();
+    }
 }
