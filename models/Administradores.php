@@ -25,6 +25,12 @@ class Administradores extends \yii\db\ActiveRecord
      */
     const SCENARIO_UPDATE = 'update';
     /**
+     * Se usa para comparar las contraseñas al cambiarlas.
+     * @var string
+     */
+    public $contrasena_repeat;
+
+    /**
      * {@inheritdoc}
      */
     public static function tableName()
@@ -40,7 +46,8 @@ class Administradores extends \yii\db\ActiveRecord
         return [
             [['nombre', 'email'], 'required'],
             [['contrasena'], 'required', 'on' => [self::SCENARIO_CREATE]],
-            [['contrasena'], 'safe', 'on' => [self::SCENARIO_UPDATE]], // quitar en el futuro si comparamos contraseñas
+            [['contrasena_repeat'], 'safe', 'on' => [self::SCENARIO_UPDATE]],
+            [['contrasena'], 'compare', 'on' => [self::SCENARIO_UPDATE]],
             [['nombre'], 'string', 'max' => 32],
             [['email', 'contrasena'], 'string', 'max' => 60],
             [['email'], 'unique'],
@@ -57,6 +64,9 @@ class Administradores extends \yii\db\ActiveRecord
             'nombre' => 'Nombre',
             'email' => 'Email',
             'contrasena' => 'Contraseña',
+            'token' => 'Token',
+            'confirmado' => 'Confirmado',
+            'contrasena_repeat' => 'Repetir Contraseña',
         ];
     }
 
@@ -76,16 +86,9 @@ class Administradores extends \yii\db\ActiveRecord
                 salto:
                 $this->contrasena = Yii::$app->security
                     ->generatePasswordHash($this->contrasena);
+                $this->token = Yii::$app->security->generateRandomString();
             }
         }
         return true;
-    }
-
-    /**
-     * Genera un token aleatorio para comprobar que el usuario a verificado su cuenta.
-     */
-    public function setToken()
-    {
-        $this->token = Yii::$app->security->generateRandomString();
     }
 }
