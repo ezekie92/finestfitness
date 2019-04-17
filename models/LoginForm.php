@@ -17,6 +17,7 @@ class LoginForm extends Model
     public $rememberMe = true;
 
     private $_user = false;
+    private $_conf = false;
 
 
     /**
@@ -70,7 +71,7 @@ class LoginForm extends Model
      */
     public function login()
     {
-        if ($this->validate()) {
+        if ($this->validate() && $this->getConf()) {
             return Yii::$app->user->login($this->getUser(), $this->rememberMe ? 3600 * 24 * 30 : 0);
         }
         return false;
@@ -88,5 +89,18 @@ class LoginForm extends Model
         }
 
         return $this->_user;
+    }
+
+    /**
+     * Devuelve si un usuario está confirmado o no.
+     * @return bool Verdadero o falso
+     */
+    public function getConf()
+    {
+        if ($this->_conf === false) {
+            $this->_conf = Identity::confirmado($this->username);
+        }
+
+        return $this->_conf;
     }
 }
