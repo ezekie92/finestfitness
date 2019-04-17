@@ -7,6 +7,7 @@ use app\models\Monitores;
 use app\models\MonitoresSearch;
 use Yii;
 use yii\filters\VerbFilter;
+use yii\helpers\Url;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 
@@ -66,8 +67,10 @@ class MonitoresController extends Controller
     public function actionCreate()
     {
         $model = new Monitores(['scenario' => Monitores::SCENARIO_CREATE]);
+        $model->contrasena = Yii::$app->security->generateRandomString();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            $this->actionEmail($model);
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
@@ -99,6 +102,83 @@ class MonitoresController extends Controller
             'model' => $model,
             'listaEsp' => $this->listaEsp(),
         ]);
+    }
+
+    /**
+     * Modifica la contraseña de un monitor existente
+     * Si se lleva a cabo con éxito, redirige a login.
+     * @param int $id
+     * @param string $token
+     * @return mixed
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    public function actionCambiarContrasena($id, $token)
+    {
+        $model = $this->findModel($id);
+        $model->scenario = Monitores::SCENARIO_UPDATE;
+        $model->contrasena = '';
+
+        if ($model->load(Yii::$app->request->post())) {
+            $model->confirmado = true;
+            if ($model->save()) {
+                return $this->redirect(['site/login']);
+            }
+        }
+
+        return $this->render('cambiarContrasena', [
+            'model' => $model,
+        ]);
+    }
+
+    /**
+     * Envía un email con un link para confirmar el registro.
+     * @param  Monitores $model El monitor al que se le enviará el email
+     */
+    public function actionEmail($model)
+    {
+        $url = Url::to([
+            'monitores/confirmar',
+            'id' => $model->id,
+            'token' => $model->token,
+        ], true);
+
+        if (Yii::$app->mailer->compose()
+            ->setFrom('finestfitnessdaw@gmail.com')
+            ->setTo($model->email)
+            ->setSubject('Confirmar registro FinestFitness')
+            ->setTextBody("Clique en el siguiente enlace para confirmar su registro: $url")
+            ->send()
+        ) {
+            Yii::$app->session->setFlash('success', 'Se ha enviado un correo para la confirmación de registro al monitor.');
+        } else {
+            Yii::$app->session->setFlash('error', 'No se ha podido enviar el correo de verificación.');
+        }
+    }
+
+    /**
+     * Confirma el registro del usuario.
+     * @param  int    $id    El del usuario a confirmar
+     * @param  string $token El token de autenticación del usuario a confirmar
+     * @return mixed         Redirige a un sitio u otro de la aplicación.
+     */
+    public function actionConfirmar($id, $token)
+    {
+        $model = $this->findModel($id);
+        if ($model->token === $token) {
+            if ($model->save()) {
+                Yii::$app->session->setFlash('success', 'Registro confirmado. Establezca su contraseña para poder empezar a usar la aplicación.');
+            } else {
+                Yii::$app->session->setFlash('error', 'No se ha podido confirmar el registro.');
+            }
+        } else {
+            if ($model->confirmado) {
+                Yii::$app->session->setFlash('info', 'Ya había validado su cuenta. Si necesita ayuda contacte con su gimnasio');
+            } else {
+                Yii::$app->session->setFlash('error', 'Error de confirmación, póngase en contacto con su gimnasio.');
+            }
+            return $this->redirect(['site/login']);
+        }
+        return $this->redirect(['monitores/cambiar-contrasena', 'id' => $id, 'token' => $token]);
     }
 
     /**

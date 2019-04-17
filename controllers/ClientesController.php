@@ -69,7 +69,7 @@ class ClientesController extends Controller
     {
         $model = new Clientes(['scenario' => Clientes::SCENARIO_CREATE]);
         $model->fecha_alta = date('d/m/y');
-        $model->token = Yii::$app->security->generateRandomString();
+        $model->contrasena = Yii::$app->security->generateRandomString();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             $this->actionEmail($model);
@@ -109,6 +109,32 @@ class ClientesController extends Controller
     }
 
     /**
+     * Modifica la contraseña de un cliente existente
+     * Si se lleva a cabo con éxito, redirige a login.
+     * @param int $id
+     * @param string $token
+     * @return mixed
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    public function actionCambiarContrasena($id, $token)
+    {
+        $model = $this->findModel($id);
+        $model->scenario = Clientes::SCENARIO_UPDATE;
+        $model->contrasena = '';
+
+        if ($model->load(Yii::$app->request->post())) {
+            $model->confirmado = true;
+            if ($model->save()) {
+                return $this->redirect(['site/login']);
+            }
+        }
+
+        return $this->render('cambiarContrasena', [
+            'model' => $model,
+        ]);
+    }
+
+    /**
      * Deletes an existing Clientes model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param int $id
@@ -122,6 +148,10 @@ class ClientesController extends Controller
         return $this->redirect(['index']);
     }
 
+    /**
+     * Envía un email con un link para confirmar el registro.
+     * @param  Clientes $model El cliente al que se le enviará el email
+     */
     public function actionEmail($model)
     {
         $url = Url::to([
@@ -143,20 +173,30 @@ class ClientesController extends Controller
         }
     }
 
+    /**
+     * Confirma el registro del usuario.
+     * @param  int    $id    El del usuario a confirmar
+     * @param  string $token El token de autenticación del usuario a confirmar
+     * @return mixed         Redirige a un sitio u otro de la aplicación.
+     */
     public function actionConfirmar($id, $token)
     {
         $model = $this->findModel($id);
         if ($model->token === $token) {
-            $model->confirmado = true;
             if ($model->save()) {
-                Yii::$app->session->setFlash('success', 'Registro confirmado. Bienvenido.');
+                Yii::$app->session->setFlash('success', 'Registro confirmado. Establezca su contraseña para poder empezar a usar la aplicación.');
             } else {
                 Yii::$app->session->setFlash('error', 'No se ha podido confirmar el registro.');
             }
         } else {
-            Yii::$app->session->setFlash('error', 'Error de confirmación, póngase en contacto con el administrador de su gimnasio.');
+            if ($model->confirmado) {
+                Yii::$app->session->setFlash('info', 'Ya había validado su cuenta. Si necesita ayuda contacte con su gimnasio');
+            } else {
+                Yii::$app->session->setFlash('error', 'Error de confirmación, póngase en contacto con su gimnasio.');
+            }
+            return $this->redirect(['site/login']);
         }
-        return $this->redirect(['site/login']);
+        return $this->redirect(['clientes/cambiar-contrasena', 'id' => $id, 'token' => $token]);
     }
 
     /**

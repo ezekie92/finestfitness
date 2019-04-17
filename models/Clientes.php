@@ -39,6 +39,13 @@ class Clientes extends \yii\db\ActiveRecord
     const SCENARIO_UPDATE = 'update';
 
     /**
+     * Se usa para comparar las contraseñas al cambiarlas.
+     * @var string
+     */
+    public $contrasena_repeat;
+
+
+    /**
      * {@inheritdoc}
      */
     public static function tableName()
@@ -54,14 +61,15 @@ class Clientes extends \yii\db\ActiveRecord
         return [
             [['nombre', 'email', 'fecha_nac', 'tarifa'], 'required'],
             [['contrasena'], 'required', 'on' => [self::SCENARIO_CREATE]],
-            [['contrasena'], 'safe', 'on' => [self::SCENARIO_UPDATE]], // quitar en el futuro si comparamos contraseñas
-            [['fecha_nac', 'fecha_alta', 'confirmado'], 'safe'],
+            [['contrasena_repeat'], 'safe', 'on' => [self::SCENARIO_UPDATE]],
+            [['contrasena'], 'compare', 'on' => [self::SCENARIO_UPDATE]],
+            [['fecha_nac', 'fecha_alta', 'confirmado', 'token'], 'safe'],
             [['peso', 'altura', 'tarifa', 'monitor'], 'default', 'value' => null],
             [['peso', 'altura', 'tarifa', 'monitor'], 'integer'],
             [['telefono'], 'number'],
             [['nombre'], 'string', 'max' => 32],
             [['email', 'contrasena'], 'string', 'max' => 60],
-            [['foto', 'token'], 'string', 'max' => 255],
+            [['foto'], 'string', 'max' => 255],
             [['email'], 'unique'],
             [['monitor'], 'exist', 'skipOnError' => true, 'targetClass' => Monitores::className(), 'targetAttribute' => ['monitor' => 'id']],
             [['tarifa'], 'exist', 'skipOnError' => true, 'targetClass' => Tarifas::className(), 'targetAttribute' => ['tarifa' => 'id']],
@@ -88,6 +96,7 @@ class Clientes extends \yii\db\ActiveRecord
             'monitor' => 'Monitor',
             'token' => 'Token',
             'confirmado' => 'Confirmado',
+            'contrasena_repeat' => 'Repetir Contraseña',
         ];
     }
 
@@ -139,16 +148,9 @@ class Clientes extends \yii\db\ActiveRecord
                 salto:
                 $this->contrasena = Yii::$app->security
                     ->generatePasswordHash($this->contrasena);
+                $this->token = Yii::$app->security->generateRandomString();
             }
         }
         return true;
-    }
-
-    /**
-     * Genera el token aleatorio para comprobar que el usuario a verificado su cuenta.
-     */
-    public function setToken()
-    {
-        $this->token = Yii::$app->security->generateRandomString();
     }
 }
