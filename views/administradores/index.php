@@ -27,6 +27,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'nombre',
             'email:email',
+            'confirmado:boolean',
 
             [
                 'class' => 'yii\grid\ActionColumn',

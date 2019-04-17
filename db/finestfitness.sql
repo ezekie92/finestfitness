@@ -29,6 +29,8 @@ CREATE TABLE administradores
   , email           VARCHAR(60) NOT NULL UNIQUE CONSTRAINT ck_administradores_email_valido
                                 CHECK (email ~ '^[a-zA-Z0-9.!#$%&''*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$')
   , contrasena      VARCHAR(60) NOT NULL
+  , token           VARCHAR(255)
+  , confirmado      BOOLEAN     DEFAULT 'f'
 );
 
 DROP TABLE IF EXISTS monitores CASCADE;
