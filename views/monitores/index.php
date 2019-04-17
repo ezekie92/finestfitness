@@ -24,7 +24,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
-            
+
             'nombre',
             'email:email',
             'fecha_nac:date',
@@ -32,6 +32,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'horario_entrada:time',
             'horario_salida:time',
             'esp.especialidad',
+            'confirmado:boolean',
 
             [
                 'class' => 'yii\grid\ActionColumn',

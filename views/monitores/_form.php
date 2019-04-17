@@ -16,7 +16,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'contrasena')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'contrasena')->passwordInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'fecha_nac')->textInput() ?>
 

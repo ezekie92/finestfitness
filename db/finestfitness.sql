@@ -48,6 +48,8 @@ CREATE TABLE monitores
   , especialidad    BIGINT      NOT NULL REFERENCES especialidades (id)
                                 ON DELETE NO ACTION
                                 ON UPDATE CASCADE
+  , token           VARCHAR(255)
+  , confirmado      BOOLEAN     DEFAULT 'f'
 );
 
 DROP TABLE IF EXISTS clientes CASCADE;
@@ -73,6 +75,8 @@ CREATE TABLE clientes
   , monitor         BIGINT      REFERENCES monitores (id)
                                 ON DELETE NO ACTION
                                 ON UPDATE CASCADE
+  , token           VARCHAR(255)
+  , confirmado      BOOLEAN     DEFAULT 'f'
 );
 
 DROP TABLE IF EXISTS dias CASCADE;
@@ -219,11 +223,9 @@ VALUES('Press banca')
     , ('Sentadillas')
     , ('Peso muerto');
 
-
 INSERT INTO rutinas (nombre, ejercicio, dia)
 VALUES('Básicos', 1, 1)
     , ('Básicos', 2, 1);
-
 
 INSERT INTO horarios (dia, apertura, cierre)
 VALUES(1, '7:00', '23:00')

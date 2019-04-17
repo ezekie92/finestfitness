@@ -37,6 +37,12 @@ class Monitores extends \yii\db\ActiveRecord
     const SCENARIO_UPDATE = 'update';
 
     /**
+     * Se usa para comparar las contraseñas al cambiarlas.
+     * @var string
+     */
+    public $contrasena_repeat;
+
+    /**
      * {@inheritdoc}
      */
     public static function tableName()
@@ -52,8 +58,9 @@ class Monitores extends \yii\db\ActiveRecord
         return [
             [['nombre', 'email', 'fecha_nac', 'especialidad'], 'required'],
             [['contrasena'], 'required', 'on' => [self::SCENARIO_CREATE]],
-            [['contrasena'], 'safe', 'on' => [self::SCENARIO_UPDATE]], // quitar en el futuro si comparamos contraseñas
-            [['fecha_nac', 'horario_entrada', 'horario_salida'], 'safe'],
+            [['contrasena_repeat'], 'safe', 'on' => [self::SCENARIO_UPDATE]],
+            [['contrasena'], 'compare', 'on' => [self::SCENARIO_UPDATE]],
+            [['fecha_nac', 'horario_entrada', 'horario_salida', 'token'], 'safe'],
             [['telefono'], 'number'],
             [['especialidad'], 'default', 'value' => null],
             [['especialidad'], 'integer'],
@@ -80,6 +87,9 @@ class Monitores extends \yii\db\ActiveRecord
             'horario_entrada' => 'Inicio jornada',
             'horario_salida' => 'Fin jornada',
             'especialidad' => 'Especialidad',
+            'token' => 'Token',
+            'confirmado' => 'Confirmado',
+            'contrasena_repeat' => 'Repetir Contraseña',
         ];
     }
 
@@ -139,6 +149,7 @@ class Monitores extends \yii\db\ActiveRecord
                 salto:
                 $this->contrasena = Yii::$app->security
                     ->generatePasswordHash($this->contrasena);
+                $this->token = Yii::$app->security->generateRandomString();
             }
         }
         return true;

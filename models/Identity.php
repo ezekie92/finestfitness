@@ -53,6 +53,7 @@ final class Identity implements IdentityInterface
      * @var string
      */
     private $_password;
+    private $_conf;
 
     public static function findIdentity($id)
     {
@@ -136,6 +137,23 @@ final class Identity implements IdentityInterface
         $identity->_nombre = $model->nombre;
         $identity->_password = $model->contrasena;
         return $identity;
+    }
+
+    public static function confirmado($email)
+    {
+        $model = Clientes::find()->where(['email' => $email])->one();
+        if (!$model) {
+            $model = Monitores::find()->where(['email' => $email])->one();
+        }
+        if (!$model) {
+            $model = Administradores::find()->where(['email' => $email])->one();
+        }
+
+        if (!$model) {
+            return false;
+        }
+
+        return $model->confirmado;
     }
 
     public function getId()

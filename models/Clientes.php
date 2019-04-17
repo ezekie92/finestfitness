@@ -39,6 +39,13 @@ class Clientes extends \yii\db\ActiveRecord
     const SCENARIO_UPDATE = 'update';
 
     /**
+     * Se usa para comparar las contraseñas al cambiarlas.
+     * @var string
+     */
+    public $contrasena_repeat;
+
+
+    /**
      * {@inheritdoc}
      */
     public static function tableName()
@@ -54,8 +61,9 @@ class Clientes extends \yii\db\ActiveRecord
         return [
             [['nombre', 'email', 'fecha_nac', 'tarifa'], 'required'],
             [['contrasena'], 'required', 'on' => [self::SCENARIO_CREATE]],
-            [['contrasena'], 'safe', 'on' => [self::SCENARIO_UPDATE]], // quitar en el futuro si comparamos contraseñas
-            [['fecha_nac', 'fecha_alta'], 'safe'],
+            [['contrasena_repeat'], 'safe', 'on' => [self::SCENARIO_UPDATE]],
+            [['contrasena'], 'compare', 'on' => [self::SCENARIO_UPDATE]],
+            [['fecha_nac', 'fecha_alta', 'confirmado', 'token'], 'safe'],
             [['peso', 'altura', 'tarifa', 'monitor'], 'default', 'value' => null],
             [['peso', 'altura', 'tarifa', 'monitor'], 'integer'],
             [['telefono'], 'number'],
@@ -86,6 +94,9 @@ class Clientes extends \yii\db\ActiveRecord
             'tarifa' => 'Tarifa',
             'fecha_alta' => 'Fecha de alta',
             'monitor' => 'Monitor',
+            'token' => 'Token',
+            'confirmado' => 'Confirmado',
+            'contrasena_repeat' => 'Repetir Contraseña',
         ];
     }
 
@@ -137,6 +148,7 @@ class Clientes extends \yii\db\ActiveRecord
                 salto:
                 $this->contrasena = Yii::$app->security
                     ->generatePasswordHash($this->contrasena);
+                $this->token = Yii::$app->security->generateRandomString();
             }
         }
         return true;
