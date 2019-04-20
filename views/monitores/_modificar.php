@@ -14,8 +14,6 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'nombre')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
-
     <?= $form->field($model, 'contrasena')->passwordInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'contrasena_repeat')->passwordInput(['maxlength' => true]) ?>
@@ -23,12 +21,6 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'fecha_nac')->textInput() ?>
 
     <?= $form->field($model, 'telefono')->textInput() ?>
-
-    <?= $form->field($model, 'horario_entrada')->textInput() ?>
-
-    <?= $form->field($model, 'horario_salida')->textInput() ?>
-
-    <?= $form->field($model, 'especialidad')->dropDownList($listaEsp, ['prompt' => 'Seleccione una especialidad']) ?>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>

@@ -26,7 +26,7 @@ final class Identity implements IdentityInterface
      * Define un de los tipos permitidos, en este caso: administradores.
      * @var string
      */
-    const TIPO_ADMIN = 'admininistradores';
+    const TIPO_ADMIN = 'administradores';
     /**
      * Los tipos permitidos.
      * @var array

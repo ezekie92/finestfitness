@@ -16,29 +16,25 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Modificar', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Dar de baja', ['delete', 'id' => $model->id], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
-                'method' => 'post',
-            ],
-        ]) ?>
+        <?= Html::a('Modificar datos', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+        <?php // Html::a('Dar de baja', ['delete', 'id' => $model->id], [
+            // 'class' => 'btn btn-danger',
+            // 'data' => [
+            //     'confirm' => 'Are you sure you want to delete this item?',
+            //     'method' => 'post',
+            // ],
+        //]) ?>
     </p>
 
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'id',
-            'nombre',
             'email:email',
-            // 'contrasena',
             'fecha_nac',
-            'foto',
             'telefono',
-            'horario_entrada',
             'horario_salida',
-            'especialidad',
+            'horario_entrada',
+            'esp.especialidad',
         ],
     ]) ?>
 

@@ -4,6 +4,7 @@
 /* @var $content string */
 
 use app\widgets\Alert;
+use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
@@ -25,6 +26,10 @@ AppAsset::register($this);
 </head>
 <body>
 <?php $this->beginBody() ?>
+<?php if (!Yii::$app->user->isGuest) {
+    $usuario = explode('-', Yii::$app->user->identity->getid());
+}
+?>
 
 <div class="wrap">
     <?php
@@ -63,14 +68,21 @@ AppAsset::register($this);
             Yii::$app->user->isGuest ? (
                 ['label' => 'Login', 'url' => ['/site/login']]
             ) : (
-                '<li>'
-                . Html::beginForm(['/site/logout'], 'post')
-                . Html::submitButton(
-                    'Logout (' . Yii::$app->user->identity->getNombre() . ')',
-                    ['class' => 'btn btn-link logout']
-                )
-                . Html::endForm()
-                . '</li>'
+                [
+                    'label' => Yii::$app->user->identity->getNombre(),
+                    'items' => [
+                        [
+                            'label' => 'Mi perfil',
+                            'url' => Url::to(["/$usuario[0]/view", 'id'=> $usuario[1]])
+                        ],
+                        [
+                            'label' => 'Logout',
+                            'url' => ['site/logout'],
+                            'linkOptions' => ['data-method' => 'post']
+                        ],
+                    ],
+                ]
+
             )
         ],
     ]);

@@ -25,11 +25,11 @@ class MonitoresController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::class,
-                'only' => ['update', 'create'],
+                'only' => ['update', 'create', 'view'],
                 'rules' => [
                     [
                         'allow' => true,
-                        'actions' => ['update'],
+                        'actions' => ['update', 'view'],
                         'roles' => ['@'],
                         'matchCallback' => function ($rule, $action) {
                             $ruta = explode('/', Yii::$app->request->get('r'));
