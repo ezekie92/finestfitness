@@ -18,6 +18,8 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'contrasena')->passwordInput(['maxlength' => true]) ?>
 
+    <?= $form->field($model, 'contrasena_repeat')->passwordInput(['maxlength' => true]) ?>
+
     <?= $form->field($model, 'fecha_nac')->textInput() ?>
 
     <?= $form->field($model, 'peso')->textInput() ?>

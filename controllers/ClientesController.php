@@ -7,6 +7,7 @@ use app\models\ClientesSearch;
 use app\models\Monitores;
 use app\models\Tarifas;
 use Yii;
+use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\helpers\Url;
 use yii\web\Controller;
@@ -23,6 +24,29 @@ class ClientesController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::class,
+                'only' => ['update', 'create', 'view'],
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'actions' => ['update', 'view'],
+                        'roles' => ['@'],
+                        'matchCallback' => function ($rule, $action) {
+                            $ruta = explode('/', Yii::$app->request->get('r'));
+                            return ($ruta[0] . '-' . Yii::$app->request->get('id')) == Yii::$app->user->id;
+                        },
+                    ],
+                    [
+                        // 'allow' => true,
+                        // 'actions' => ['create'],
+                        // 'roles' => ['@'],
+                        // 'matchCallback' => function ($rule, $action) {
+                        //     return Yii::$app->request->get('id') == Yii::$app->user->id;
+                        // },
+                    ],
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [

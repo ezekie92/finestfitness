@@ -111,7 +111,7 @@ class Clientes extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getTarifa()
+    public function getTarifas()
     {
         return $this->hasOne(Tarifas::className(), ['id' => 'tarifa'])->inverseOf('clientes');
     }
