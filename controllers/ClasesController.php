@@ -4,6 +4,8 @@ namespace app\controllers;
 
 use app\models\Clases;
 use app\models\ClasesSearch;
+use app\models\Dias;
+use app\models\Monitores;
 use Yii;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
@@ -93,6 +95,8 @@ class ClasesController extends Controller
 
         return $this->render('create', [
             'model' => $model,
+            'listaDias' => $this->listaDias(),
+            'listaMonitores' => $this->listaMonitores(),
         ]);
     }
 
@@ -113,6 +117,8 @@ class ClasesController extends Controller
 
         return $this->render('update', [
             'model' => $model,
+            'listaDias' => $this->listaDias(),
+            'listaMonitores' => $this->listaMonitores(),
         ]);
     }
 
@@ -144,5 +150,23 @@ class ClasesController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    /**
+     * Devuelve un listado de los dias.
+     * @return Dias
+     */
+    private function listaDias()
+    {
+        return Dias::find()->select('dia')->indexBy('id')->column();
+    }
+
+    /**
+     * Devuelve un listado de monitores.
+     * @return Monitores el monitor que puede imparte la clase
+     */
+    private function listaMonitores()
+    {
+        return Monitores::find()->select('nombre')->indexBy('id')->column();
     }
 }

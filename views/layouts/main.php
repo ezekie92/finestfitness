@@ -45,10 +45,17 @@ AppAsset::register($this);
         'items' => [
             ['label' => 'Home', 'url' => ['/site/index']],
             [
+                'label' => 'Clases',
+                'items' => [
+                    ['label' => 'Clases', 'url' => ['/clases/index']],
+                ],
+            ],
+            [
                 'label' => 'Administradores',
                 'items' => [
                     ['label' => 'Gestionar', 'url' => ['/administradores/index']],
                     ['label' => 'Alta Administradores', 'url' => ['/administradores/create']],
+                    ['label' => 'Clases', 'url' => ['/clases/index']],
                 ],
             ],
             [
