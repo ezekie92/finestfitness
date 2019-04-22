@@ -54,7 +54,7 @@ class Rutinas extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getDia()
+    public function getDiaRutina()
     {
         return $this->hasOne(Dias::className(), ['id' => 'dia'])->inverseOf('rutinas');
     }
@@ -62,7 +62,7 @@ class Rutinas extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getEjercicio()
+    public function getEjercicios()
     {
         return $this->hasOne(Ejercicios::className(), ['id' => 'ejercicio'])->inverseOf('rutinas');
     }

@@ -14,9 +14,9 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'nombre')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'ejercicio')->textInput() ?>
+    <?= $form->field($model, 'ejercicio')->dropDownList($listaEjercicios, ['prompt' => 'Seleccione el ejercicio a añadir']) ?>
 
-    <?= $form->field($model, 'dia')->textInput() ?>
+    <?= $form->field($model, 'dia')->dropDownList($listaDias, ['prompt' => 'Seleccione el día de la semana']) ?>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
