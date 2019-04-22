@@ -25,7 +25,7 @@ class MonitoresController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::class,
-                'only' => ['update', 'create', 'view'],
+                'only' => ['update', 'create', 'view', 'index'],
                 'rules' => [
                     [
                         'allow' => true,
