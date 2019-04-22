@@ -14,6 +14,8 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'nombre')->textInput(['maxlength' => true]) ?>
 
+    <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
+
     <?= $form->field($model, 'contrasena')->passwordInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'contrasena_repeat')->passwordInput(['maxlength' => true]) ?>
