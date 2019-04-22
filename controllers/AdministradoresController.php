@@ -24,11 +24,11 @@ class AdministradoresController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::class,
-                'only' => ['update', 'create', 'view'],
+                'only' => ['update', 'create', 'view', 'index'],
                 'rules' => [
                     [
                         'allow' => true,
-                        'actions' => ['update', 'view'],
+                        'actions' => ['update'],
                         'roles' => ['@'],
                         'matchCallback' => function ($rule, $action) {
                             $ruta = explode('/', Yii::$app->request->get('r'));
@@ -36,12 +36,13 @@ class AdministradoresController extends Controller
                         },
                     ],
                     [
-                        // 'allow' => true,
-                        // 'actions' => ['create'],
-                        // 'roles' => ['@'],
-                        // 'matchCallback' => function ($rule, $action) {
-                        //     return Yii::$app->request->get('id') == Yii::$app->user->id;
-                        // },
+                        'allow' => true,
+                        'actions' => ['create', 'index', 'view'],
+                        'roles' => ['@'],
+                        'matchCallback' => function ($rule, $action) {
+                            $tipo = explode('-', Yii::$app->user->id);
+                            return $tipo[0] == 'administradores';
+                        },
                     ],
                 ],
             ],

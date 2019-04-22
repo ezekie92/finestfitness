@@ -26,7 +26,7 @@ class ClientesController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::class,
-                'only' => ['update', 'create', 'view'],
+                'only' => ['update', 'create', 'view', 'delete', 'index'],
                 'rules' => [
                     [
                         'allow' => true,
@@ -38,12 +38,13 @@ class ClientesController extends Controller
                         },
                     ],
                     [
-                        // 'allow' => true,
-                        // 'actions' => ['create'],
-                        // 'roles' => ['@'],
-                        // 'matchCallback' => function ($rule, $action) {
-                        //     return Yii::$app->request->get('id') == Yii::$app->user->id;
-                        // },
+                        'allow' => true,
+                        'actions' => ['create', 'update', 'view', 'delete', 'index'],
+                        'roles' => ['@'],
+                        'matchCallback' => function ($rule, $action) {
+                            $tipo = explode('-', Yii::$app->user->id);
+                            return $tipo[0] == 'administradores';
+                        },
                     ],
                 ],
             ],
