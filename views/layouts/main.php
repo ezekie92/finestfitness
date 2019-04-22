@@ -44,6 +44,7 @@ AppAsset::register($this);
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items' => [
             ['label' => 'Home', 'url' => ['/site/index']],
+            ['label' => 'Rutinas', 'url' => ['/rutinas/index']],
             [
                 'label' => 'Clases',
                 'items' => [
