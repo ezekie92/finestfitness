@@ -80,7 +80,7 @@ class ClasesSearch extends Clases
             'plazas' => $this->plazas,
         ]);
 
-        $query->andFilterWhere(['ilike', 'nombre', $this->nombre])
+        $query->andFilterWhere(['ilike', 'clases.nombre', $this->nombre])
         ->andFilterWhere(['ilike', 'dias.dia', $this->getAttribute('diaClase.dia')])
         ->andFilterWhere(['ilike', 'monitores.nombre', $this->getAttribute('monitorClase.nombre')]);
 

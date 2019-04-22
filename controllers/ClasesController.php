@@ -25,7 +25,7 @@ class ClasesController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::class,
-                'only' => ['update', 'create', 'view'],
+                'only' => ['update', 'create', 'index', 'view'],
                 'rules' => [
                     [
                         'allow' => true,
@@ -38,7 +38,7 @@ class ClasesController extends Controller
                     ],
                     [
                         'allow' => true,
-                        'actions' => ['view'],
+                        'actions' => ['index', 'view'],
                         'roles' => ['@'],
                     ],
                 ],
