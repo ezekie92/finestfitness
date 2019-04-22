@@ -5,7 +5,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\Clases */
 
-$this->title = 'Create Clases';
+$this->title = 'Crear Clase';
 $this->params['breadcrumbs'][] = ['label' => 'Clases', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -15,6 +15,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= $this->render('_form', [
         'model' => $model,
+        'listaDias' => $listaDias,
+        'listaMonitores' => $listaMonitores,
     ]) ?>
 
 </div>

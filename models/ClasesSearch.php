@@ -4,7 +4,6 @@ namespace app\models;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\Clases;
 
 /**
  * ClasesSearch represents the model behind the search form of `app\models\Clases`.
@@ -18,8 +17,13 @@ class ClasesSearch extends Clases
     {
         return [
             [['id', 'dia', 'monitor', 'plazas'], 'integer'],
-            [['nombre', 'hora_inicio', 'hora_fin'], 'safe'],
+            [['nombre', 'hora_inicio', 'hora_fin', 'diaClase.dia', 'monitorClase.nombre'], 'safe'],
         ];
+    }
+
+    public function attributes()
+    {
+        return array_merge(parent::attributes(), ['diaClase.dia', 'monitorClase.nombre']);
     }
 
     /**
@@ -32,7 +36,7 @@ class ClasesSearch extends Clases
     }
 
     /**
-     * Creates data provider instance with search query applied
+     * Creates data provider instance with search query applied.
      *
      * @param array $params
      *
@@ -40,13 +44,23 @@ class ClasesSearch extends Clases
      */
     public function search($params)
     {
-        $query = Clases::find();
+        $query = Clases::find()->joinWith(['diaClase', 'monitorClase']);
 
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
+
+        $dataProvider->sort->attributes['diaClase.dia'] = [
+           'asc' => ['dias.dia' => SORT_ASC],
+           'desc' => ['dias.dia' => SORT_DESC],
+        ];
+
+        $dataProvider->sort->attributes['monitorClase.nombre'] = [
+           'asc' => ['monitores.nombre' => SORT_ASC],
+           'desc' => ['monitores.nombre' => SORT_DESC],
+        ];
 
         $this->load($params);
 
@@ -66,7 +80,9 @@ class ClasesSearch extends Clases
             'plazas' => $this->plazas,
         ]);
 
-        $query->andFilterWhere(['ilike', 'nombre', $this->nombre]);
+        $query->andFilterWhere(['ilike', 'nombre', $this->nombre])
+        ->andFilterWhere(['ilike', 'dias.dia', $this->getAttribute('diaClase.dia')])
+        ->andFilterWhere(['ilike', 'monitores.nombre', $this->getAttribute('monitorClase.nombre')]);
 
         return $dataProvider;
     }

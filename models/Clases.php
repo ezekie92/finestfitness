@@ -61,7 +61,7 @@ class Clases extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getDia()
+    public function getDiaClase()
     {
         return $this->hasOne(Dias::className(), ['id' => 'dia'])->inverseOf('clases');
     }
@@ -69,7 +69,7 @@ class Clases extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getMonitor()
+    public function getMonitorClase()
     {
         return $this->hasOne(Monitores::className(), ['id' => 'monitor'])->inverseOf('clases');
     }

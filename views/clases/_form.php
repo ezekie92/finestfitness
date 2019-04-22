@@ -18,14 +18,14 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'hora_fin')->textInput() ?>
 
-    <?= $form->field($model, 'dia')->textInput() ?>
+    <?= $form->field($model, 'dia')->dropDownList($listaDias, ['prompt' => 'Seleccione el día']) ?>
 
-    <?= $form->field($model, 'monitor')->textInput() ?>
+    <?= $form->field($model, 'monitor')->dropDownList($listaMonitores, ['prompt' => 'Seleccione el monitor']) ?>
 
     <?= $form->field($model, 'plazas')->textInput() ?>
 
     <div class="form-group">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

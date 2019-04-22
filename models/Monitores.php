@@ -98,7 +98,7 @@ class Monitores extends \yii\db\ActiveRecord
      */
     public function getClases()
     {
-        return $this->hasMany(Clases::className(), ['monitor' => 'id'])->inverseOf('monitor');
+        return $this->hasMany(Clases::className(), ['monitor' => 'id'])->inverseOf('monitorClase');
     }
 
     /**

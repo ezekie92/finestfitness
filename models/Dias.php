@@ -49,7 +49,7 @@ class Dias extends \yii\db\ActiveRecord
      */
     public function getClases()
     {
-        return $this->hasMany(Clases::className(), ['dia' => 'id'])->inverseOf('dia');
+        return $this->hasMany(Clases::className(), ['dia' => 'id'])->inverseOf('diaClase');
     }
 
     /**

@@ -2,12 +2,15 @@
 
 namespace app\controllers;
 
-use Yii;
 use app\models\Clases;
 use app\models\ClasesSearch;
+use app\models\Dias;
+use app\models\Monitores;
+use Yii;
+use yii\filters\AccessControl;
+use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 
 /**
  * ClasesController implements the CRUD actions for Clases model.
@@ -20,6 +23,26 @@ class ClasesController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::class,
+                'only' => ['update', 'create', 'view'],
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'actions' => ['create', 'update'],
+                        'roles' => ['@'],
+                        'matchCallback' => function ($rule, $action) {
+                            $tipo = explode('-', Yii::$app->user->id);
+                            return $tipo[0] == 'administradores';
+                        },
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['view'],
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -46,7 +69,7 @@ class ClasesController extends Controller
 
     /**
      * Displays a single Clases model.
-     * @param integer $id
+     * @param int $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
@@ -72,13 +95,15 @@ class ClasesController extends Controller
 
         return $this->render('create', [
             'model' => $model,
+            'listaDias' => $this->listaDias(),
+            'listaMonitores' => $this->listaMonitores(),
         ]);
     }
 
     /**
      * Updates an existing Clases model.
      * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
+     * @param int $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
@@ -92,13 +117,15 @@ class ClasesController extends Controller
 
         return $this->render('update', [
             'model' => $model,
+            'listaDias' => $this->listaDias(),
+            'listaMonitores' => $this->listaMonitores(),
         ]);
     }
 
     /**
      * Deletes an existing Clases model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
+     * @param int $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
@@ -112,7 +139,7 @@ class ClasesController extends Controller
     /**
      * Finds the Clases model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
+     * @param int $id
      * @return Clases the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
@@ -123,5 +150,23 @@ class ClasesController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    /**
+     * Devuelve un listado de los dias.
+     * @return Dias
+     */
+    private function listaDias()
+    {
+        return Dias::find()->select('dia')->indexBy('id')->column();
+    }
+
+    /**
+     * Devuelve un listado de monitores.
+     * @return Monitores el monitor que puede imparte la clase
+     */
+    private function listaMonitores()
+    {
+        return Monitores::find()->select('nombre')->indexBy('id')->column();
     }
 }
