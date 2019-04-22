@@ -41,7 +41,11 @@ $this->params['breadcrumbs'][] = $this->title;
                 'header' => 'Acciones',
                 'buttons'=>[
                     'view'=>function ($url, $model) {
-                        return null;
+                        return Html::a(
+                            'Ver perfil',
+                            ['clientes/view', 'id' => $model->id],
+                            ['class' => 'btn btn-primary btn-xs']
+                        );
                     },
                     'update'=>function ($url, $model) {
                         return Html::a(
