@@ -12,7 +12,7 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'dia')->textInput() ?>
+    <?= $form->field($model, 'dia')->dropDownList($dias) ?>
 
     <?= $form->field($model, 'apertura')->textInput() ?>
 

@@ -2,12 +2,13 @@
 
 namespace app\controllers;
 
-use Yii;
+use app\models\Dias;
 use app\models\Horarios;
 use app\models\HorariosSearch;
+use Yii;
+use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 
 /**
  * HorariosController implements the CRUD actions for Horarios model.
@@ -46,7 +47,7 @@ class HorariosController extends Controller
 
     /**
      * Displays a single Horarios model.
-     * @param integer $id
+     * @param int $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
@@ -72,13 +73,14 @@ class HorariosController extends Controller
 
         return $this->render('create', [
             'model' => $model,
+            'dias' => $this->listaDias(),
         ]);
     }
 
     /**
      * Updates an existing Horarios model.
      * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
+     * @param int $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
@@ -87,18 +89,19 @@ class HorariosController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['index']);
         }
 
         return $this->render('update', [
             'model' => $model,
+            'dias' => $this->listaDias(),
         ]);
     }
 
     /**
      * Deletes an existing Horarios model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
+     * @param int $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
@@ -112,7 +115,7 @@ class HorariosController extends Controller
     /**
      * Finds the Horarios model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
+     * @param int $id
      * @return Horarios the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
@@ -123,5 +126,14 @@ class HorariosController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    /**
+     * Devuelve un listado de los días de la semana.
+     * @return Dias El dia de la semana
+     */
+    private function listaDias()
+    {
+        return Dias::find()->select('dia')->indexBy('id')->column();
     }
 }

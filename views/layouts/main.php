@@ -44,11 +44,13 @@ AppAsset::register($this);
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items' => [
             ['label' => 'Home', 'url' => ['/site/index']],
+            ['label' => 'Horario', 'url' => ['/horarios/index']],
             ['label' => 'Rutinas', 'url' => ['/rutinas/index']],
             [
                 'label' => 'Clases',
                 'items' => [
                     ['label' => 'Clases', 'url' => ['/clases/index']],
+                    ['label' => 'Entrenos', 'url' => ['/entrenamientos/index']],
                 ],
             ],
             [
