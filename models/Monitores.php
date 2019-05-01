@@ -68,6 +68,14 @@ class Monitores extends \yii\db\ActiveRecord
             [['email', 'contrasena'], 'string', 'max' => 60],
             [['foto'], 'string', 'max' => 255],
             [['email'], 'unique'],
+            [['email'], 'unique',
+               'targetClass' => Administradores::ClassName(),
+                'targetAttribute' => ['email'],
+            ],
+            [['email'], 'unique',
+               'targetClass' => Clientes::ClassName(),
+                'targetAttribute' => ['email'],
+            ],
         ];
     }
 

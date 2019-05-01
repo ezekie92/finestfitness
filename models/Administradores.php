@@ -51,6 +51,14 @@ class Administradores extends \yii\db\ActiveRecord
             [['nombre'], 'string', 'max' => 32],
             [['email', 'contrasena'], 'string', 'max' => 60],
             [['email'], 'unique'],
+            [['email'], 'unique',
+               'targetClass' => Clientes::ClassName(),
+                'targetAttribute' => ['email'],
+            ],
+            [['email'], 'unique',
+               'targetClass' => Monitores::ClassName(),
+                'targetAttribute' => ['email'],
+            ],
         ];
     }
 
