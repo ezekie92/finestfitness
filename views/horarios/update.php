@@ -16,7 +16,6 @@ $this->params['breadcrumbs'][] = 'Update';
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-
     <?php $form = ActiveForm::begin(); ?>
 
     <?= $form->field($model, 'apertura')->textInput() ?>
@@ -24,7 +23,7 @@ $this->params['breadcrumbs'][] = 'Update';
     <?= $form->field($model, 'cierre')->textInput() ?>
 
     <div class="form-group">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

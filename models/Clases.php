@@ -52,8 +52,8 @@ class Clases extends \yii\db\ActiveRecord
             'nombre' => 'Nombre',
             'hora_inicio' => 'Hora Inicio',
             'hora_fin' => 'Hora Fin',
-            'dia' => 'Dia',
-            'monitor' => 'Monitor',
+            'diaClase.dia' => 'Día',
+            'monitorClase.nombre' => 'Monitor',
             'plazas' => 'Plazas',
         ];
     }

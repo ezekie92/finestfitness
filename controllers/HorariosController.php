@@ -2,10 +2,13 @@
 
 namespace app\controllers;
 
+use app\models\Clases;
 use app\models\Dias;
+use app\models\Entrenamientos;
 use app\models\Horarios;
 use app\models\HorariosSearch;
 use Yii;
+use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -21,6 +24,30 @@ class HorariosController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::class,
+                'only' => ['update', 'view', 'index'],
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'actions' => ['index'],
+                        'roles' => ['@'],
+                        'matchCallback' => function ($rule, $action) {
+                            $ruta = explode('/', Yii::$app->request->get('r'));
+                            return ($ruta[0] . '-' . Yii::$app->request->get('id')) == Yii::$app->user->id;
+                        },
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['update', 'view', 'index', 'create'],
+                        'roles' => ['@'],
+                        'matchCallback' => function ($rule, $action) {
+                            $tipo = explode('-', Yii::$app->user->id);
+                            return $tipo[0] == 'administradores';
+                        },
+                    ],
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -89,6 +116,8 @@ class HorariosController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            $this->cancelarClases($model->apertura, $model->cierre, $model->dia);
+            $this->cancelarEntrenamientos($model->apertura, $model->cierre, $model->dia);
             return $this->redirect(['index']);
         }
 
@@ -135,5 +164,54 @@ class HorariosController extends Controller
     private function listaDias()
     {
         return Dias::find()->select('dia')->indexBy('id')->column();
+    }
+
+    /**
+     * Cancela las clases que se queden fuera del nuevo horario.
+     * @param  string $inicio La hora a la que abre el gimnasio
+     * @param  string $fin    La hora a la que abre el gimnasio
+     * @param  int $dia       El día de la semana en cuestión
+     */
+    private function cancelarClases($inicio, $fin, $dia)
+    {
+        $clases = Clases::find()
+                        ->where(['dia' => $dia])
+                        ->andWhere(['<', 'hora_inicio', $inicio])
+                        ->orWhere(['>', 'hora_fin', $fin])
+                        ->all();
+
+        foreach ($clases as $key => $value) {
+            $model = Clases::find()->where(['id' => $value->id])->one();
+            if ($model->plazas) {
+                $model->nombre = $model->nombre . ' (CANCELADA)';
+            }
+            $model->plazas = 0;
+            $model->update();
+        }
+    }
+
+    /**
+     * Cancela los entrenamientos que se queden fuera del nuevo horario.
+     * @param  string $inicio La hora a la que abre el gimnasio
+     * @param  string $fin    La hora a la que abre el gimnasio
+     * @param  int $dia       El día de la semana en cuestión
+     */
+    private function cancelarEntrenamientos($inicio, $fin, $dia)
+    {
+        $ent = Entrenamientos::find()
+                        ->where(['dia' => $dia])
+                        ->andWhere(['<', 'hora_inicio', $inicio])
+                        ->orWhere(['>', 'hora_fin', $fin])
+                        ->all();
+
+        foreach ($ent as $key => $value) {
+            $model = Entrenamientos::find()
+                        ->where(['cliente_id' => $value->cliente_id])
+                        ->andWhere(['monitor_id' => $value->monitor_id])
+                        ->one();
+            $model->hora_inicio = null;
+            $model->hora_fin = null;
+            $model->update();
+        }
     }
 }
