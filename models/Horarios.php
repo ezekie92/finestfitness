@@ -52,7 +52,7 @@ class Horarios extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getDia()
+    public function getNombreDia()
     {
         return $this->hasOne(Dias::className(), ['id' => 'dia'])->inverseOf('horarios');
     }

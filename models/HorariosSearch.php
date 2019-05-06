@@ -4,7 +4,6 @@ namespace app\models;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\Horarios;
 
 /**
  * HorariosSearch represents the model behind the search form of `app\models\Horarios`.
@@ -22,6 +21,11 @@ class HorariosSearch extends Horarios
         ];
     }
 
+    public function attributes()
+    {
+        return array_merge(parent::attributes(), ['nombreDia.dia']);
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -32,7 +36,7 @@ class HorariosSearch extends Horarios
     }
 
     /**
-     * Creates data provider instance with search query applied
+     * Creates data provider instance with search query applied.
      *
      * @param array $params
      *
@@ -40,13 +44,19 @@ class HorariosSearch extends Horarios
      */
     public function search($params)
     {
-        $query = Horarios::find();
+        $query = Horarios::find()->joinWith('nombreDia');
 
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort' => ['defaultOrder' => ['dia' => SORT_ASC]],
         ]);
+
+        $dataProvider->sort->attributes['nombreDia.dia'] = [
+           'asc' => ['dias.dia' => SORT_ASC],
+           'desc' => ['dias.dia' => SORT_DESC],
+        ];
 
         $this->load($params);
 

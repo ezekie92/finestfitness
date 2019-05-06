@@ -67,7 +67,7 @@ class Entrenamientos extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getDia()
+    public function getDiaSemana()
     {
         return $this->hasOne(Dias::className(), ['id' => 'dia'])->inverseOf('entrenamientos');
     }
