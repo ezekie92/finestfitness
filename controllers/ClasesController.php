@@ -25,11 +25,11 @@ class ClasesController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::class,
-                'only' => ['update', 'create', 'index', 'view'],
+                'only' => ['update', 'create', 'index', 'view', 'delete'],
                 'rules' => [
                     [
                         'allow' => true,
-                        'actions' => ['create', 'update'],
+                        'actions' => ['create', 'update', 'delete'],
                         'roles' => ['@'],
                         'matchCallback' => function ($rule, $action) {
                             $tipo = explode('-', Yii::$app->user->id);
@@ -134,6 +134,27 @@ class ClasesController extends Controller
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
+    }
+
+    /**
+     * Cambia el monitor asignado a la Clase.
+     * If update is successful, the browser will be redirected to the 'view' page.
+     * @param int $id
+     * @return mixed
+     * @throws NotFoundHttpException si no se encuentra el modelo
+     */
+    public function actionCambiarMonitor($id)
+    {
+        $model = $this->findModel($id);
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['index']);
+        }
+
+        return $this->renderAjax('_monitor', [
+            'model' => $model,
+            'listaMonitores' => $this->listaMonitores(),
+        ]);
     }
 
     /**
