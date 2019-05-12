@@ -50,6 +50,7 @@ AppAsset::register($this);
                 'label' => 'Clases',
                 'items' => [
                     ['label' => 'Clases', 'url' => ['/clases/index']],
+                    ['label' => 'Mis clases', 'url' => ['/clases/clases-monitor']],
                 ],
             ],
             [

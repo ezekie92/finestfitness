@@ -27,15 +27,24 @@ class ClasesController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::class,
-                'only' => ['update', 'create', 'index', 'view', 'delete', 'cambiar-monitor'],
+                'only' => ['update', 'create', 'index', 'view', 'delete', 'cambiar-monitor', 'clases-monitor'],
                 'rules' => [
                     [
                         'allow' => true,
-                        'actions' => ['create', 'update', 'delete'],
+                        'actions' => ['create', 'update', 'delete', 'cambiar-monitor'],
                         'roles' => ['@'],
                         'matchCallback' => function ($rule, $action) {
                             $tipo = explode('-', Yii::$app->user->id);
                             return $tipo[0] == 'administradores';
+                        },
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['clases-monitor'],
+                        'roles' => ['@'],
+                        'matchCallback' => function ($rule, $action) {
+                            $tipo = explode('-', Yii::$app->user->id);
+                            return $tipo[0] == 'monitores';
                         },
                     ],
                     [
@@ -62,6 +71,23 @@ class ClasesController extends Controller
     {
         $searchModel = new ClasesSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    /**
+     * Lista todas las clases que imparte un entrenador.
+     * @return mixed
+     */
+    public function actionClasesMonitor()
+    {
+        $searchModel = new ClasesSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $id = explode('-', Yii::$app->user->identity->getid())[1];
+        $dataProvider->query->where(['monitor' => $id]);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
