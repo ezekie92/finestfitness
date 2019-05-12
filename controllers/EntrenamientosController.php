@@ -5,6 +5,7 @@ namespace app\controllers;
 use app\models\Entrenamientos;
 use app\models\EntrenamientosSearch;
 use Yii;
+use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -20,6 +21,30 @@ class EntrenamientosController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::class,
+                'only' => ['index', 'clientes-entrenador', 'view', 'create', 'update', 'delete'],
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'actions' => ['index', 'view', 'create', 'update', 'delete'],
+                        'roles' => ['@'],
+                        'matchCallback' => function ($rule, $action) {
+                            $tipo = explode('-', Yii::$app->user->id);
+                            return $tipo[0] == 'administradores';
+                        },
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['clientes-entrenador'],
+                        'roles' => ['@'],
+                        'matchCallback' => function ($rule, $action) {
+                            $tipo = explode('-', Yii::$app->user->id);
+                            return $tipo[0] == 'monitores';
+                        },
+                    ],
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -37,6 +62,23 @@ class EntrenamientosController extends Controller
     {
         $searchModel = new EntrenamientosSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    /**
+     * Lista todos los clientes que entrena un entrenador.
+     * @return mixed
+     */
+    public function actionClientesEntrenador()
+    {
+        $searchModel = new EntrenamientosSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $id = explode('-', Yii::$app->user->identity->getid())[1];
+        $dataProvider->query->where(['monitor_id' => $id]);
 
         return $this->render('index', [
             'searchModel' => $searchModel,

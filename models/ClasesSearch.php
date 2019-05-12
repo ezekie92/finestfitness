@@ -50,6 +50,7 @@ class ClasesSearch extends Clases
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort' => ['defaultOrder' => ['diaClase.dia' => SORT_ASC, 'hora_inicio' => SORT_ASC]],
         ]);
 
         $dataProvider->sort->attributes['diaClase.dia'] = [
