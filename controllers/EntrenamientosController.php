@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\models\Entrenamientos;
 use app\models\EntrenamientosSearch;
+use app\models\Horarios;
 use Yii;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
@@ -109,8 +110,14 @@ class EntrenamientosController extends Controller
     {
         $model = new Entrenamientos();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'cliente_id' => $model->cliente_id, 'monitor_id' => $model->monitor_id]);
+        if ($model->load(Yii::$app->request->post())) {
+            $comprobar = $this->comprobarHorario($model->hora_inicio, $model->hora_fin, $model->dia, $model->diaSemana->dia);
+
+            if ($comprobar) {
+                if ($model->save()) {
+                    return $this->redirect(['index']);
+                }
+            }
         }
 
         return $this->render('create', [
@@ -130,8 +137,14 @@ class EntrenamientosController extends Controller
     {
         $model = $this->findModel($cliente_id, $monitor_id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'cliente_id' => $model->cliente_id, 'monitor_id' => $model->monitor_id]);
+        if ($model->load(Yii::$app->request->post())) {
+            $comprobar = $this->comprobarHorario($model->hora_inicio, $model->hora_fin, $model->dia, $model->diaSemana->dia);
+
+            if ($comprobar) {
+                if ($model->save()) {
+                    return $this->redirect(['index']);
+                }
+            }
         }
 
         return $this->render('update', [
@@ -169,5 +182,35 @@ class EntrenamientosController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    /**
+     * Comprueba que el horario de una sesión de entrenamiento está dentro del
+     * horario de apertura y cierre del gimnasio en el día en el que se quiere
+     * llevar a cabo.
+     * @param  string $inicio La hora a la que empieza el entrenamiento
+     * @param  string $fin    La hora a la que termina el entrenamiento
+     * @param  int    $dia    El id del día de la semana
+     * @param  string $nDia   El nombre del día de la semana
+     * @return mixed          True si no da error, o flash en caso de haberlo
+     */
+    private function comprobarHorario($inicio, $fin, $dia, $nDia)
+    {
+        $apertura = Horarios::find()->select('apertura')->where(['id' => $dia])->scalar();
+        $cierre = Horarios::find()->select('cierre')->where(['id' => $dia])->scalar();
+
+        if (strtotime($inicio) < strtotime($apertura) ||
+            strtotime($inicio) > strtotime($cierre) ||
+            strtotime($fin) < strtotime($apertura) ||
+            strtotime($fin) > strtotime($cierre)) {
+            $mensaje = 'Los entrenamientos del ' . $nDia .
+                        " deben empezar después de las $apertura" .
+                        " y terminar antes de las $cierre.";
+            return Yii::$app->session->setFlash('danger', $mensaje);
+        } elseif (strtotime($inicio) > strtotime($fin)) {
+            $mensaje = 'Las entrenamientos no pueden terminar antes de la hora a la que empiezan.';
+            return Yii::$app->session->setFlash('danger', $mensaje);
+        }
+        return true;
     }
 }
