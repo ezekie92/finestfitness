@@ -26,8 +26,8 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'cliente.nombre',
-            'monitor.nombre',
+            'cliente.nombre:text:Cliente',
+            'monitor.nombre:text:Monitor',
             'hora_inicio',
             'hora_fin',
             'diaSemana.dia',

@@ -50,9 +50,16 @@ AppAsset::register($this);
                 'label' => 'Clases',
                 'items' => [
                     ['label' => 'Clases', 'url' => ['/clases/index']],
-                    ['label' => 'Entrenos', 'url' => ['/entrenamientos/index']],
                 ],
             ],
+            [
+                'label' => 'Entrenamientos',
+                'items' => [
+                    ['label' => 'Entrenos', 'url' => ['/entrenamientos/index']],
+                    ['label' => 'Mis entrenos', 'url' => ['/entrenamientos/clientes-entrenador']],
+                ],
+            ],
+
             [
                 'label' => 'Administradores',
                 'items' => [
