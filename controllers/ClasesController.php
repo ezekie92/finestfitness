@@ -11,6 +11,8 @@ use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use yii\web\Response;
+use yii\widgets\ActiveForm;
 
 /**
  * ClasesController implements the CRUD actions for Clases model.
@@ -138,7 +140,7 @@ class ClasesController extends Controller
 
     /**
      * Cambia el monitor asignado a la Clase.
-     * If update is successful, the browser will be redirected to the 'view' page.
+     * If update is successful, the browser will be redirected to the 'index' page.
      * @param int $id
      * @return mixed
      * @throws NotFoundHttpException si no se encuentra el modelo
@@ -146,6 +148,11 @@ class ClasesController extends Controller
     public function actionCambiarMonitor($id)
     {
         $model = $this->findModel($id);
+
+        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            return ActiveForm::validate($model);
+        }
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['index']);

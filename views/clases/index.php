@@ -1,5 +1,7 @@
 <?php
 
+use yii\bootstrap\Modal;
+use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\grid\GridView;
 
@@ -10,14 +12,34 @@ use yii\grid\GridView;
 
 $this->title = 'Clases';
 $this->params['breadcrumbs'][] = $this->title;
+
+$js = <<<EOF
+$(function(){
+    $('.showModalButton').click(function() {
+        //if modal isn't open; open it and load content
+        $('#modal').modal('show')
+        .find('#modalContent')
+        .load($(this).attr('value'));
+    });
+});
+EOF;
+$this->registerJs($js);
 ?>
 
 <!-- Vista modal para cambiar el monitor asignado a una clase -->
-<div class="modal remote fade" id="modalmonitor">
-        <div class="modal-dialog">
-            <div class="modal-content loader-lg"></div>
-        </div>
-</div>
+<?php
+    Modal::begin([
+        'closeButton' => [
+              'label' => "&times;",
+        ],
+        'header' => 'CAMBIAR MONITOR',
+        'headerOptions' => ['id' => 'modalHeader', 'class' => 'bg-primary text-center'],
+        'id' => 'modal',
+        'size' => 'modal-md',
+    ]);
+    echo "<div id='modalContent' class='text-right'></div>";
+    Modal::end();
+?>
 
 <div class="clases-index">
 
@@ -43,17 +65,15 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => 'Acciones',
-                'headerOptions' => ['class' => 'text-primary', 'style' => 'width:8%'],
+                'headerOptions' => ['class' => 'text-primary', 'style' => 'width:10%'],
                 'template' => '{monitor} {view} {update} {delete}',
                 'buttons'=>[
                     'monitor'=>function ($url, $model) {
-                        return Html::a(
+                        return Html::button(
                             '<i class="glyphicon glyphicon-education"></i>',
-                            ['clases/cambiar-monitor', 'id' => $model->id],
                             [
-                                'title' => 'Cambiar monitor',
-                                'data-toggle'=>'modal',
-                                'data-target'=>'#modalmonitor',
+                                'value' => Url::to(['clases/cambiar-monitor', 'id' => $model->id]),
+                                'class' => 'showModalButton btn btn-link btn-xs'
                             ]
                         );
                     },
