@@ -27,7 +27,7 @@ class ClasesController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::class,
-                'only' => ['update', 'create', 'index', 'view', 'delete'],
+                'only' => ['update', 'create', 'index', 'view', 'delete', 'cambiar-monitor'],
                 'rules' => [
                     [
                         'allow' => true,
