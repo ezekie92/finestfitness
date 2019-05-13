@@ -15,7 +15,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Create Rutinas', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Crear Rutina', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
@@ -35,7 +35,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'buttons' => [
                     'ejercicios'=>function ($url, $model) {
                         return Html::a(
-                            'Ver ejercicios',
+                            'Ver rutina',
                             ['ejercicios/rutina', 'id' => $model->id],
                             ['class' => 'btn btn-primary btn-xs']
                         );

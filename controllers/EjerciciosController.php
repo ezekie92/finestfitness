@@ -2,8 +2,10 @@
 
 namespace app\controllers;
 
+use app\models\Dias;
 use app\models\Ejercicios;
 use app\models\EjerciciosSearch;
+use app\models\Rutinas;
 use Yii;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
@@ -68,11 +70,13 @@ class EjerciciosController extends Controller
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $dataProvider->query->where(['rutina_id' => $id]);
         $dias = Ejercicios::find()->joinWith('dia')->select('dia')->where(['rutina_id' => $id])->indexBy('dia_id')->distinct()->column();
-
+        ksort($dias);
+        $nombre = Rutinas::findOne($id)->nombre;
 
         return $this->render('rutina', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'nombre' => $nombre,
             'dias' => $dias,
         ]);
     }
@@ -92,6 +96,27 @@ class EjerciciosController extends Controller
 
         return $this->render('create', [
             'model' => $model,
+        ]);
+    }
+
+    /**
+     * Añade un nuevo ejercicio a una rutina concreta.
+     * Si se añade con éxito, redirige a la vista de ejercicios de la rutina.
+     * @param int $rutina El id de la rutina
+     * @return mixed
+     */
+    public function actionAnadir($rutina)
+    {
+        $model = new Ejercicios();
+        $model->rutina_id = $rutina;
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['ejercicios/rutina', 'id' => $rutina]);
+        }
+
+        return $this->render('anadir', [
+            'model' => $model,
+            'listaDias' => $this->listaDias(),
         ]);
     }
 
@@ -143,5 +168,14 @@ class EjerciciosController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    /**
+     * Devuelve un listado de los dias.
+     * @return Dias
+     */
+    private function listaDias()
+    {
+        return Dias::find()->select('dia')->indexBy('id')->column();
     }
 }

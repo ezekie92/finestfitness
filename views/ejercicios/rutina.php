@@ -1,13 +1,13 @@
 <?php
 
 use yii\helpers\Html;
-use yii\grid\GridView;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\EjerciciosSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Rutina: ' . $dataProvider->models[0]->rutina->nombre;
+$this->title = 'Rutina: ' . $nombre;
+$this->params['breadcrumbs'][] = ['label' => 'Rutinas', 'url' => ['rutinas/index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="ejercicios-index">
@@ -15,22 +15,10 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Create Ejercicios', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Añadir ejercicio', ['anadir', 'rutina' => $_GET['id']], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
-    <!-- <pre>
-        <?php
-        // $dias = 0;
-        // foreach ($dataProvider->models as $key => $value) {
-        //     $dataProvider->models[$key]->dia_id != 1;
-        //     $dias++;
-        // }
-        // var_dump($dias);
-        ?>
-    </pre> -->
-
 
     <?php foreach ($dias as $key => $value): ?>
         <table class="table table-condensed">
@@ -57,25 +45,5 @@ $this->params['breadcrumbs'][] = $this->title;
             </tbody>
         </table>
     <?php endforeach; ?>
-
-    <?php
-    // GridView::widget([
-    //     'dataProvider' => $dataProvider,
-    //     // 'filterModel' => $searchModel,
-    //     'columns' => [
-    //
-    //         'nombre',
-    //         'dia.dia',
-    //         'rutina.nombre',
-    //         'series',
-    //         'repeticiones',
-    //         'descanso',
-    //         'peso',
-    //
-    //         ['class' => 'yii\grid\ActionColumn'],
-    //     ],
-    // ]);
-    ?>
-
 
 </div>
