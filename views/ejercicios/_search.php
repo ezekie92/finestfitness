@@ -19,11 +19,15 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'nombre') ?>
 
+    <?= $form->field($model, 'dia_id') ?>
+
+    <?= $form->field($model, 'rutina_id') ?>
+
     <?= $form->field($model, 'series') ?>
 
-    <?= $form->field($model, 'repeticiones') ?>
+    <?php // echo $form->field($model, 'repeticiones') ?>
 
-    <?= $form->field($model, 'descanso') ?>
+    <?php // echo $form->field($model, 'descanso') ?>
 
     <?php // echo $form->field($model, 'peso') ?>
 

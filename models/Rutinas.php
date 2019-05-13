@@ -2,16 +2,15 @@
 
 namespace app\models;
 
+use Yii;
+
 /**
  * This is the model class for table "rutinas".
  *
  * @property int $id
  * @property string $nombre
- * @property int $ejercicio
- * @property int $dia
  *
- * @property Dias $dia
- * @property Ejercicios $ejercicio
+ * @property Ejercicios[] $ejercicios
  */
 class Rutinas extends \yii\db\ActiveRecord
 {
@@ -29,12 +28,8 @@ class Rutinas extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['nombre', 'ejercicio', 'dia'], 'required'],
-            [['ejercicio', 'dia'], 'default', 'value' => null],
-            [['ejercicio', 'dia'], 'integer'],
+            [['nombre'], 'required'],
             [['nombre'], 'string', 'max' => 25],
-            [['dia'], 'exist', 'skipOnError' => true, 'targetClass' => Dias::className(), 'targetAttribute' => ['dia' => 'id']],
-            [['ejercicio'], 'exist', 'skipOnError' => true, 'targetClass' => Ejercicios::className(), 'targetAttribute' => ['ejercicio' => 'id']],
         ];
     }
 
@@ -46,17 +41,7 @@ class Rutinas extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'nombre' => 'Nombre',
-            'ejercicio' => 'Ejercicio',
-            'dia' => 'Dia',
         ];
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getDiaRutina()
-    {
-        return $this->hasOne(Dias::className(), ['id' => 'dia'])->inverseOf('rutinas');
     }
 
     /**
@@ -64,6 +49,6 @@ class Rutinas extends \yii\db\ActiveRecord
      */
     public function getEjercicios()
     {
-        return $this->hasOne(Ejercicios::className(), ['id' => 'ejercicio'])->inverseOf('rutinas');
+        return $this->hasMany(Ejercicios::className(), ['rutina_id' => 'id'])->inverseOf('rutina');
     }
 }

@@ -17,8 +17,8 @@ class EjerciciosSearch extends Ejercicios
     public function rules()
     {
         return [
-            [['id', 'series', 'repeticiones', 'descanso', 'peso'], 'integer'],
-            [['nombre'], 'safe'],
+            [['id', 'dia_id', 'rutina_id', 'descanso', 'peso'], 'integer'],
+            [['nombre', 'series', 'repeticiones'], 'safe'],
         ];
     }
 
@@ -59,13 +59,15 @@ class EjerciciosSearch extends Ejercicios
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'series' => $this->series,
-            'repeticiones' => $this->repeticiones,
+            'dia_id' => $this->dia_id,
+            'rutina_id' => $this->rutina_id,
             'descanso' => $this->descanso,
             'peso' => $this->peso,
         ]);
 
-        $query->andFilterWhere(['ilike', 'nombre', $this->nombre]);
+        $query->andFilterWhere(['ilike', 'nombre', $this->nombre])
+            ->andFilterWhere(['ilike', 'series', $this->series])
+            ->andFilterWhere(['ilike', 'repeticiones', $this->repeticiones]);
 
         return $dataProvider;
     }

@@ -5,7 +5,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\Rutinas */
 
-$this->title = 'Crear Rutina';
+$this->title = 'Create Rutinas';
 $this->params['breadcrumbs'][] = ['label' => 'Rutinas', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -15,8 +15,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= $this->render('_form', [
         'model' => $model,
-        'listaEjercicios' => $listaEjercicios,
-        'listaDias' => $listaDias,
     ]) ?>
 
 </div>

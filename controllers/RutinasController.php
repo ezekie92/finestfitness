@@ -2,12 +2,9 @@
 
 namespace app\controllers;
 
-use app\models\Dias;
-use app\models\Ejercicios;
 use app\models\Rutinas;
 use app\models\RutinasSearch;
 use Yii;
-use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -23,26 +20,6 @@ class RutinasController extends Controller
     public function behaviors()
     {
         return [
-            'access' => [
-                'class' => AccessControl::class,
-                'only' => ['update', 'create', 'index', 'view', 'delete'],
-                'rules' => [
-                    [
-                        'allow' => true,
-                        'actions' => ['create', 'update', 'delete'],
-                        'roles' => ['@'],
-                        'matchCallback' => function ($rule, $action) {
-                            $tipo = explode('-', Yii::$app->user->id);
-                            return $tipo[0] == 'administradores';
-                        },
-                    ],
-                    [
-                        'allow' => true,
-                        'actions' => ['index', 'view'],
-                        'roles' => ['@'],
-                    ],
-                ],
-            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -95,8 +72,6 @@ class RutinasController extends Controller
 
         return $this->render('create', [
             'model' => $model,
-            'listaDias' => $this->listaDias(),
-            'listaEjercicios' => $this->listaEjercicios(),
         ]);
     }
 
@@ -117,8 +92,6 @@ class RutinasController extends Controller
 
         return $this->render('update', [
             'model' => $model,
-            'listaDias' => $this->listaDias(),
-            'listaEjercicios' => $this->listaEjercicios(),
         ]);
     }
 
@@ -150,23 +123,5 @@ class RutinasController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
-    }
-
-    /**
-     * Devuelve un listado de los dias.
-     * @return Dias
-     */
-    private function listaDias()
-    {
-        return Dias::find()->select('dia')->indexBy('id')->column();
-    }
-
-    /**
-     * Devuelve un listado de ejercicios.
-     * @return Ejercicios uno de los ejercicios que componen la rutina
-     */
-    private function listaEjercicios()
-    {
-        return Ejercicios::find()->select('nombre')->indexBy('id')->column();
     }
 }

@@ -14,9 +14,13 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'nombre')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'series')->textInput() ?>
+    <?= $form->field($model, 'dia_id')->textInput() ?>
 
-    <?= $form->field($model, 'repeticiones')->textInput() ?>
+    <?= $form->field($model, 'rutina_id')->textInput() ?>
+
+    <?= $form->field($model, 'series')->textInput(['maxlength' => true]) ?>
+
+    <?= $form->field($model, 'repeticiones')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'descanso')->textInput() ?>
 

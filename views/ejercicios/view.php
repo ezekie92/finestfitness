@@ -31,6 +31,8 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'id',
             'nombre',
+            'dia_id',
+            'rutina_id',
             'series',
             'repeticiones',
             'descanso',

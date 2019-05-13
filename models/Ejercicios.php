@@ -2,17 +2,22 @@
 
 namespace app\models;
 
+use Yii;
+
 /**
  * This is the model class for table "ejercicios".
  *
  * @property int $id
  * @property string $nombre
- * @property int $series
- * @property int $repeticiones
+ * @property int $dia_id
+ * @property int $rutina_id
+ * @property string $series
+ * @property string $repeticiones
  * @property int $descanso
  * @property int $peso
  *
- * @property Rutinas[] $rutinas
+ * @property Dias $dia
+ * @property Rutinas $rutina
  */
 class Ejercicios extends \yii\db\ActiveRecord
 {
@@ -30,10 +35,14 @@ class Ejercicios extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['nombre'], 'required'],
-            [['series', 'repeticiones', 'descanso', 'peso'], 'default', 'value' => null],
-            [['series', 'repeticiones', 'descanso', 'peso'], 'integer'],
+            [['nombre', 'dia_id', 'rutina_id'], 'required'],
+            [['dia_id', 'rutina_id', 'descanso', 'peso'], 'default', 'value' => null],
+            [['dia_id', 'rutina_id', 'descanso', 'peso'], 'integer'],
             [['nombre'], 'string', 'max' => 60],
+            [['series'], 'string', 'max' => 5],
+            [['repeticiones'], 'string', 'max' => 15],
+            [['dia_id'], 'exist', 'skipOnError' => true, 'targetClass' => Dias::className(), 'targetAttribute' => ['dia_id' => 'id']],
+            [['rutina_id'], 'exist', 'skipOnError' => true, 'targetClass' => Rutinas::className(), 'targetAttribute' => ['rutina_id' => 'id']],
         ];
     }
 
@@ -45,6 +54,8 @@ class Ejercicios extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'nombre' => 'Nombre',
+            'dia_id' => 'Dia ID',
+            'rutina_id' => 'Rutina ID',
             'series' => 'Series',
             'repeticiones' => 'Repeticiones',
             'descanso' => 'Descanso',
@@ -55,8 +66,16 @@ class Ejercicios extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getRutinas()
+    public function getDia()
     {
-        return $this->hasMany(Rutinas::className(), ['ejercicios' => 'id'])->inverseOf('ejercicio');
+        return $this->hasOne(Dias::className(), ['id' => 'dia_id'])->inverseOf('ejercicios');
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getRutina()
+    {
+        return $this->hasOne(Rutinas::className(), ['id' => 'rutina_id'])->inverseOf('ejercicios');
     }
 }

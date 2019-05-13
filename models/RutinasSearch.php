@@ -4,6 +4,7 @@ namespace app\models;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
+use app\models\Rutinas;
 
 /**
  * RutinasSearch represents the model behind the search form of `app\models\Rutinas`.
@@ -16,14 +17,9 @@ class RutinasSearch extends Rutinas
     public function rules()
     {
         return [
-            [['id', 'ejercicio', 'dia'], 'integer'],
-            [['nombre', 'ejercicios.nombre', 'diaRutina.dia'], 'safe'],
+            [['id'], 'integer'],
+            [['nombre'], 'safe'],
         ];
-    }
-
-    public function attributes()
-    {
-        return array_merge(parent::attributes(), ['ejercicios.nombre', 'diaRutina.dia']);
     }
 
     /**
@@ -36,7 +32,7 @@ class RutinasSearch extends Rutinas
     }
 
     /**
-     * Creates data provider instance with search query applied.
+     * Creates data provider instance with search query applied
      *
      * @param array $params
      *
@@ -44,23 +40,13 @@ class RutinasSearch extends Rutinas
      */
     public function search($params)
     {
-        $query = Rutinas::find()->joinWith(['ejercicios', 'diaRutina']);
+        $query = Rutinas::find();
 
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
-
-        $dataProvider->sort->attributes['diaRutina.dia'] = [
-           'asc' => ['dias.dia' => SORT_ASC],
-           'desc' => ['dias.dia' => SORT_DESC],
-        ];
-
-        $dataProvider->sort->attributes['ejercicios.nombre'] = [
-           'asc' => ['ejercicios.nombre' => SORT_ASC],
-           'desc' => ['ejercicios.nombre' => SORT_DESC],
-        ];
 
         $this->load($params);
 
@@ -73,13 +59,9 @@ class RutinasSearch extends Rutinas
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'ejercicio' => $this->ejercicio,
-            'dia' => $this->dia,
         ]);
 
-        $query->andFilterWhere(['ilike', 'rutinas.nombre', $this->nombre])
-        ->andFilterWhere(['ilike', 'dias.dia', $this->getAttribute('diaRutina.dia')])
-        ->andFilterWhere(['ilike', 'ejercicios.nombre', $this->getAttribute('ejercicios.nombre')]);
+        $query->andFilterWhere(['ilike', 'nombre', $this->nombre]);
 
         return $dataProvider;
     }

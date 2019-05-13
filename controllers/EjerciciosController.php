@@ -2,12 +2,12 @@
 
 namespace app\controllers;
 
-use Yii;
 use app\models\Ejercicios;
 use app\models\EjerciciosSearch;
+use Yii;
+use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 
 /**
  * EjerciciosController implements the CRUD actions for Ejercicios model.
@@ -46,7 +46,7 @@ class EjerciciosController extends Controller
 
     /**
      * Displays a single Ejercicios model.
-     * @param integer $id
+     * @param int $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
@@ -54,6 +54,26 @@ class EjerciciosController extends Controller
     {
         return $this->render('view', [
             'model' => $this->findModel($id),
+        ]);
+    }
+
+    /**
+     * Muestra todos los ejercicios de una rutina.
+     * @param  int $id El id de la rutina
+     * @return mixed
+     */
+    public function actionRutina($id)
+    {
+        $searchModel = new EjerciciosSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->query->where(['rutina_id' => $id]);
+        $dias = Ejercicios::find()->joinWith('dia')->select('dia')->where(['rutina_id' => $id])->indexBy('dia_id')->distinct()->column();
+
+
+        return $this->render('rutina', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+            'dias' => $dias,
         ]);
     }
 
@@ -78,7 +98,7 @@ class EjerciciosController extends Controller
     /**
      * Updates an existing Ejercicios model.
      * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
+     * @param int $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
@@ -98,7 +118,7 @@ class EjerciciosController extends Controller
     /**
      * Deletes an existing Ejercicios model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
+     * @param int $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
@@ -112,7 +132,7 @@ class EjerciciosController extends Controller
     /**
      * Finds the Ejercicios model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
+     * @param int $id
      * @return Ejercicios the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */

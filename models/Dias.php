@@ -71,8 +71,8 @@ class Dias extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getRutinas()
+    public function getEjercicios()
     {
-        return $this->hasMany(Rutinas::className(), ['dia' => 'id'])->inverseOf('dia');
+        return $this->hasMany(Ejercicios::className(), ['dia_id' => 'id'])->inverseOf('dia');
     }
 }
