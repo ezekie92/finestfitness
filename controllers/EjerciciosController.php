@@ -32,6 +32,9 @@ class EjerciciosController extends Controller
                         'actions' => ['rutina', 'anadir'],
                         'roles' => ['@'],
                         'matchCallback' => function ($rule, $action) {
+                            if (Yii::$app->user->identity->getTipoId() != 'clientes') {
+                                return false;
+                            }
                             $rutina = isset($_GET['rutina']) ? $id = $_GET['rutina'] : $id = $_GET['id'];
                             $rutina = Rutinas::findOne(['id' => $id]);
                             return $rutina->cliente_id == Yii::$app->user->identity->getNId();
