@@ -26,8 +26,93 @@ AppAsset::register($this);
 </head>
 <body>
 <?php $this->beginBody() ?>
-<?php if (!Yii::$app->user->isGuest) {
-    $usuario = explode('-', Yii::$app->user->identity->getid());
+
+<?php
+if (!Yii::$app->user->isGuest) {
+    if (Yii::$app->user->identity->getTipoId() == 'administradores') {
+        $menu = [
+            ['label' => 'Home', 'url' => ['/site/index']],
+            ['label' => 'Horario', 'url' => ['/horarios/index']],
+            ['label' => 'Clases', 'url' => ['/clases/index']],
+            ['label' => 'Entrenos', 'url' => ['/entrenamientos/index']],
+            [
+               'label' => 'Administradores',
+               'items' => [
+                   ['label' => 'Gestionar', 'url' => ['/administradores/index']],
+                   ['label' => 'Alta Administradores', 'url' => ['/administradores/create']],
+               ],
+           ],
+           [
+               'label' => 'Clientes',
+               'items' => [
+                   ['label' => 'Gestionar', 'url' => ['/clientes/index']],
+                   ['label' => 'Alta Clientes', 'url' => ['/clientes/create']],
+               ],
+           ],
+           [
+               'label' => 'Monitores',
+               'items' => [
+                   ['label' => 'Gestionar', 'url' => ['/monitores/index']],
+                   ['label' => 'Alta Monitores', 'url' => ['/monitores/create']],
+               ],
+           ],
+        ];
+    } elseif (Yii::$app->user->identity->getTipoId() == 'monitores') {
+        $menu = [
+            ['label' => 'Home', 'url' => ['/site/index']],
+            [
+                'label' => 'Clases',
+                'items' => [
+                    ['label' => 'Clases', 'url' => ['/clases/index']],
+                    ['label' => 'Mis clases', 'url' => ['/clases/clases-monitor']],
+                ],
+            ],
+            ['label' => 'Entranamientos', 'url' => ['/entrenamientos/clientes-entrenador']],
+        ];
+    } elseif (Yii::$app->user->identity->getTipoId() == 'clientes') {
+        $menu = [
+            ['label' => 'Home', 'url' => ['/site/index']],
+            ['label' => 'Rutinas', 'url' => ['/rutinas/index']],
+            [
+                'label' => 'Clases',
+                'items' => [
+                    ['label' => 'Clases', 'url' => ['/clases/index']],
+                    // ['label' => 'Mis clases', 'url' => ['/clases/clases-monitor']],
+                ],
+            ],
+            // [
+            //     'label' => 'Entrenamientos',
+            //     'items' => [
+            //         ['label' => 'Entrenos', 'url' => ['/entrenamientos/index']],
+            //         ['label' => 'Mis entrenos', 'url' => ['/entrenamientos/clientes-entrenador']],
+            //     ],
+            // ],
+        ];
+    }
+    $perfil = [
+        'label' => Yii::$app->user->identity->getNombre(),
+        'items' => [
+            [
+                'label' => 'Mi perfil',
+                'url' => Url::to(
+                    [
+                        '/' . Yii::$app->user->identity->getTipoId() .'/view',
+                        'id'=> Yii::$app->user->identity->getNId()
+                    ]
+                )
+            ],
+            [
+                'label' => 'Logout',
+                'url' => ['site/logout'],
+                'linkOptions' => ['data-method' => 'post']
+            ],
+        ],
+    ];
+    array_push($menu, $perfil);
+} else {
+    $menu = [
+        ['label' => 'Login', 'url' => ['/site/login']]
+    ];
 }
 ?>
 
@@ -42,67 +127,7 @@ AppAsset::register($this);
     ]);
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],
-        'items' => [
-            ['label' => 'Home', 'url' => ['/site/index']],
-            ['label' => 'Horario', 'url' => ['/horarios/index']],
-            ['label' => 'Rutinas', 'url' => ['/rutinas/index']],
-            [
-                'label' => 'Clases',
-                'items' => [
-                    ['label' => 'Clases', 'url' => ['/clases/index']],
-                    ['label' => 'Mis clases', 'url' => ['/clases/clases-monitor']],
-                ],
-            ],
-            [
-                'label' => 'Entrenamientos',
-                'items' => [
-                    ['label' => 'Entrenos', 'url' => ['/entrenamientos/index']],
-                    ['label' => 'Mis entrenos', 'url' => ['/entrenamientos/clientes-entrenador']],
-                ],
-            ],
-
-            [
-                'label' => 'Administradores',
-                'items' => [
-                    ['label' => 'Gestionar', 'url' => ['/administradores/index']],
-                    ['label' => 'Alta Administradores', 'url' => ['/administradores/create']],
-                    ['label' => 'Clases', 'url' => ['/clases/index']],
-                ],
-            ],
-            [
-                'label' => 'Clientes',
-                'items' => [
-                    ['label' => 'Gestionar', 'url' => ['/clientes/index']],
-                    ['label' => 'Alta Clientes', 'url' => ['/clientes/create']],
-                ],
-            ],
-            [
-                'label' => 'Monitores',
-                'items' => [
-                    ['label' => 'Gestionar', 'url' => ['/monitores/index']],
-                    ['label' => 'Alta Monitores', 'url' => ['/monitores/create']],
-                ],
-            ],
-            Yii::$app->user->isGuest ? (
-                ['label' => 'Login', 'url' => ['/site/login']]
-            ) : (
-                [
-                    'label' => Yii::$app->user->identity->getNombre(),
-                    'items' => [
-                        [
-                            'label' => 'Mi perfil',
-                            'url' => Url::to(["/$usuario[0]/view", 'id'=> $usuario[1]])
-                        ],
-                        [
-                            'label' => 'Logout',
-                            'url' => ['site/logout'],
-                            'linkOptions' => ['data-method' => 'post']
-                        ],
-                    ],
-                ]
-
-            )
-        ],
+        'items' => $menu,
     ]);
     NavBar::end();
     ?>
