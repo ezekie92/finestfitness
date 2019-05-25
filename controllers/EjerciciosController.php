@@ -7,6 +7,7 @@ use app\models\Ejercicios;
 use app\models\EjerciciosSearch;
 use app\models\Rutinas;
 use Yii;
+use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -22,6 +23,25 @@ class EjerciciosController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::class,
+                'only' => ['rutina', 'anadir'],
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'actions' => ['rutina', 'anadir'],
+                        'roles' => ['@'],
+                        'matchCallback' => function ($rule, $action) {
+                            if (Yii::$app->user->identity->getTipoId() != 'clientes') {
+                                return false;
+                            }
+                            $rutina = isset($_GET['rutina']) ? $id = $_GET['rutina'] : $id = $_GET['id'];
+                            $rutina = Rutinas::findOne(['id' => $id]);
+                            return $rutina->cliente_id == Yii::$app->user->identity->getNId();
+                        },
+                    ],
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [

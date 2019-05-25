@@ -137,18 +137,10 @@ CREATE TABLE rutinas
 (
     id          BIGSERIAL   PRIMARY KEY
   , nombre      VARCHAR(25) NOT NULL
-  /* , ejercicio   BIGINT      NOT NULL
-                            REFERENCES ejercicios (id)
-                            ON DELETE NO ACTION
-                            ON UPDATE CASCADE
-  , dia         BIGINT      NOT NULL
-                            REFERENCES dias (id)
-                            ON DELETE NO ACTION
-                            ON UPDATE CASCADE */
-  /* , autor       BIGINT      NOT NULL
+  , cliente_id  BIGINT      NOT NULL
                             REFERENCES clientes (id)
                             ON DELETE NO ACTION
-                            ON UPDATE CASCADE */
+                            ON UPDATE CASCADE
 );
 
 DROP TABLE IF EXISTS ejercicios CASCADE;
@@ -226,8 +218,8 @@ VALUES('Zumba', '12:00', '12:45', 2, 1, 20);
 INSERT INTO entrenamientos (cliente_id, monitor_id, hora_inicio, hora_fin, dia)
 VALUES (3, 2, '16:30', '17:45', 1);
 
-INSERT INTO rutinas (nombre)
-VALUES('Básicos');
+INSERT INTO rutinas (nombre, cliente_id)
+VALUES('Básicos', 1);
 
 INSERT INTO ejercicios (nombre, dia_id, rutina_id, series, repeticiones, descanso)
 VALUES('Press banca', 2, 1, 5, 5, 180)

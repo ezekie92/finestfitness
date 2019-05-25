@@ -24,6 +24,7 @@ use Yii;
  * @property Tarifas $tarifa
  * @property Entrenamientos[] $entrenamientos
  * @property Monitores[] $monitores
+ * @property Rutinas[] $rutinas
  */
 class Clientes extends \yii\db\ActiveRecord
 {
@@ -138,6 +139,14 @@ class Clientes extends \yii\db\ActiveRecord
     public function getMonitores()
     {
         return $this->hasMany(Monitores::className(), ['id' => 'monitor_id'])->viaTable('entrenamientos', ['cliente_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getRutinas()
+    {
+        return $this->hasMany(Rutinas::className(), ['cliente_id' => 'id'])->inverseOf('cliente');
     }
 
     public function beforeSave($insert)
