@@ -5,6 +5,7 @@ namespace app\controllers;
 use app\models\Rutinas;
 use app\models\RutinasSearch;
 use Yii;
+use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -20,6 +21,29 @@ class RutinasController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::class,
+                'only' => ['index', 'view', 'create', 'update', 'delete'],
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'actions' => ['index', 'create'],
+                        'roles' => ['@'],
+                        'matchCallback' => function ($rule, $action) {
+                            return Yii::$app->user->identity->getTipoId() == 'clientes';
+                        },
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['update', 'view', 'delete'],
+                        'roles' => ['@'],
+                        'matchCallback' => function ($rule, $action) {
+                            $rutina = $this->findModel($_GET['id']);
+                            return $rutina->cliente_id == Yii::$app->user->identity->getNId();
+                        },
+                    ],
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -65,6 +89,8 @@ class RutinasController extends Controller
     public function actionCreate()
     {
         $model = new Rutinas();
+
+        $model->cliente_id = Yii::$app->user->identity->getNId();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);

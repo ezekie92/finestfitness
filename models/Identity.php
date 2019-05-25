@@ -170,6 +170,26 @@ final class Identity implements IdentityInterface
         return $this->_nombre;
     }
 
+    /**
+     * Devuelve el número de id del usuario.
+     * @return int El id del usuario
+     */
+    public function getNId()
+    {
+        $id = explode('-', $this->_id);
+        return $id[1];
+    }
+
+    /**
+     * Devuelve la clase de id del usuario.
+     * @return string La clase del usuario
+     */
+    public function getTipoId()
+    {
+        $id = explode('-', $this->_id);
+        return $id[0];
+    }
+
     public function getAuthKey()
     {
         // return $this->_authkey;
