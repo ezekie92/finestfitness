@@ -1,4 +1,8 @@
 <?php
+
+use yii\helpers\Url;
+use yii\helpers\Html;
+
 // Define como se verá el listado de monitores
 ?>
 
@@ -7,9 +11,19 @@
         <div class="col-md-1">
             <img src="" alt="Aquí irá la foto">
         </div>
-        <div class="col-md-9">
+        <div class="col-md-4">
             <h2><?= $model->nombre ?><small> (<?= $model->esp->especialidad ?>)</small></h2>
             <p>Disponible de: <?= Yii::$app->formatter->asTime($model->horario_entrada, 'short') ?> hasta: <?= Yii::$app->formatter->asTime($model->horario_salida, 'short') ?></p>
+        </div>
+        <div class="col-md-1">
+            <br>
+            <?=Html::button(
+                'Solicitar',
+                [
+                    'value' => Url::to(['entrenamientos/solicitar', 'id' => $model->id]),
+                    'class' => 'showModalButton btn btn-success btn',
+                ]
+            ); ?>
         </div>
     </div>
 </article>

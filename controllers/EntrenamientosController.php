@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\Dias;
 use app\models\Entrenamientos;
 use app\models\EntrenamientosSearch;
 use app\models\Horarios;
@@ -10,6 +11,8 @@ use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use yii\web\Response;
+use yii\widgets\ActiveForm;
 
 /**
  * EntrenamientosController implements the CRUD actions for Entrenamientos model.
@@ -24,11 +27,11 @@ class EntrenamientosController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::class,
-                'only' => ['index', 'clientes-entrenador', 'view', 'create', 'update', 'delete'],
+                'only' => ['index', 'clientes-entrenador', 'view', 'update', 'delete'],
                 'rules' => [
                     [
                         'allow' => true,
-                        'actions' => ['index', 'view', 'create', 'update', 'delete'],
+                        'actions' => ['index', 'view', 'update', 'delete'],
                         'roles' => ['@'],
                         'matchCallback' => function ($rule, $action) {
                             $tipo = explode('-', Yii::$app->user->id);
@@ -152,6 +155,28 @@ class EntrenamientosController extends Controller
         ]);
     }
 
+    public function actionSolicitar($id)
+    {
+        $model = new Entrenamientos();
+        $model->cliente_id = Yii::$app->user->identity->getNId();
+        $model->monitor_id = $id;
+
+        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            return ActiveForm::validate($model);
+        }
+
+        if ($model->load(Yii::$app->request->post())) {
+            $model->save() ? Yii::$app->session->setFlash('success', 'Solicitud enviada con éxito.') : Yii::$app->session->setFlash('danger', 'Error al enviar la solicitud.');
+            return $this->redirect(['monitores/lista-monitores']);
+        }
+
+        return $this->renderAjax('_solicitud', [
+            'model' => $model,
+            'listaDias' => $this->listaDias(),
+        ]);
+    }
+
     /**
      * Deletes an existing Entrenamientos model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
@@ -212,5 +237,14 @@ class EntrenamientosController extends Controller
             return Yii::$app->session->setFlash('danger', $mensaje);
         }
         return true;
+    }
+
+    /**
+     * Devuelve un listado de los dias.
+     * @return Dias
+     */
+    private function listaDias()
+    {
+        return Dias::find()->select('dia')->indexBy('id')->column();
     }
 }

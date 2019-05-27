@@ -127,6 +127,7 @@ CREATE TABLE entrenamientos
                             REFERENCES dias (id)
                             ON DELETE NO ACTION
                             ON UPDATE CASCADE
+  , estado          BOOLEAN
   , PRIMARY KEY(cliente_id, monitor_id)
 );
 
@@ -228,10 +229,11 @@ VALUES('Lunes')
     , ('Domingo');
 
 INSERT INTO clases (nombre, hora_inicio, hora_fin, dia, monitor, plazas)
-VALUES('Zumba', '12:00', '12:45', 2, 1, 20);
+VALUES('Zumba', '12:00', '12:45', 2, 1, 20)
+    , ('Spinning', '12:00', '12:45', 1, 2, 10);
 
-INSERT INTO entrenamientos (cliente_id, monitor_id, hora_inicio, hora_fin, dia)
-VALUES (3, 2, '16:30', '17:45', 1);
+INSERT INTO entrenamientos (cliente_id, monitor_id, hora_inicio, hora_fin, dia, estado)
+VALUES (3, 2, '16:30', '17:45', 1, true);
 
 INSERT INTO rutinas (nombre, cliente_id)
 VALUES('Básicos', 1);
@@ -252,4 +254,4 @@ VALUES(1, '7:00', '23:00')
     , (6, '7:00', '12:00');
 
 INSERT INTO clientes_clases(cliente_id, clase_id)
-VALUES(1,1);
+VALUES(2,1);

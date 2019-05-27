@@ -26,7 +26,7 @@ class MonitoresController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::class,
-                'only' => ['update', 'create', 'view', 'index', 'delete', 'lista-monitores'],
+                'only' => ['update', 'create', 'view', 'index', 'delete', 'lista-monitores', 'solicitar'],
                 'rules' => [
                     [
                         'allow' => true,
@@ -48,7 +48,7 @@ class MonitoresController extends Controller
                     ],
                     [
                         'allow' => true,
-                        'actions' => ['lista-monitores'],
+                        'actions' => ['lista-monitores', 'solicitar'],
                         'roles' => ['@'],
                         'matchCallback' => function ($rule, $action) {
                             return Yii::$app->user->identity->getTipoId() == 'clientes';
