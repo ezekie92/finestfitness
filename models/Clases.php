@@ -2,6 +2,8 @@
 
 namespace app\models;
 
+use Yii;
+
 /**
  * This is the model class for table "clases".
  *
@@ -88,5 +90,16 @@ class Clases extends \yii\db\ActiveRecord
     public function getClientes()
     {
         return $this->hasMany(Clientes::className(), ['id' => 'cliente_id'])->viaTable('clientes_clases', ['clase_id' => 'id']);
+    }
+
+    /**
+     * Comprueba si un cliente está inscrito a una clase.
+     * @return [type] [description]
+     */
+    public function clienteInscrito()
+    {
+        $inscripcion = $this->getClientesClases()->where(['cliente_id' => Yii::$app->user->identity->getNId()])->one();
+
+        return $inscripcion;
     }
 }

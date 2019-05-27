@@ -174,6 +174,7 @@ class ClasesController extends Controller
         $model->cliente_id = (int) Yii::$app->request->post('cliente_id');
         $model->clase_id = (int) Yii::$app->request->post('clase_id');
         Yii::$app->response->format = Response::FORMAT_JSON;
+
         return $model->save();
     }
 

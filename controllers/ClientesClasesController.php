@@ -8,6 +8,7 @@ use Yii;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use yii\web\Response;
 
 /**
  * ClientesClasesController implements the CRUD actions for ClientesClases model.
@@ -108,8 +109,11 @@ class ClientesClasesController extends Controller
     public function actionDelete($cliente_id, $clase_id)
     {
         $this->findModel($cliente_id, $clase_id)->delete();
+        Yii::$app->response->format = Response::FORMAT_JSON;
 
-        return $this->redirect(['index']);
+
+        return $this->redirect(['clases/index']);
+        // return $this->redirect(['index']);
     }
 
     /**

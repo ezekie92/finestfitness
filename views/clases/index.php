@@ -107,13 +107,21 @@ $this->registerJs($js);
                             );
                         }
                     },
-                    'inscribirse' => function ($url, $model) {
+                    'inscribirse' => function ($url, $model, $key) {
                         if (Yii::$app->user->identity->getTipoId() == 'clientes') {
-                            return Html::beginForm(['clases/inscribirse'],'post')
+                            if ($model->clienteInscrito()) {
+                                return Html::a(
+                                    'No asistir',
+                                    ['clientes-clases/delete', 'clase_id' => $model->id, 'cliente_id' => Yii::$app->user->identity->getNId()],
+                                    ['class'=>'btn-sm btn-danger', 'data-method' => 'POST'],
+                                );
+                            } else {
+                                return Html::beginForm(['clases/inscribirse'],'post')
                                 . Html::hiddenInput('clase_id', $model->id)
                                 . Html::hiddenInput('cliente_id', Yii::$app->user->identity->getNId())
-                                . Html::submitButton('<span class="glyphicon glyphicon-log-in"></span>', ['class' => 'btn-link'])
+                                . Html::submitButton('Inscribirse', ['class' => 'btn-xs btn-success'])
                                 . Html::endForm();
+                            }
                         }
                     },
                 ]
