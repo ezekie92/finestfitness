@@ -6,6 +6,7 @@ use app\models\Especialidades;
 use app\models\Monitores;
 use app\models\MonitoresSearch;
 use Yii;
+use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\helpers\Url;
@@ -25,7 +26,7 @@ class MonitoresController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::class,
-                'only' => ['update', 'create', 'view', 'index'],
+                'only' => ['update', 'create', 'view', 'index', 'delete', 'lista-monitores'],
                 'rules' => [
                     [
                         'allow' => true,
@@ -43,6 +44,14 @@ class MonitoresController extends Controller
                         'matchCallback' => function ($rule, $action) {
                             $tipo = explode('-', Yii::$app->user->id);
                             return $tipo[0] == 'administradores';
+                        },
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['lista-monitores'],
+                        'roles' => ['@'],
+                        'matchCallback' => function ($rule, $action) {
+                            return Yii::$app->user->identity->getTipoId() == 'clientes';
                         },
                     ],
                 ],
@@ -70,6 +79,23 @@ class MonitoresController extends Controller
             'dataProvider' => $dataProvider,
         ]);
     }
+
+    /**
+     * Muestra un listado de monitores.
+     * @return mixed
+     */
+    public function actionListaMonitores()
+    {
+        $dataProvider = new ActiveDataProvider([
+            'query' => Monitores::find(),
+            'pagination' => [
+                'pageSize' => 15,
+            ],
+        ]);
+
+        return $this->render('lista', ['listaDataProvider' => $dataProvider]);
+    }
+
 
     /**
      * Displays a single Monitores model.
