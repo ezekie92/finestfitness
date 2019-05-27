@@ -31,7 +31,6 @@ AppAsset::register($this);
 if (!Yii::$app->user->isGuest) {
     if (Yii::$app->user->identity->getTipoId() == 'administradores') {
         $menu = [
-            ['label' => 'Home', 'url' => ['/site/index']],
             ['label' => 'Horario', 'url' => ['/horarios/index']],
             ['label' => 'Clases', 'url' => ['/clases/index']],
             ['label' => 'Entrenos', 'url' => ['/entrenamientos/index']],
@@ -59,7 +58,6 @@ if (!Yii::$app->user->isGuest) {
         ];
     } elseif (Yii::$app->user->identity->getTipoId() == 'monitores') {
         $menu = [
-            ['label' => 'Home', 'url' => ['/site/index']],
             [
                 'label' => 'Clases',
                 'items' => [
@@ -71,7 +69,6 @@ if (!Yii::$app->user->isGuest) {
         ];
     } elseif (Yii::$app->user->identity->getTipoId() == 'clientes') {
         $menu = [
-            ['label' => 'Home', 'url' => ['/site/index']],
             ['label' => 'Rutinas', 'url' => ['/rutinas/index']],
             [
                 'label' => 'Clases',
@@ -109,8 +106,10 @@ if (!Yii::$app->user->isGuest) {
         ],
     ];
     array_push($menu, $perfil);
+    array_unshift($menu, ['label' => 'Home', 'url' => ['/site/index']]);
 } else {
     $menu = [
+        ['label' => 'Home', 'url' => ['/site/index']],
         ['label' => 'Login', 'url' => ['/site/login']]
     ];
 }

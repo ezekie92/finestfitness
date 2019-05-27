@@ -73,4 +73,20 @@ class Clases extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Monitores::className(), ['id' => 'monitor'])->inverseOf('clases');
     }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getClientesClases()
+    {
+        return $this->hasMany(ClientesClases::className(), ['clase_id' => 'id'])->inverseOf('clase');
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getClientes()
+    {
+        return $this->hasMany(Clientes::className(), ['id' => 'cliente_id'])->viaTable('clientes_clases', ['clase_id' => 'id']);
+    }
 }

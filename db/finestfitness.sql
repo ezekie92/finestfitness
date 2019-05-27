@@ -176,6 +176,21 @@ CREATE TABLE horarios
   , cierre    TIME        NOT NULL
 );
 
+DROP TABLE IF EXISTS clientes_clases CASCADE;
+
+CREATE TABLE clientes_clases
+(
+    cliente_id      BIGINT  NOT NULL
+                            REFERENCES clientes (id)
+                            ON DELETE NO ACTION
+                            ON UPDATE CASCADE
+  , clase_id        BIGINT  NOT NULL
+                            REFERENCES clases (id)
+                            ON DELETE NO ACTION
+                            ON UPDATE CASCADE
+  , PRIMARY KEY(cliente_id, clase_id)
+);
+
 ---------------------
 -- Datos de prueba --
 ---------------------
@@ -235,3 +250,6 @@ VALUES(1, '7:00', '23:00')
     , (4, '7:00', '23:00')
     , (5, '7:00', '23:00')
     , (6, '7:00', '12:00');
+
+INSERT INTO clientes_clases(cliente_id, clase_id)
+VALUES(1,1);
