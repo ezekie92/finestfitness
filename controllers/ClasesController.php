@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\models\Clases;
 use app\models\ClasesSearch;
+use app\models\ClientesClases;
 use app\models\Dias;
 use app\models\Horarios;
 use app\models\Monitores;
@@ -162,6 +163,27 @@ class ClasesController extends Controller
             'listaMonitores' => $this->listaMonitores(),
         ]);
     }
+
+    /**
+     * Inscribe un cliente a una clase mediante ajax.
+     * @return mixed
+     */
+    public function actionInscribirse()
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $model = new ClientesClases();
+        $model->cliente_id = (int) Yii::$app->request->post('cliente_id');
+        $model->clase_id = (int) Yii::$app->request->post('clase_id');
+        $clase = $this->findModel($model->clase_id);
+        if ($clase->plazasLibres()) {
+            Yii::$app->session->setFlash('success', 'Te has inscrito correctamente.');
+            $model->save();
+        } else {
+            Yii::$app->session->setFlash('danger', 'No quedan plazas libres.');
+        }
+        return $this->redirect(['index']);
+    }
+
 
     /**
      * Deletes an existing Clases model.

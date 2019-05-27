@@ -149,6 +149,23 @@ class Clientes extends \yii\db\ActiveRecord
         return $this->hasMany(Rutinas::className(), ['cliente_id' => 'id'])->inverseOf('cliente');
     }
 
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getClientesClases()
+    {
+        return $this->hasMany(ClientesClases::className(), ['cliente_id' => 'id'])->inverseOf('cliente');
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getClases()
+    {
+        return $this->hasMany(Clases::className(), ['id' => 'clase_id'])->viaTable('clientes_clases', ['cliente_id' => 'id']);
+    }
+
+
     public function beforeSave($insert)
     {
         if (!parent::beforeSave($insert)) {

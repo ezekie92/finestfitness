@@ -2,6 +2,8 @@
 
 namespace app\models;
 
+use Yii;
+
 /**
  * This is the model class for table "clases".
  *
@@ -72,5 +74,43 @@ class Clases extends \yii\db\ActiveRecord
     public function getMonitorClase()
     {
         return $this->hasOne(Monitores::className(), ['id' => 'monitor'])->inverseOf('clases');
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getClientesClases()
+    {
+        return $this->hasMany(ClientesClases::className(), ['clase_id' => 'id'])->inverseOf('clase');
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getClientes()
+    {
+        return $this->hasMany(Clientes::className(), ['id' => 'cliente_id'])->viaTable('clientes_clases', ['clase_id' => 'id']);
+    }
+
+    /**
+     * Comprueba si un cliente está inscrito a una clase.
+     * @return [type] [description]
+     */
+    public function clienteInscrito()
+    {
+        $inscripcion = $this->getClientesClases()->where(['cliente_id' => Yii::$app->user->identity->getNId()])->one();
+
+        return $inscripcion;
+    }
+
+    /**
+     * Devuelve el número de plazas libres de una clase.
+     * @return int El número de plazas libres
+     */
+    public function plazasLibres()
+    {
+        $ocupadas = count($this->getClientes()->all());
+        $libres = $this->plazas - $ocupadas;
+        return $libres;
     }
 }
