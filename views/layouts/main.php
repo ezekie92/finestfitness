@@ -77,13 +77,14 @@ if (!Yii::$app->user->isGuest) {
                     // ['label' => 'Mis clases', 'url' => ['/clases/clases-monitor']],
                 ],
             ],
-            // [
-            //     'label' => 'Entrenamientos',
-            //     'items' => [
-            //         ['label' => 'Entrenos', 'url' => ['/entrenamientos/index']],
-            //         ['label' => 'Mis entrenos', 'url' => ['/entrenamientos/clientes-entrenador']],
-            //     ],
-            // ],
+            [
+                'label' => 'Entrenamientos',
+                'items' => [
+                    ['label' => 'Monitores', 'url' => ['/monitores/lista-monitores']],
+                    // ['label' => 'Entrenos', 'url' => ['/entrenamientos/index']],
+                    // ['label' => 'Mis entrenos', 'url' => ['/entrenamientos/clientes-entrenador']],
+                ],
+            ],
         ];
     }
     $perfil = [
