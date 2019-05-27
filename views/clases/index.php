@@ -4,6 +4,8 @@ use yii\bootstrap\Modal;
 use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\grid\GridView;
+use yii\widgets\Pjax;
+
 
 
 /* @var $this yii\web\View */
@@ -33,7 +35,9 @@ $('.grid-view form').on('submit', function (event) {
         type: 'POST',
         data: data,
     });
+    $.pjax.reload({container: '#pjax-grid-view'});
 });
+
 EOF;
 $this->registerJs($js);
 ?>
@@ -63,76 +67,79 @@ $this->registerJs($js);
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'columns' => [
-            'nombre',
-            'hora_inicio',
-            'hora_fin',
-            'diaClase.dia',
-            'monitorClase.nombre',
-            [
-                'attribute' => 'plazas',
-                'value' => function ($model) {
-                    return $model->plazasLibres();
-                }
-            ],
+    <?php Pjax::begin(['id' => 'pjax-grid-view']); ?>
+        <?= GridView::widget([
+            'dataProvider' => $dataProvider,
+            'filterModel' => $searchModel,
+            'columns' => [
+                'nombre',
+                'hora_inicio',
+                'hora_fin',
+                'diaClase.dia',
+                'monitorClase.nombre',
+                [
+                    'attribute' => 'plazas',
+                    'value' => function ($model) {
+                        return $model->plazasLibres();
+                    }
+                ],
 
-            [
-                'class' => 'yii\grid\ActionColumn',
-                'header' => 'Acciones',
-                'headerOptions' => ['class' => 'text-primary', 'style' => 'width:10%'],
-                'template' => '{monitor} {view} {update} {delete} {inscribirse}',
-                'buttons'=>[
-                    'monitor'=>function ($url, $model) {
-                        if (Yii::$app->user->identity->getTipoId() == 'administradores') {
-                            return Html::button(
-                                '<i class="glyphicon glyphicon-education"></i>',
-                                [
-                                    'value' => Url::to(['clases/cambiar-monitor', 'id' => $model->id]),
-                                    'class' => 'showModalButton btn btn-link btn-xs'
-                                ]
-                            );
-                        }
-                    },
-                    'update' => function ($url, $model) {
-                        if (Yii::$app->user->identity->getTipoId() == 'administradores') {
-                            return Html::a(
-                                '<span class="glyphicon glyphicon-pencil"></span>',
-                                ['clases/update', 'id' => $model->id],
-                            );
-                        }
-                    },
-                    'delete' => function ($url, $model) {
-                        if (Yii::$app->user->identity->getTipoId() == 'administradores') {
-                            return Html::a(
-                                '<span class="glyphicon glyphicon-trash"></span>',
-                                ['clases/update', 'id' => $model->id],
-                            );
-                        }
-                    },
-                    'inscribirse' => function ($url, $model, $key) {
-                        if (Yii::$app->user->identity->getTipoId() == 'clientes') {
-                            if ($model->clienteInscrito()) {
-                                return Html::a(
-                                    'No asistir',
-                                    ['clientes-clases/delete', 'clase_id' => $model->id, 'cliente_id' => Yii::$app->user->identity->getNId()],
-                                    ['class'=>'btn-sm btn-danger', 'data-method' => 'POST'],
+                [
+                    'class' => 'yii\grid\ActionColumn',
+                    'header' => 'Acciones',
+                    'headerOptions' => ['class' => 'text-primary', 'style' => 'width:10%'],
+                    'template' => '{monitor} {view} {update} {delete} {inscribirse}',
+                    'buttons'=>[
+                        'monitor'=>function ($url, $model) {
+                            if (Yii::$app->user->identity->getTipoId() == 'administradores') {
+                                return Html::button(
+                                    '<i class="glyphicon glyphicon-education"></i>',
+                                    [
+                                        'value' => Url::to(['clases/cambiar-monitor', 'id' => $model->id]),
+                                        'class' => 'showModalButton btn btn-link btn-xs'
+                                    ]
                                 );
-                            } else {
-                                return Html::beginForm(['clases/inscribirse'],'post')
-                                . Html::hiddenInput('clase_id', $model->id)
-                                . Html::hiddenInput('cliente_id', Yii::$app->user->identity->getNId())
-                                . Html::submitButton('Inscribirse', ['class' => 'btn-xs btn-success'])
-                                . Html::endForm();
                             }
-                        }
-                    },
-                ]
+                        },
+                        'update' => function ($url, $model) {
+                            if (Yii::$app->user->identity->getTipoId() == 'administradores') {
+                                return Html::a(
+                                    '<span class="glyphicon glyphicon-pencil"></span>',
+                                    ['clases/update', 'id' => $model->id],
+                                );
+                            }
+                        },
+                        'delete' => function ($url, $model) {
+                            if (Yii::$app->user->identity->getTipoId() == 'administradores') {
+                                return Html::a(
+                                    '<span class="glyphicon glyphicon-trash"></span>',
+                                    ['clases/update', 'id' => $model->id],
+                                );
+                            }
+                        },
+                        'inscribirse' => function ($url, $model) {
+                            if (Yii::$app->user->identity->getTipoId() == 'clientes') {
+                                if ($model->clienteInscrito()) {
+                                    return Html::a(
+                                        'No asistir',
+                                        ['clientes-clases/delete', 'clase_id' => $model->id, 'cliente_id' => Yii::$app->user->identity->getNId()],
+                                        ['class'=>'btn-sm btn-danger', 'data-method' => 'POST'],
+                                    );
+                                } else {
+                                    return Html::beginForm(['clases/inscribirse'],'post')
+                                    . Html::hiddenInput('clase_id', $model->id)
+                                    . Html::hiddenInput('cliente_id', Yii::$app->user->identity->getNId())
+                                    . Html::submitButton('Inscribirse', ['class' => 'btn-xs btn-success'])
+                                    . Html::endForm();
+                                }
+                            }
+                        },
+                    ]
+                ],
             ],
-        ],
-    ]); ?>
+        ]); ?>
+    <?php Pjax::end(); ?>
+
 
 
 </div>
