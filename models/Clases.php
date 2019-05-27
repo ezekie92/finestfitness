@@ -102,4 +102,11 @@ class Clases extends \yii\db\ActiveRecord
 
         return $inscripcion;
     }
+
+    public function plazasLibres()
+    {
+        $ocupadas = count($this->getClientes()->all());
+        $libres = $this->plazas - $ocupadas;
+        return $libres;
+    }
 }

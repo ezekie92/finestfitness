@@ -173,9 +173,12 @@ class ClasesController extends Controller
         $model = new ClientesClases();
         $model->cliente_id = (int) Yii::$app->request->post('cliente_id');
         $model->clase_id = (int) Yii::$app->request->post('clase_id');
-        Yii::$app->response->format = Response::FORMAT_JSON;
+        $clase = $this->findModel($model->clase_id);
+        if ($clase->plazasLibres()) {
+            Yii::$app->response->format = Response::FORMAT_JSON;
 
-        return $model->save();
+            return $model->save();
+        }
     }
 
 

@@ -72,7 +72,12 @@ $this->registerJs($js);
             'hora_fin',
             'diaClase.dia',
             'monitorClase.nombre',
-            'plazas',
+            [
+                'attribute' => 'plazas',
+                'value' => function ($model) {
+                    return $model->plazasLibres();
+                }
+            ],
 
             [
                 'class' => 'yii\grid\ActionColumn',
