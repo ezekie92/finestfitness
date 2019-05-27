@@ -103,6 +103,10 @@ class Clases extends \yii\db\ActiveRecord
         return $inscripcion;
     }
 
+    /**
+     * Devuelve el número de plazas libres de una clase.
+     * @return int El número de plazas libres
+     */
     public function plazasLibres()
     {
         $ocupadas = count($this->getClientes()->all());

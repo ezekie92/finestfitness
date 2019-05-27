@@ -170,15 +170,18 @@ class ClasesController extends Controller
      */
     public function actionInscribirse()
     {
+        Yii::$app->response->format = Response::FORMAT_JSON;
         $model = new ClientesClases();
         $model->cliente_id = (int) Yii::$app->request->post('cliente_id');
         $model->clase_id = (int) Yii::$app->request->post('clase_id');
         $clase = $this->findModel($model->clase_id);
         if ($clase->plazasLibres()) {
-            Yii::$app->response->format = Response::FORMAT_JSON;
-
-            return $model->save();
+            Yii::$app->session->setFlash('success', 'Te has inscrito correctamente.');
+            $model->save();
+        } else {
+            Yii::$app->session->setFlash('danger', 'No quedan plazas libres.');
         }
+        return $this->redirect(['index']);
     }
 
 

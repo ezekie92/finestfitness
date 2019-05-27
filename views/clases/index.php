@@ -26,17 +26,17 @@ $(function(){
 });
 
 
-$('.grid-view form').on('submit', function (event) {
-    event.preventDefault();
-    var form = $(event.target); // $(this)
-    var data = form.serialize();
-    $.ajax({
-        url: form.attr('action'),
-        type: 'POST',
-        data: data,
-    });
-    $.pjax.reload({container: '#pjax-grid-view'});
-});
+// $('.grid-view form').on('submit', function (event) {
+//     event.preventDefault();
+//     var form = $(event.target); // $(this)
+//     var data = form.serialize();
+//     $.ajax({
+//         url: form.attr('action'),
+//         type: 'POST',
+//         data: data,
+//     });
+//     $.pjax.reload({container: '#pjax-grid-view'});
+// });
 
 EOF;
 $this->registerJs($js);
