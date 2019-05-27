@@ -22,6 +22,18 @@ $(function(){
         .load($(this).attr('value'));
     });
 });
+
+
+$('.grid-view form').on('submit', function (event) {
+    event.preventDefault();
+    var form = $(event.target); // $(this)
+    var data = form.serialize();
+    $.ajax({
+        url: form.attr('action'),
+        type: 'POST',
+        data: data,
+    });
+});
 EOF;
 $this->registerJs($js);
 ?>
@@ -66,16 +78,43 @@ $this->registerJs($js);
                 'class' => 'yii\grid\ActionColumn',
                 'header' => 'Acciones',
                 'headerOptions' => ['class' => 'text-primary', 'style' => 'width:10%'],
-                'template' => '{monitor} {view} {update} {delete}',
+                'template' => '{monitor} {view} {update} {delete} {inscribirse}',
                 'buttons'=>[
                     'monitor'=>function ($url, $model) {
-                        return Html::button(
-                            '<i class="glyphicon glyphicon-education"></i>',
-                            [
-                                'value' => Url::to(['clases/cambiar-monitor', 'id' => $model->id]),
-                                'class' => 'showModalButton btn btn-link btn-xs'
-                            ]
-                        );
+                        if (Yii::$app->user->identity->getTipoId() == 'administradores') {
+                            return Html::button(
+                                '<i class="glyphicon glyphicon-education"></i>',
+                                [
+                                    'value' => Url::to(['clases/cambiar-monitor', 'id' => $model->id]),
+                                    'class' => 'showModalButton btn btn-link btn-xs'
+                                ]
+                            );
+                        }
+                    },
+                    'update' => function ($url, $model) {
+                        if (Yii::$app->user->identity->getTipoId() == 'administradores') {
+                            return Html::a(
+                                '<span class="glyphicon glyphicon-pencil"></span>',
+                                ['clases/update', 'id' => $model->id],
+                            );
+                        }
+                    },
+                    'delete' => function ($url, $model) {
+                        if (Yii::$app->user->identity->getTipoId() == 'administradores') {
+                            return Html::a(
+                                '<span class="glyphicon glyphicon-trash"></span>',
+                                ['clases/update', 'id' => $model->id],
+                            );
+                        }
+                    },
+                    'inscribirse' => function ($url, $model) {
+                        if (Yii::$app->user->identity->getTipoId() == 'clientes') {
+                            return Html::beginForm(['clases/inscribirse'],'post')
+                                . Html::hiddenInput('clase_id', $model->id)
+                                . Html::hiddenInput('cliente_id', Yii::$app->user->identity->getNId())
+                                . Html::submitButton('<span class="glyphicon glyphicon-log-in"></span>', ['class' => 'btn-link'])
+                                . Html::endForm();
+                        }
                     },
                 ]
             ],
