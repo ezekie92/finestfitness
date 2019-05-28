@@ -14,26 +14,22 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <p>
-        <?= Html::a('Create Entrenamientos', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
-
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
             'cliente.nombre:text:Cliente',
-            'monitor.nombre:text:Monitor',
+            [
+                'attribute' => 'monitor.nombre',
+                'label' => 'Monitor',
+                'visible' => Yii::$app->user->identity->getTipoId() == 'administradores',
+            ],
             'hora_inicio',
             'hora_fin',
             'diaSemana.dia',
-            'estado',
-
-            ['class' => 'yii\grid\ActionColumn'],
+            'estado:boolean',
         ],
     ]); ?>
 
