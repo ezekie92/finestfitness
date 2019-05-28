@@ -6,6 +6,7 @@ use app\models\Dias;
 use app\models\Entrenamientos;
 use app\models\EntrenamientosSearch;
 use app\models\Horarios;
+use app\models\Monitores;
 use Yii;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
@@ -155,11 +156,16 @@ class EntrenamientosController extends Controller
         ]);
     }
 
+    /**
+     * Crea un nuevo entrenamiento usando el id del entrenador y del usuario logueado.
+     * @param  int $id El id del entrenador
+     * @return mixed
+     */
     public function actionSolicitar($id)
     {
         $model = new Entrenamientos();
-        $model->cliente_id = Yii::$app->user->identity->getNId();
         $model->monitor_id = $id;
+        $model->cliente_id = Yii::$app->user->identity->getNId();
 
         if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
             Yii::$app->response->format = Response::FORMAT_JSON;
@@ -167,7 +173,13 @@ class EntrenamientosController extends Controller
         }
 
         if ($model->load(Yii::$app->request->post())) {
-            $model->save() ? Yii::$app->session->setFlash('success', 'Solicitud enviada con éxito.') : Yii::$app->session->setFlash('danger', 'Error al enviar la solicitud.');
+            if ($this->comprobarEntrenamiento($model)) {
+                if ($model->save()) {
+                    Yii::$app->session->setFlash('success', 'Solicitud enviada con éxito.');
+                } else {
+                    Yii::$app->session->setFlash('danger', 'No se puede solicitar dicho entrenamiento, contacte con el administrador.');
+                }
+            }
             return $this->redirect(['monitores/lista-monitores']);
         }
 
@@ -234,6 +246,31 @@ class EntrenamientosController extends Controller
             return Yii::$app->session->setFlash('danger', $mensaje);
         } elseif (strtotime($inicio) > strtotime($fin)) {
             $mensaje = 'Las entrenamientos no pueden terminar antes de la hora a la que empiezan.';
+            return Yii::$app->session->setFlash('danger', $mensaje);
+        }
+        return true;
+    }
+
+    /**
+     * Comprueba que el entrenamiento sea correcto.
+     * @param  Entrenamientos $model El entrenamiento que se desea crear
+     * @return [type]        [description]
+     */
+    private function comprobarEntrenamiento($model)
+    {
+        // TODO V3: Comprobar que el monitor no tiene entrenamientos a esa hora ese día
+        // Comprobar que el cliente no tiene entrenamientos ni clases a esa hora ese día
+        $entrenamientos = Entrenamientos::find()->where(['cliente_id' => $model->cliente_id])->andWhere(['monitor_id' => $model->monitor_id])->andWhere(['dia' => $model->dia])->count();
+        $monitor = Monitores::findOne($model->monitor_id);
+        if ($entrenamientos) {
+            $mensaje = 'Ya tiene un entrenamiento el ' . $model->diaSemana->dia . ' con este monitor.';
+            return Yii::$app->session->setFlash('danger', $mensaje);
+        } elseif (strtotime($model->hora_inicio) >= strtotime($model->hora_fin)) {
+            $mensaje = 'El entrenamiento no puede comenzar después de la hora a la que finaliza.';
+            return Yii::$app->session->setFlash('danger', $mensaje);
+        } elseif (strtotime($model->hora_inicio) < strtotime($monitor->horario_entrada) ||
+            strtotime($model->hora_fin) > strtotime($monitor->horario_salida)) {
+            $mensaje = 'El horario solicitado está fuera del horario de trabajo del monitor.';
             return Yii::$app->session->setFlash('danger', $mensaje);
         }
         return true;

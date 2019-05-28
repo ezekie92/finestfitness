@@ -35,7 +35,8 @@ class Entrenamientos extends \yii\db\ActiveRecord
             [['cliente_id', 'monitor_id', 'dia'], 'default', 'value' => null],
             [['cliente_id', 'monitor_id', 'dia'], 'integer'],
             [['hora_inicio', 'hora_fin'], 'safe'],
-            [['cliente_id', 'monitor_id'], 'unique', 'targetAttribute' => ['cliente_id', 'monitor_id']],
+            [['estado'], 'boolean'],
+            [['cliente_id', 'monitor_id', 'dia'], 'unique', 'targetAttribute' => ['cliente_id', 'monitor_id', 'dia']],
             [['cliente_id'], 'exist', 'skipOnError' => true, 'targetClass' => Clientes::className(), 'targetAttribute' => ['cliente_id' => 'id']],
             [['dia'], 'exist', 'skipOnError' => true, 'targetClass' => Dias::className(), 'targetAttribute' => ['dia' => 'id']],
             [['monitor_id'], 'exist', 'skipOnError' => true, 'targetClass' => Monitores::className(), 'targetAttribute' => ['monitor_id' => 'id']],
@@ -53,6 +54,7 @@ class Entrenamientos extends \yii\db\ActiveRecord
             'hora_inicio' => 'Hora Inicio',
             'hora_fin' => 'Hora Fin',
             'dia' => 'Dia',
+            'estado' => 'Aceptado',
         ];
     }
 

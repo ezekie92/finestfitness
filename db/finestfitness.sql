@@ -128,7 +128,7 @@ CREATE TABLE entrenamientos
                             ON DELETE NO ACTION
                             ON UPDATE CASCADE
   , estado          BOOLEAN
-  , PRIMARY KEY(cliente_id, monitor_id)
+  , PRIMARY KEY(cliente_id, monitor_id, dia)
 );
 
 
