@@ -17,6 +17,7 @@ class EntrenamientosSearch extends Entrenamientos
     {
         return [
             [['cliente_id', 'monitor_id', 'dia'], 'integer'],
+            [['estado'], 'boolean'],
             [['hora_inicio', 'hora_fin', 'cliente.nombre', 'monitor.nombre', 'diaSemana.dia'], 'safe'],
         ];
     }
@@ -83,6 +84,7 @@ class EntrenamientosSearch extends Entrenamientos
             'hora_inicio' => $this->hora_inicio,
             'hora_fin' => $this->hora_fin,
             'dia' => $this->dia,
+            'estado' => $this->estado,
         ]);
 
         $query->andFilterWhere(['ilike', 'clientes.nombre', $this->getAttribute('cliente.nombre')])
