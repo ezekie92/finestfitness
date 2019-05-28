@@ -65,8 +65,8 @@ class EntrenamientosSearch extends Entrenamientos
         ];
 
         $dataProvider->sort->attributes['diaSemana.dia'] = [
-           'asc' => ['dias.dia' => SORT_ASC],
-           'desc' => ['dias.dia' => SORT_DESC],
+           'asc' => ['dias.id' => SORT_ASC],
+           'desc' => ['dias.id' => SORT_DESC],
         ];
 
         $this->load($params);

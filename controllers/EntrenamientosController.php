@@ -28,24 +28,30 @@ class EntrenamientosController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::class,
-                'only' => ['index', 'clientes-entrenador', 'view', 'update', 'delete'],
+                'only' => ['index', 'clientes-entrenador', 'view', 'update', 'delete', 'decidir', 'solicitudes', 'create'],
                 'rules' => [
                     [
                         'allow' => true,
                         'actions' => ['index', 'view', 'update', 'delete'],
                         'roles' => ['@'],
                         'matchCallback' => function ($rule, $action) {
-                            $tipo = explode('-', Yii::$app->user->id);
-                            return $tipo[0] == 'administradores';
+                            return Yii::$app->user->identity->getTipoId() == 'administradores';
                         },
                     ],
                     [
                         'allow' => true,
-                        'actions' => ['clientes-entrenador'],
+                        'actions' => ['clientes-entrenador', 'decidir', 'solicitudes'],
                         'roles' => ['@'],
                         'matchCallback' => function ($rule, $action) {
-                            $tipo = explode('-', Yii::$app->user->id);
-                            return $tipo[0] == 'monitores';
+                            return Yii::$app->user->identity->getTipoId() == 'monitores';
+                        },
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['solicitar'],
+                        'roles' => ['@'],
+                        'matchCallback' => function ($rule, $action) {
+                            return Yii::$app->user->identity->getTipoId() == 'clientes';
                         },
                     ],
                 ],
@@ -84,6 +90,7 @@ class EntrenamientosController extends Controller
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $id = explode('-', Yii::$app->user->identity->getid())[1];
         $dataProvider->query->where(['monitor_id' => $id]);
+        $dataProvider->query->andWhere(['estado' => 1]);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -95,13 +102,14 @@ class EntrenamientosController extends Controller
      * Displays a single Entrenamientos model.
      * @param int $cliente_id
      * @param int $monitor_id
+     * @param mixed $dia
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionView($cliente_id, $monitor_id)
+    public function actionView($cliente_id, $monitor_id, $dia)
     {
         return $this->render('view', [
-            'model' => $this->findModel($cliente_id, $monitor_id),
+            'model' => $this->findModel($cliente_id, $monitor_id, $dia),
         ]);
     }
 
@@ -134,12 +142,13 @@ class EntrenamientosController extends Controller
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param int $cliente_id
      * @param int $monitor_id
+     * @param mixed $dia
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdate($cliente_id, $monitor_id)
+    public function actionUpdate($cliente_id, $monitor_id, $dia)
     {
-        $model = $this->findModel($cliente_id, $monitor_id);
+        $model = $this->findModel($cliente_id, $monitor_id, $dia);
 
         if ($model->load(Yii::$app->request->post())) {
             $comprobar = $this->comprobarHorario($model->hora_inicio, $model->hora_fin, $model->dia, $model->diaSemana->dia);
@@ -154,6 +163,26 @@ class EntrenamientosController extends Controller
         return $this->render('update', [
             'model' => $model,
         ]);
+    }
+
+
+    /**
+     * Permite aceptar o rechazar las solicitudes de entrenamiento.
+     * @param  int $cliente_id El id del cliente
+     * @param  int $monitor_id El id del monitor
+     * @param  int $dia        El id del día
+     * @return mixed
+     */
+    public function actionDecidir($cliente_id, $monitor_id, $dia)
+    {
+        $model = $this->findModel($cliente_id, $monitor_id, $dia);
+
+        $model->estado = Yii::$app->request->post('estado');
+        // if ($model->load(Yii::$app->request->post())) {
+        if ($model->save()) {
+            return $this->redirect(['solicitudes']);
+        }
+        // }
     }
 
     /**
@@ -190,16 +219,57 @@ class EntrenamientosController extends Controller
     }
 
     /**
+     * Muestra un listado de las solicitudes que tiene un monitor, permitiendole
+     * aceptarlas o rechazarlas.
+     * @return [type] [description]
+     */
+    public function actionSolicitudes()
+    {
+        $searchModel = new EntrenamientosSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->query->where(['monitor_id' => Yii::$app->user->identity->getNId()]);
+        $dataProvider->query->andWhere(['estado' => null]);
+        $dataProvider->setSort([
+            'attributes' => [
+                'cliente.nombre' => [
+                    'asc' => ['clientes.nombre' => SORT_ASC],
+                    'desc' => ['clientes.nombre' => SORT_DESC],
+                ],
+                'hora_inicio' => [
+                    'asc' => ['hora_inicio' => SORT_ASC],
+                    'desc' => ['hora_inicio' => SORT_DESC],
+                ],
+                'hora_fin' => [
+                    'asc' => ['hora_fin' => SORT_ASC],
+                    'desc' => ['hora_fin' => SORT_DESC],
+                ],
+                'diaSemana.dia' => [
+                    'asc' => ['dias.id' => SORT_ASC],
+                    'desc' => ['dias.id' => SORT_DESC],
+                ],
+            ],
+            'defaultOrder' => [
+               'diaSemana.dia' => SORT_ASC,
+            ],
+        ]);
+
+        return $this->render('solicitudes', [
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    /**
      * Deletes an existing Entrenamientos model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param int $cliente_id
      * @param int $monitor_id
+     * @param mixed $dia
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionDelete($cliente_id, $monitor_id)
+    public function actionDelete($cliente_id, $monitor_id, $dia)
     {
-        $this->findModel($cliente_id, $monitor_id)->delete();
+        $this->findModel($cliente_id, $monitor_id, $dia)->delete();
 
         return $this->redirect(['index']);
     }
@@ -209,12 +279,13 @@ class EntrenamientosController extends Controller
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param int $cliente_id
      * @param int $monitor_id
+     * @param mixed $dia
      * @return Entrenamientos the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($cliente_id, $monitor_id)
+    protected function findModel($cliente_id, $monitor_id, $dia)
     {
-        if (($model = Entrenamientos::findOne(['cliente_id' => $cliente_id, 'monitor_id' => $monitor_id])) !== null) {
+        if (($model = Entrenamientos::findOne(['cliente_id' => $cliente_id, 'monitor_id' => $monitor_id, 'dia' => $dia])) !== null) {
             return $model;
         }
 

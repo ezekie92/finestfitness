@@ -65,7 +65,13 @@ if (!Yii::$app->user->isGuest) {
                     ['label' => 'Mis clases', 'url' => ['/clases/clases-monitor']],
                 ],
             ],
-            ['label' => 'Entranamientos', 'url' => ['/entrenamientos/clientes-entrenador']],
+            [
+                'label' => 'Entranamientos',
+                'items' => [
+                    ['label' => 'Mis entrenamientos', 'url' => ['/entrenamientos/clientes-entrenador']],
+                    ['label' => 'Solicitudes', 'url' => ['/entrenamientos/solicitudes']],
+                ]
+            ],
         ];
     } elseif (Yii::$app->user->identity->getTipoId() == 'clientes') {
         $menu = [
