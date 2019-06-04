@@ -156,6 +156,15 @@ final class Identity implements IdentityInterface
         return $model->confirmado;
     }
 
+    public static function pago($email)
+    {
+        $model = Clientes::find()->where(['email' => $email])->one();
+        if (!$model || $model->tiempoUltimoPago < 25) {
+            return true;
+        }
+        return false;
+    }
+
     public function getId()
     {
         return $this->_id;
