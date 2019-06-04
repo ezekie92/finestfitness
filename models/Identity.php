@@ -159,7 +159,7 @@ final class Identity implements IdentityInterface
     public static function pago($email)
     {
         $model = Clientes::find()->where(['email' => $email])->one();
-        if (!$model || $model->tiempoUltimoPago < 25) {
+        if (!$model || $model->tiempoUltimoPago < 35) {
             return true;
         }
         return false;
