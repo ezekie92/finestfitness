@@ -290,7 +290,8 @@ class ClientesController extends Controller
 
             if ($estado == 'SUCCESS') {
                 $pago = new Pagos();
-                $pago->fecha = date('d/m/y');
+                // $pago->fecha = date('d/m/y');
+                $pago->fecha = strftime('%d-%m-%Y');
                 $pago->cliente_id = $cliente->id;
                 $pago->concepto = 'Tarifa ' . $cliente->tarifas->tarifa;
                 $pago->cantidad = $cliente->tarifas->precio;
