@@ -192,6 +192,20 @@ CREATE TABLE clientes_clases
   , PRIMARY KEY(cliente_id, clase_id)
 );
 
+DROP TABLE IF EXISTS pagos CASCADE;
+
+CREATE TABLE pagos
+(
+    id          BIGSERIAL       PRIMARY KEY
+  , fecha       DATE            NOT NULL
+  , cliente_id  BIGINT          NOT NULL
+                                REFERENCES clientes (id)
+                                ON DELETE NO ACTION
+                                ON UPDATE CASCADE
+  , concepto    VARCHAR(255)    NOT NULL
+  , cantidad    NUMERIC(10,2)   NOT NULL
+);
+
 ---------------------
 -- Datos de prueba --
 ---------------------

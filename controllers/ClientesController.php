@@ -5,6 +5,7 @@ namespace app\controllers;
 use app\models\Clientes;
 use app\models\ClientesSearch;
 use app\models\Monitores;
+use app\models\Pagos;
 use app\models\Tarifas;
 use Yii;
 use yii\filters\AccessControl;
@@ -80,8 +81,15 @@ class ClientesController extends Controller
      */
     public function actionView($id)
     {
+        $model = $this->findModel($id);
+
+        if (isset($_GET['tx']) && $model->tiempoUltimoPago > 20) {
+            $this->gestionarPago($model);
+        }
+
+
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $model,
         ]);
     }
 
@@ -256,5 +264,81 @@ class ClientesController extends Controller
     private function listaMonitores()
     {
         return Monitores::find()->select('nombre')->indexBy('id')->column();
+    }
+
+    /**
+     * Se encarga de la lógica de los pagos de mensualidades.
+     * @param  Clientes $cliente El cliente que realiza el pago
+     * @return [type]          [description]
+     */
+    private function gestionarPago($cliente)
+    {
+        if (isset($_GET['tx'])) {
+            $response = trim($this->paypalPdtRequest($_GET['tx'], getenv('PAYPAL')));
+
+            $response = preg_split('/[\s]+/', $response);
+            $estado = array_shift($response);
+            $respuesta = [];
+            foreach ($response as $value) {
+                $tmp = explode('=', $value);
+                if (isset($tmp[1])) {
+                    $respuesta[$tmp[0]] = $tmp[1];
+                } else {
+                    $respuesta = $tmp[0];
+                }
+            }
+
+            if ($estado == 'SUCCESS') {
+                $pago = new Pagos();
+                $pago->fecha = date('d/m/y');
+                $pago->cliente_id = $cliente->id;
+                $pago->concepto = 'Tarifa ' . $cliente->tarifas->tarifa;
+                $pago->cantidad = $cliente->tarifas->precio;
+
+                if ($pago->save()) {
+                    return $this->redirect(['view', 'id' => $cliente->id]);
+                }
+            }
+        }
+    }
+
+
+    /**
+     * Gestiona la petición PDT.
+     * PDT Es el mecanismo por el cual Paypal añade a la url de retorno una
+     * serie de argumentos con la información relevante sobre el pago realizado.
+     * @param  string $tx                 identificador de la transacción
+     * @param  string $pdt_identity_token token de identificación de la cuenta business de paypal
+     * @return string                     Respuesta con los datos de la transacción
+     */
+    private function paypalPdtRequest($tx, $pdt_identity_token)
+    {
+        $request = curl_init();
+
+        // Set request options
+        curl_setopt_array(
+            $request,
+            [
+              CURLOPT_URL => 'https://www.sandbox.paypal.com/cgi-bin/webscr',
+              CURLOPT_POST => true,
+              CURLOPT_POSTFIELDS => http_build_query(
+                  [
+                    'cmd' => '_notify-synch',
+                    'tx' => $tx,
+                    'at' => $pdt_identity_token,
+                  ]
+              ),
+              CURLOPT_RETURNTRANSFER => true,
+              CURLOPT_HEADER => false,
+            ]
+        );
+
+        // Realizar la solicitud y obtener la respuesta y el código de status
+        $response = curl_exec($request);
+        $status = curl_getinfo($request, CURLINFO_HTTP_CODE);
+
+        // Cerrar la conexión
+        curl_close($request);
+        return $response;
     }
 }
