@@ -25,6 +25,29 @@ $this->params['breadcrumbs'][] = $this->title;
             // ],
         //]) ?>
     </p>
+    <form action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="post">
+        <!-- Tipo de transacción -->
+        <input type="hidden" name="cmd" value="_xclick">
+        <!-- Evita que pregunte por una dirección de entrega -->
+        <input type="hidden" name="no_shipping" value="1">
+        <!-- Receptor -->
+        <input type="hidden" name="business" value="<?= Yii::$app->params['pagosEmail']; ?>">
+        <!-- Producto o servicio -->
+        <input type="hidden" name="item_name" value="Mensualidad <?= $model->tarifas->tarifa ?>">
+        <!-- Moneda -->
+        <input type="hidden" name="currency_code" value="EUR">
+        <!-- Cuantía -->
+        <input type="hidden" name="amount" value="<?= $model->tarifas->precio ?>">
+        <!-- Cantidad -->
+        <input type="hidden" name="quantity" value="1">
+        <!-- Redirección si transacción exitosa -->
+        <input type="hidden" name="return" value="http://localhost:8080/index.php?r=clientes%2Fview&id=<?= $model->id ?>">
+        <!-- Redirección si transacción cancelada -->
+        <input type="hidden" name="cancel_return" value="http://localhost:8080/index.php?r=clientes%2Fview&id=<?= $model->id ?>">
+        <input type="submit" value="Pagar" class="btn btn-success">
+    </form>
+
+    <hr>
 
     <?= DetailView::widget([
         'model' => $model,
