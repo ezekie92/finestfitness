@@ -173,6 +173,18 @@ class Clientes extends \yii\db\ActiveRecord
         return $this->hasMany(Pagos::className(), ['cliente_id' => 'id'])->inverseOf('cliente');
     }
 
+    /**
+     * Devuelve el número de días desde el último pago realizado.
+     * @return int El número de días
+     */
+    public function getTiempoUltimoPago()
+    {
+        $tiempo = Pagos::find()->select('fecha')->where(['cliente_id' => $this->id])->orderBy(['fecha' => SORT_DESC])->scalar();
+        $tiempo = strtotime($tiempo);
+        $hoy = strtotime(date('y-m-d'));
+        return ($hoy - $tiempo) / (60 * 60 * 24);
+    }
+
 
     public function beforeSave($insert)
     {

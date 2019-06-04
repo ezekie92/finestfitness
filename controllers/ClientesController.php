@@ -83,9 +83,10 @@ class ClientesController extends Controller
     {
         $model = $this->findModel($id);
 
-        if (isset($_GET['tx'])) {
+        if (isset($_GET['tx']) && $model->tiempoUltimoPago > 20) {
             $this->gestionarPago($model);
         }
+
 
         return $this->render('view', [
             'model' => $model,
