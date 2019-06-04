@@ -1,5 +1,6 @@
 <?php
 
+use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 
@@ -43,9 +44,9 @@ $this->params['breadcrumbs'][] = $this->title;
             <!-- Cantidad -->
             <input type="hidden" name="quantity" value="1">
             <!-- Redirección si transacción exitosa -->
-            <input type="hidden" name="return" value="http://localhost:8080/index.php?r=clientes%2Fview&id=<?= $model->id ?>">
+            <input type="hidden" name="return" value="<?= Url::base(true).Yii::$app->request->url ?>">
             <!-- Redirección si transacción cancelada -->
-            <input type="hidden" name="cancel_return" value="http://localhost:8080/index.php?r=clientes%2Fview&id=<?= $model->id ?>">
+            <input type="hidden" name="cancel_return" value="<?= Url::base(true).Yii::$app->request->url ?>">
             <input type="submit" value="Pagar" class="btn btn-success">
         </form>
     <?php endif; ?>
