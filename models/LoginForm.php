@@ -18,6 +18,7 @@ class LoginForm extends Model
 
     private $_user = false;
     private $_conf = false;
+    private $_pago = false;
 
 
     /**
@@ -71,7 +72,10 @@ class LoginForm extends Model
      */
     public function login()
     {
-        if ($this->validate() && $this->getConf()) {
+        if (!$this->getPago()) {
+            return Yii::$app->session->setFlash('danger', 'No pagó el mes anterior. Contacte con el administrador.');
+        }
+        if ($this->validate() && $this->getConf() && $this->getPago()) {
             return Yii::$app->user->login($this->getUser(), $this->rememberMe ? 3600 * 24 * 30 : 0);
         }
         return false;
@@ -102,5 +106,18 @@ class LoginForm extends Model
         }
 
         return $this->_conf;
+    }
+
+    /**
+     * Devuelve si un usuario ha pagado la mensualidad.
+     * @return bool Si ha pagado o no
+     */
+    public function getPago()
+    {
+        if ($this->_pago === false) {
+            $this->_pago = Identity::pago($this->username);
+        }
+
+        return $this->_pago;
     }
 }

@@ -104,7 +104,14 @@ class ClientesController extends Controller
         $model->fecha_alta = date('d/m/y');
         $model->contrasena = Yii::$app->security->generateRandomString();
 
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            $pago = new Pagos();
+            $pago->cliente_id = $model->id;
+            $pago->fecha = date('1-m-y');
+            $pago->concepto = 'Pago en mano';
+            $pago->cantidad = 0;
+            $pago->save();
             $this->actionEmail($model);
             return $this->redirect(['view', 'id' => $model->id]);
         }
