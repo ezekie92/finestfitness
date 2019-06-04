@@ -26,7 +26,7 @@ $this->params['breadcrumbs'][] = $this->title;
             // ],
         //]) ?>
     </p>
-    <?php if ($model->tiempoUltimoPago > 20 && date('d') >= 1 && date('d') <= 5): ?>
+    <?php if (Yii::$app->user->identity->getTipoId() == 'clientes' && $model->tiempoUltimoPago > 20 && date('d') >= 1 && date('d') <= 5): ?>
         <form action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="post">
             <!-- Tipo de transacción -->
             <input type="hidden" name="cmd" value="_xclick">
