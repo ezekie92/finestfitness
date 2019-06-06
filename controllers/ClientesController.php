@@ -101,14 +101,16 @@ class ClientesController extends Controller
     public function actionCreate()
     {
         $model = new Clientes(['scenario' => Clientes::SCENARIO_CREATE]);
-        $model->fecha_alta = date('d/m/y');
+        $model->fecha_alta = date('d-m-y');
         $model->contrasena = Yii::$app->security->generateRandomString();
 
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             $pago = new Pagos();
             $pago->cliente_id = $model->id;
-            $pago->fecha = date('1-m-y');
+            $fecha = new \DateTime('now', new \DateTimeZone('UTC'));
+            $pago->fecha = $fecha->format('Y-m-d H:i:s');
+            // $pago->fecha = date('d-m-y');
             $pago->concepto = 'Pago en mano';
             $pago->cantidad = 0;
             $pago->save();
@@ -297,8 +299,9 @@ class ClientesController extends Controller
 
             if ($estado == 'SUCCESS') {
                 $pago = new Pagos();
-                // $pago->fecha = date('d/m/y');
-                $pago->fecha = strftime('%d-%m-%Y');
+                $fecha = date('d-m-Y');
+                // $pago->fecha = strftime('%d-%m-%Y');
+                $pago->fecha = $fecha->format('d-m-Y H:i:s');
                 $pago->cliente_id = $cliente->id;
                 $pago->concepto = 'Tarifa ' . $cliente->tarifas->tarifa;
                 $pago->cantidad = $cliente->tarifas->precio;

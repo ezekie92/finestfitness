@@ -42,7 +42,7 @@ CREATE TABLE monitores
   , email           VARCHAR(60) NOT NULL UNIQUE CONSTRAINT ck_monitores_email_valido
                                 CHECK (email ~ '^[a-zA-Z0-9.!#$%&''*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$')
   , contrasena      VARCHAR(60) NOT NULL
-  , fecha_nac       DATE        NOT NULL
+  , fecha_nac       TIMESTAMP   NOT NULL
   , foto            VARCHAR(255)
   , telefono        NUMERIC(9)
   , horario_entrada TIME
@@ -63,7 +63,7 @@ CREATE TABLE clientes
   , email           VARCHAR(60) NOT NULL UNIQUE CONSTRAINT ck_clientes_email_valido
                                 CHECK (email ~ '^[a-zA-Z0-9.!#$%&''*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$')
   , contrasena      VARCHAR(60) NOT NULL
-  , fecha_nac       DATE        NOT NULL
+  , fecha_nac       TIMESTAMP   NOT NULL
   , peso            SMALLINT    CONSTRAINT ck_clientes_peso_positivo
                                 CHECK (coalesce(peso, 0) >= 0)
   , altura          SMALLINT    CONSTRAINT ck_clientes_altura_positiva
@@ -73,7 +73,7 @@ CREATE TABLE clientes
   , tarifa          BIGINT      NOT NULL REFERENCES tarifas (id)
                                 ON DELETE NO ACTION
                                 ON UPDATE CASCADE
-  , fecha_alta      DATE        NOT NULL DEFAULT CURRENT_DATE
+  , fecha_alta      TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP
   , monitor         BIGINT      REFERENCES monitores (id)
                                 ON DELETE NO ACTION
                                 ON UPDATE CASCADE
@@ -197,7 +197,7 @@ DROP TABLE IF EXISTS pagos CASCADE;
 CREATE TABLE pagos
 (
     id          BIGSERIAL       PRIMARY KEY
-  , fecha       DATE            NOT NULL
+  , fecha       TIMESTAMP       NOT NULL
   , cliente_id  BIGINT          NOT NULL
                                 REFERENCES clientes (id)
                                 ON DELETE NO ACTION
