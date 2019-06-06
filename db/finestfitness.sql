@@ -198,9 +198,8 @@ CREATE TABLE pagos
 (
     id          BIGSERIAL       PRIMARY KEY
   , fecha       TIMESTAMP       NOT NULL
-  , cliente_id  BIGINT          NOT NULL
-                                REFERENCES clientes (id)
-                                ON DELETE NO ACTION
+  , cliente_id  BIGINT          REFERENCES clientes (id)
+                                ON DELETE SET NULL
                                 ON UPDATE CASCADE
   , concepto    VARCHAR(255)    NOT NULL
   , cantidad    NUMERIC(10,2)   NOT NULL

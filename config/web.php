@@ -6,6 +6,8 @@ $log = require __DIR__ . '/log.php';
 
 $config = [
     'id' => 'basic',
+    'name' => 'FinestFitness',
+    'timeZone' => 'Europe/Madrid',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'aliases' => [
@@ -47,9 +49,6 @@ $config = [
         ],
         'log' => $log,
         'db' => $db,
-        'formatter' => [
-            'timeZone' => 'Europe/Madrid',
-        ],
         /*
         'urlManager' => [
             'enablePrettyUrl' => true,

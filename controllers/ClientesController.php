@@ -106,14 +106,7 @@ class ClientesController extends Controller
 
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            $pago = new Pagos();
-            $pago->cliente_id = $model->id;
-            $fecha = new \DateTime('now', new \DateTimeZone('UTC'));
-            $pago->fecha = $fecha->format('Y-m-d H:i:s');
-            // $pago->fecha = date('d-m-y');
-            $pago->concepto = 'Pago en mano';
-            $pago->cantidad = 0;
-            $pago->save();
+            $this->almacenarPago($model);
             $this->actionEmail($model);
             return $this->redirect(['view', 'id' => $model->id]);
         }
@@ -298,15 +291,8 @@ class ClientesController extends Controller
             }
 
             if ($estado == 'SUCCESS') {
-                $pago = new Pagos();
-                $fecha = date('d-m-Y');
-                // $pago->fecha = strftime('%d-%m-%Y');
-                $pago->fecha = $fecha->format('d-m-Y H:i:s');
-                $pago->cliente_id = $cliente->id;
-                $pago->concepto = 'Tarifa ' . $cliente->tarifas->tarifa;
-                $pago->cantidad = $cliente->tarifas->precio;
-
-                if ($pago->save()) {
+                $pagado = $this->almacenarPago($cliente);
+                if ($pagado) {
                     return $this->redirect(['view', 'id' => $cliente->id]);
                 }
             }
@@ -351,5 +337,22 @@ class ClientesController extends Controller
         // Cerrar la conexión
         curl_close($request);
         return $response;
+    }
+
+    /**
+     * Crea una nueva instancia de pago.
+     * @param Clientes $cliente el cliente que realiza el pago
+     * @return mixed
+     */
+    private function almacenarPago($cliente)
+    {
+        $pago = new Pagos();
+        $pago->cliente_id = $cliente->id;
+        $fecha = new \DateTime('now', new \DateTimeZone('UTC'));
+        $pago->fecha = $fecha->format('Y-m-d H:i:s');
+        $pago->concepto = 'Pago en mano';
+        $pago->cantidad = $cliente->tarifas->precio;
+
+        return $pago->save();
     }
 }
