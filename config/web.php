@@ -49,6 +49,9 @@ $config = [
                 'encryption' => 'tls',
             ],
         ],
+        'formatter' => [
+            'nullDisplay' => '',
+        ],
         'log' => $log,
         'db' => $db,
         /*
