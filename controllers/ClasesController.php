@@ -118,6 +118,7 @@ class ClasesController extends Controller
     public function actionCreate()
     {
         $model = new Clases();
+        $model->hora_inicio = $model->hora_fin = '00:00:00';
 
         if ($model->load(Yii::$app->request->post())) {
             $comprobar = $this->comprobarHorario($model->hora_inicio, $model->hora_fin, $model->dia, $model->diaClase->dia);

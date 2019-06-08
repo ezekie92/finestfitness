@@ -35,6 +35,7 @@ class Entrenamientos extends \yii\db\ActiveRecord
             [['cliente_id', 'monitor_id', 'dia'], 'default', 'value' => null],
             [['cliente_id', 'monitor_id', 'dia'], 'integer'],
             [['hora_inicio', 'hora_fin'], 'safe'],
+            ['hora_fin', 'compare', 'compareAttribute' => 'hora_inicio', 'operator' => '>'],
             [['estado'], 'boolean'],
             [['cliente_id', 'monitor_id', 'dia'], 'unique', 'targetAttribute' => ['cliente_id', 'monitor_id', 'dia']],
             [['cliente_id'], 'exist', 'skipOnError' => true, 'targetClass' => Clientes::className(), 'targetAttribute' => ['cliente_id' => 'id']],

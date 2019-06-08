@@ -119,6 +119,8 @@ class MonitoresController extends Controller
     {
         $model = new Monitores(['scenario' => Monitores::SCENARIO_CREATE]);
         $model->contrasena = Yii::$app->security->generateRandomString();
+        $model->horario_entrada = '00:00:00';
+        $model->horario_salida = '00:00:00';
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             $this->actionEmail($model);

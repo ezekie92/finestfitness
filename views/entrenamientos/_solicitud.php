@@ -2,6 +2,8 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use kartik\datecontrol\DateControl;
+
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Entrenamientos */
@@ -12,9 +14,17 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'hora_inicio')->textInput() ?>
+    <?=
+        $form->field($model, 'hora_inicio')->widget(DateControl::classname(), [
+            'type'=>DateControl::FORMAT_TIME,
+        ])
+    ?>
 
-    <?= $form->field($model, 'hora_fin')->textInput() ?>
+    <?=
+        $form->field($model, 'hora_fin')->widget(DateControl::classname(), [
+            'type'=>DateControl::FORMAT_TIME,
+        ])
+    ?>
 
     <?= $form->field($model, 'dia')->dropDownList($listaDias) ?>
 
