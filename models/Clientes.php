@@ -18,9 +18,7 @@ use Yii;
  * @property string $telefono
  * @property int $tarifa
  * @property string $fecha_alta
- * @property int $monitor
  *
- * @property Monitores $monitor
  * @property Tarifas $tarifa
  * @property Entrenamientos[] $entrenamientos
  * @property Monitores[] $monitores
@@ -65,8 +63,8 @@ class Clientes extends \yii\db\ActiveRecord
             [['contrasena_repeat'], 'safe', 'on' => [self::SCENARIO_UPDATE]],
             [['contrasena'], 'compare', 'on' => [self::SCENARIO_UPDATE]],
             [['fecha_nac', 'fecha_alta', 'confirmado', 'token'], 'safe'],
-            [['peso', 'altura', 'tarifa', 'monitor'], 'default', 'value' => null],
-            [['peso', 'altura', 'tarifa', 'monitor'], 'integer'],
+            [['peso', 'altura', 'tarifa'], 'default', 'value' => null],
+            [['peso', 'altura', 'tarifa'], 'integer'],
             [['telefono'], 'number'],
             [['nombre'], 'string', 'max' => 32],
             [['email', 'contrasena'], 'string', 'max' => 60],
@@ -80,7 +78,6 @@ class Clientes extends \yii\db\ActiveRecord
                'targetClass' => Monitores::ClassName(),
                 'targetAttribute' => ['email'],
             ],
-            [['monitor'], 'exist', 'skipOnError' => true, 'targetClass' => Monitores::className(), 'targetAttribute' => ['monitor' => 'id']],
             [['tarifa'], 'exist', 'skipOnError' => true, 'targetClass' => Tarifas::className(), 'targetAttribute' => ['tarifa' => 'id']],
         ];
     }
@@ -96,25 +93,16 @@ class Clientes extends \yii\db\ActiveRecord
             'email' => 'Email',
             'contrasena' => 'Contraseña',
             'fecha_nac' => 'Fecha de nacimiento',
-            'peso' => 'Peso',
-            'altura' => 'Altura',
+            'peso' => 'Peso (kg)',
+            'altura' => 'Altura (cm)',
             'foto' => 'Foto',
             'telefono' => 'Teléfono',
             'tarifa' => 'Tarifa',
             'fecha_alta' => 'Fecha de alta',
-            'monitor' => 'Monitor',
             'token' => 'Token',
             'confirmado' => 'Confirmado',
             'contrasena_repeat' => 'Repetir Contraseña',
         ];
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getEntrenador()
-    {
-        return $this->hasOne(Monitores::className(), ['id' => 'monitor'])->inverseOf('clientes');
     }
 
     /**

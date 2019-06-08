@@ -16,7 +16,7 @@ class ClientesSearch extends Clientes
     public function rules()
     {
         return [
-            [['id', 'peso', 'altura', 'tarifa', 'monitor'], 'integer'],
+            [['id', 'peso', 'altura', 'tarifa'], 'integer'],
             [['nombre', 'email', 'contrasena', 'fecha_nac', 'foto', 'fecha_alta'], 'safe'],
             [['telefono'], 'number'],
         ];
@@ -65,7 +65,6 @@ class ClientesSearch extends Clientes
             'telefono' => $this->telefono,
             'tarifa' => $this->tarifa,
             'fecha_alta' => $this->fecha_alta,
-            'monitor' => $this->monitor,
         ]);
 
         $query->andFilterWhere(['ilike', 'nombre', $this->nombre])

@@ -64,7 +64,6 @@ $this->params['breadcrumbs'][] = $this->title;
             'telefono',
             'tarifas.tarifa',
             'fecha_alta:date',
-            'entrenador.nombre:text:Monitor',
         ],
     ]) ?>
 

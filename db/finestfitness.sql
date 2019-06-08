@@ -74,9 +74,6 @@ CREATE TABLE clientes
                                 ON DELETE NO ACTION
                                 ON UPDATE CASCADE
   , fecha_alta      TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP
-  , monitor         BIGINT      REFERENCES monitores (id)
-                                ON DELETE NO ACTION
-                                ON UPDATE CASCADE
   , token           VARCHAR(255)
   , confirmado      BOOLEAN     DEFAULT 'f'
 );
@@ -227,10 +224,10 @@ INSERT INTO monitores (nombre, email, contrasena, fecha_nac, telefono, horario_e
 VALUES('Blas', 'blas@blas.com', crypt('blas', gen_salt('bf', 10)), '1978-1-1', 666999888, '7:00:00', '15:00:00', 1, true)
     , ('Benito', 'benito@benito.com', crypt('benito', gen_salt('bf', 10)), '1985-1-1', 666777888, '15:00:00', '23:00:00', 3, false);
 
-INSERT INTO clientes (nombre, email, contrasena, fecha_nac, peso, altura, telefono, tarifa, fecha_alta, monitor, confirmado)
-VALUES('Alberto', 'alberto@alberto.com', crypt('alberto', gen_salt('bf', 10)), '1970-1-1', 70, 175, 666555444, 1, '2019-1-1', 2, true)
-    , ('Alfredo', 'alfredo@alfredo.com', crypt('alfredo', gen_salt('bf', 10)), '1980-1-1', 65, 172, 666555444, 1, '2019-1-1', 1, false)
-    , ('Antonio', 'antonio@antonio.com', crypt('antonio', gen_salt('bf', 10)), '1991-1-1', 65, 170, 666555444, 2, '2019-1-1', 2, false);
+INSERT INTO clientes (nombre, email, contrasena, fecha_nac, peso, altura, telefono, tarifa, fecha_alta, confirmado)
+VALUES('Alberto', 'alberto@alberto.com', crypt('alberto', gen_salt('bf', 10)), '1970-1-1', 70, 175, 666555444, 1, '2019-1-1', true)
+    , ('Alfredo', 'alfredo@alfredo.com', crypt('alfredo', gen_salt('bf', 10)), '1980-1-1', 65, 172, 666555444, 1, '2019-1-1', false)
+    , ('Antonio', 'antonio@antonio.com', crypt('antonio', gen_salt('bf', 10)), '1991-1-1', 65, 170, 666555444, 2, '2019-1-1', false);
 
 INSERT INTO dias (dia)
 VALUES('Lunes')

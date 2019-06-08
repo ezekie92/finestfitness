@@ -19,7 +19,6 @@ use Yii;
  * @property int $especialidad
  *
  * @property Clases[] $clases
- * @property Clientes[] $clientes
  * @property Entrenamientos[] $entrenamientos
  * @property Clientes[] $clientes0
  */
@@ -107,14 +106,6 @@ class Monitores extends \yii\db\ActiveRecord
     public function getClases()
     {
         return $this->hasMany(Clases::className(), ['monitor' => 'id'])->inverseOf('monitorClase');
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getClientes()
-    {
-        return $this->hasMany(Clientes::className(), ['monitor' => 'id'])->inverseOf('monitor');
     }
 
     /**

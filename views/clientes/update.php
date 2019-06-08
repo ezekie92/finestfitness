@@ -17,7 +17,6 @@ $this->params['breadcrumbs'][] = 'Update';
     <?= $this->render('_modificar', [
         'model' => $model,
         'listaTarifas' => $listaTarifas,
-        'listaMonitores' => $listaMonitores,
     ]) ?>
 
 </div>

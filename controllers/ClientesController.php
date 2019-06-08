@@ -4,7 +4,6 @@ namespace app\controllers;
 
 use app\models\Clientes;
 use app\models\ClientesSearch;
-use app\models\Monitores;
 use app\models\Pagos;
 use app\models\Tarifas;
 use Yii;
@@ -114,7 +113,6 @@ class ClientesController extends Controller
         return $this->render('create', [
             'model' => $model,
             'listaTarifas' => $this->listaTarifas(),
-            'listaMonitores' => $this->listaMonitores(),
         ]);
     }
 
@@ -139,7 +137,6 @@ class ClientesController extends Controller
         return $this->render('update', [
             'model' => $model,
             'listaTarifas' => $this->listaTarifas(),
-            'listaMonitores' => $this->listaMonitores(),
         ]);
     }
 
@@ -257,15 +254,6 @@ class ClientesController extends Controller
     private function listaTarifas()
     {
         return Tarifas::find()->select('tarifa')->indexBy('id')->column();
-    }
-
-    /**
-     * Devuelve un listado de monitores.
-     * @return Monitores el monitor que puede tener un cliente
-     */
-    private function listaMonitores()
-    {
-        return Monitores::find()->select('nombre')->indexBy('id')->column();
     }
 
     /**
