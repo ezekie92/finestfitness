@@ -113,7 +113,8 @@ $this->registerJs($js);
                             if (Yii::$app->user->identity->getTipoId() == 'administradores') {
                                 return Html::a(
                                     '<span class="glyphicon glyphicon-trash"></span>',
-                                    ['clases/update', 'id' => $model->id],
+                                    ['clases/delete', 'id' => $model->id],
+                                    ['data-method' => 'POST'],
                                 );
                             }
                         },
