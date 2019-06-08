@@ -34,6 +34,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'cliente.nombre',
                 'label' => 'Cliente',
                 'visible' => Yii::$app->user->identity->getTipoId() != 'clientes',
+                'format' => 'raw',
+                'value' => function ($data) {
+                    return Html::a($data->cliente->nombre, ['clientes/view', 'id' => $data->cliente_id]);
+                },
             ],
             [
                 'attribute' => 'monitor.nombre',

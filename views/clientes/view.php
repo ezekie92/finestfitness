@@ -18,7 +18,9 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Modificar datos', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+        <?php if (Yii::$app->user->identity->getTipoId() != 'monitores'): ?>
+            <?= Html::a('Modificar datos', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+        <?php endif; ?>
         <?php //Html::a('Dar de baja', ['delete', 'id' => $model->id], [
             // 'class' => 'btn btn-danger',
             // 'data' => [
@@ -56,14 +58,28 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'email:email',
+            [
+                'attribute' => 'email',
+                'label' => 'Email',
+                'format' => 'email',
+                'visible' => Yii::$app->user->identity->getTipoId() != 'monitores',
+            ],
             'fecha_nac:date',
             'peso:shortWeight',
             'altura',
-            'foto',
-            'telefono',
-            'tarifas.tarifa',
-            'fecha_alta:date',
+            [
+                'attribute' => 'telefono',
+                'visible' => Yii::$app->user->identity->getTipoId() != 'monitores',
+            ],
+            [
+                'attribute' => 'tarifas.tarifa',
+                'visible' => Yii::$app->user->identity->getTipoId() != 'monitores',
+            ],
+            [
+                'attribute' => 'fecha_alta',
+                'format' => 'date',
+                'visible' => Yii::$app->user->identity->getTipoId() != 'monitores',
+            ],
         ],
     ]) ?>
 

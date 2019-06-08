@@ -30,7 +30,7 @@ class ClientesController extends Controller
                 'rules' => [
                     [
                         'allow' => true,
-                        'actions' => ['update', 'view'],
+                        'actions' => ['update'],
                         'roles' => ['@'],
                         'matchCallback' => function ($rule, $action) {
                             $ruta = explode('/', Yii::$app->request->get('r'));
@@ -39,7 +39,12 @@ class ClientesController extends Controller
                     ],
                     [
                         'allow' => true,
-                        'actions' => ['create', 'update', 'view', 'delete', 'index'],
+                        'actions' => ['view'],
+                        'roles' => ['@'],
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['create', 'update', 'delete', 'index'],
                         'roles' => ['@'],
                         'matchCallback' => function ($rule, $action) {
                             $tipo = explode('-', Yii::$app->user->id);
