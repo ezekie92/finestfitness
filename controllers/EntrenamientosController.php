@@ -48,7 +48,7 @@ class EntrenamientosController extends Controller
                     ],
                     [
                         'allow' => true,
-                        'actions' => ['solicitar'],
+                        'actions' => ['index', 'solicitar'],
                         'roles' => ['@'],
                         'matchCallback' => function ($rule, $action) {
                             return Yii::$app->user->identity->getTipoId() == 'clientes';
@@ -88,9 +88,6 @@ class EntrenamientosController extends Controller
     {
         $searchModel = new EntrenamientosSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        $id = explode('-', Yii::$app->user->identity->getid())[1];
-        $dataProvider->query->where(['monitor_id' => $id]);
-        $dataProvider->query->andWhere(['estado' => 1]);
 
         return $this->render('index', [
             'searchModel' => $searchModel,

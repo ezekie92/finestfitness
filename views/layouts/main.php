@@ -86,8 +86,8 @@ if (!Yii::$app->user->isGuest) {
             [
                 'label' => 'Entrenamientos',
                 'items' => [
-                    ['label' => 'Monitores', 'url' => ['/monitores/lista-monitores']],
-                    // ['label' => 'Entrenos', 'url' => ['/entrenamientos/index']],
+                    ['label' => 'Solicitar', 'url' => ['/monitores/lista-monitores']],
+                    ['label' => 'Mis entrenamientos', 'url' => ['/entrenamientos/index']],
                     // ['label' => 'Mis entrenos', 'url' => ['/entrenamientos/clientes-entrenador']],
                 ],
             ],

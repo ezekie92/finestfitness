@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 
@@ -45,7 +46,15 @@ class EntrenamientosSearch extends Entrenamientos
      */
     public function search($params)
     {
+        $tipo = Yii::$app->user->identity->getTipoId();
         $query = Entrenamientos::find()->joinWith(['cliente', 'monitor', 'diaSemana']);
+
+        if ($tipo == 'clientes') {
+            $query->where(['cliente_id' => Yii::$app->user->identity->getNId()]);
+        } elseif ($tipo == 'monitores') {
+            $query->where(['monitor_id' => Yii::$app->user->identity->getNId()]);
+            $query->andWhere(['estado' => 1]);
+        }
 
         // add conditions that should always apply here
 
