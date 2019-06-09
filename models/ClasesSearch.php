@@ -16,14 +16,14 @@ class ClasesSearch extends Clases
     public function rules()
     {
         return [
-            [['id', 'dia', 'monitor', 'plazas'], 'integer'],
-            [['nombre', 'hora_inicio', 'hora_fin', 'diaClase.dia', 'monitorClase.nombre'], 'safe'],
+            [['id', 'monitor', 'plazas'], 'integer'],
+            [['nombre', 'fecha', 'monitorClase.nombre'], 'safe'],
         ];
     }
 
     public function attributes()
     {
-        return array_merge(parent::attributes(), ['diaClase.dia', 'monitorClase.nombre']);
+        return array_merge(parent::attributes(), ['monitorClase.nombre']);
     }
 
     /**
@@ -44,19 +44,16 @@ class ClasesSearch extends Clases
      */
     public function search($params)
     {
-        $query = Clases::find()->joinWith(['diaClase', 'monitorClase']);
+        $fecha = new \DateTime('now');
+        $ahora = $fecha->format('Y-m-d H:i:s');
+        $query = Clases::find()->joinWith(['monitorClase'])->where(['>=', 'fecha', $ahora]);
 
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
-            'sort' => ['defaultOrder' => ['diaClase.dia' => SORT_ASC, 'hora_inicio' => SORT_ASC]],
+            'sort' => ['defaultOrder' => ['fecha' => SORT_ASC, 'fecha' => SORT_ASC]],
         ]);
-
-        $dataProvider->sort->attributes['diaClase.dia'] = [
-           'asc' => ['dias.dia' => SORT_ASC],
-           'desc' => ['dias.dia' => SORT_DESC],
-        ];
 
         $dataProvider->sort->attributes['monitorClase.nombre'] = [
            'asc' => ['monitores.nombre' => SORT_ASC],
@@ -74,15 +71,12 @@ class ClasesSearch extends Clases
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'hora_inicio' => $this->hora_inicio,
-            'hora_fin' => $this->hora_fin,
-            'dia' => $this->dia,
+            'fecha' => $this->fecha,
             'monitor' => $this->monitor,
             'plazas' => $this->plazas,
         ]);
 
         $query->andFilterWhere(['ilike', 'clases.nombre', $this->nombre])
-        ->andFilterWhere(['ilike', 'dias.dia', $this->getAttribute('diaClase.dia')])
         ->andFilterWhere(['ilike', 'monitores.nombre', $this->getAttribute('monitorClase.nombre')]);
 
         return $dataProvider;

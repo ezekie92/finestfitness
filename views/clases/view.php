@@ -16,6 +16,22 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
+        <?php if (Yii::$app->user->identity->getTipoId() == 'clientes'): ?>
+            <?php if ($model->clienteInscrito()): ?>
+                <?= Html::a(
+                    'No asistir',
+                    ['clientes-clases/delete', 'clase_id' => $model->id, 'cliente_id' => Yii::$app->user->identity->getNId()],
+                    ['class'=>'btn-sm btn-danger', 'data-method' => 'POST'],
+                );?>
+            <?php else: ?>
+                <?= Html::beginForm(['clases/inscribirse'],'post')
+                . Html::hiddenInput('clase_id', $model->id)
+                . Html::hiddenInput('cliente_id', Yii::$app->user->identity->getNId())
+                . Html::submitButton('Inscribirse', ['class' => 'btn-xs btn-success'])
+                . Html::endForm(); ?>
+            <?php endif; ?>
+        <?php endif; ?>
+
         <?php Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
         <?php Html::a('Delete', ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
@@ -29,9 +45,8 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'hora_inicio',
-            'hora_fin',
-            'diaClase.dia',
+            'fecha:date',
+            'fecha:time:Hora',
             'monitorClase.nombre',
             'plazas',
         ],
