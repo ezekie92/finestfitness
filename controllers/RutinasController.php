@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\RutinaActual;
 use app\models\Rutinas;
 use app\models\RutinasSearch;
 use Yii;
@@ -61,10 +62,12 @@ class RutinasController extends Controller
     {
         $searchModel = new RutinasSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $actual = RutinaActual::find()->select('rutina_id')->where(['cliente_id' => Yii::$app->user->identity->getNId()])->scalar();
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'actual' => $actual,
         ]);
     }
 
