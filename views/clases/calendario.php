@@ -1,6 +1,7 @@
 <?php
 
 use yii\helpers\Url;
+use yii\helpers\Html;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\ClasesSearch */
@@ -40,7 +41,7 @@ $this->params['breadcrumbs'][] = $this->title;
         {
             title: "<?= $value->nombre ?>",
             start: "<?= $value->fecha ?>",
-            url: "<?= Url::toRoute(['clases/view', 'id' => $value->id]) ?>",
+            url: "<?= Url::toRoute(['clases/calendario', 'filtro' => $value->nombre]) ?>",
         },
         <?php endforeach; ?>
       ]
@@ -49,5 +50,9 @@ $this->params['breadcrumbs'][] = $this->title;
     calendar.render();
     });
 </script>
+
+<?php if (isset($_GET['filtro'])) : ?>
+    <?= Html::a('Limpar filtro', ['clases/calendario'], ['class' => 'btn btn-primary']) ?>
+<?php endif ?>
 
  <div id='calendar'></div>
