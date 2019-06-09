@@ -2,9 +2,12 @@
 
 namespace app\controllers;
 
+use app\models\Clientes;
 use app\models\Especialidades;
 use app\models\Monitores;
 use app\models\MonitoresSearch;
+use app\models\Pagos;
+use app\models\Tarifas;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
@@ -184,6 +187,43 @@ class MonitoresController extends Controller
     }
 
     /**
+     * Convierte un monitor a cliente.
+     * @param  int $id El id del monitor a convertir
+     * @return mixed
+     */
+    public function actionConvertir($id)
+    {
+        $actual = $this->findModel($id);
+
+        $nuevo = new Clientes();
+        $nuevo->nombre = $actual->nombre;
+        $nuevo->email = $actual->email;
+        $nuevo->fecha_nac = $actual->fecha_nac;
+        $nuevo->contrasena = $actual->contrasena;
+        $nuevo->confirmado = true;
+
+
+        if ($nuevo->load(Yii::$app->request->post())) {
+            $this->findModel($id)->delete();
+            if ($nuevo->save()) {
+                $pago = new Pagos();
+                $pago->cliente_id = $nuevo->id;
+                $fecha = new \DateTime('now', new \DateTimeZone('UTC'));
+                $pago->fecha = $fecha->format('Y-m-d H:i:s');
+                $pago->concepto = 'Pago en mano';
+                $pago->cantidad = $nuevo->tarifas->precio;
+                $pago->save();
+                return $this->redirect(['//clientes/view', 'id' => $nuevo->id]);
+            }
+        }
+
+        return $this->render('//clientes/create', [
+            'model' => $nuevo,
+            'listaTarifas' => $this->listaTarifas(),
+        ]);
+    }
+
+    /**
      * Envía un email con un link para confirmar el registro.
      * @param  Monitores $model El monitor al que se le enviará el email
      */
@@ -271,5 +311,14 @@ class MonitoresController extends Controller
     private function listaEsp()
     {
         return Especialidades::find()->select('especialidad')->indexBy('id')->column();
+    }
+
+    /**
+     * Devuelve un listado de las tarifas.
+     * @return Tarifas
+     */
+    private function listaTarifas()
+    {
+        return Tarifas::find()->select('tarifa')->indexBy('id')->column();
     }
 }

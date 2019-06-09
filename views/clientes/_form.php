@@ -14,11 +14,13 @@ use kartik\datecontrol\DateControl;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'nombre')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
+    <?php if ($this->context->action->id != 'convertir'): ?>
+        <?= $form->field($model, 'nombre')->textInput(['maxlength' => true]) ?>
 
-    <?=
+        <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
+
+        <?=
         $form->field($model, 'fecha_nac')->widget(DateControl::classname(), [
             'type'=>DateControl::FORMAT_DATE,
             'widgetOptions' => [
@@ -27,7 +29,8 @@ use kartik\datecontrol\DateControl;
                 ],
             ],
         ])
-    ?>
+        ?>
+    <?php endif; ?>
 
     <?= $form->field($model, 'peso')->textInput() ?>
 
@@ -38,7 +41,7 @@ use kartik\datecontrol\DateControl;
     <?= $form->field($model, 'tarifa')->dropDownList($listaTarifas) ?>
 
     <div class="form-group">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton($boton, ['class' => 'btn btn-success']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>
