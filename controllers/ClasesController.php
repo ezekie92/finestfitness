@@ -83,13 +83,18 @@ class ClasesController extends Controller
     /**
      * Lists all Clases models.
      * @return mixed
+     * @param null|mixed $filtro
      */
-    public function actionCalendario()
+    public function actionCalendario($filtro = null)
     {
         if (Yii::$app->user->identity->getTipoId() == 'monitores') {
             $clases = Clases::find()->where(['monitor' => Yii::$app->user->identity->getNId()])->all();
         } else {
-            $clases = Clases::find()->all();
+            if (isset($filtro)) {
+                $clases = Clases::find()->where(['nombre' => $filtro])->all();
+            } else {
+                $clases = Clases::find()->all();
+            }
         }
 
         return $this->render('calendario', [
