@@ -2,7 +2,9 @@
 
 namespace app\controllers;
 
+use app\models\Clases;
 use app\models\Clientes;
+use app\models\Entrenamientos;
 use app\models\Especialidades;
 use app\models\Monitores;
 use app\models\MonitoresSearch;
@@ -195,7 +197,7 @@ class MonitoresController extends Controller
     {
         $actual = $this->findModel($id);
 
-        $nuevo = new Clientes();
+        $nuevo = new Clientes(['scenario' => Clientes::SCENARIO_CONVERTIR]);
         $nuevo->nombre = $actual->nombre;
         $nuevo->email = $actual->email;
         $nuevo->fecha_nac = $actual->fecha_nac;
@@ -204,8 +206,18 @@ class MonitoresController extends Controller
 
 
         if ($nuevo->load(Yii::$app->request->post())) {
-            $this->findModel($id)->delete();
-            if ($nuevo->save()) {
+            if ($nuevo->validate()) {
+                $clases = Clases::find()->where(['monitor' => $actual->id])->count();
+                if ($clases) {
+                    $error = 'Este monitor tiene clases asignadas. Asigne otro monitor a sus clases';
+                    return $this->redirect(['clases/index', 'nombre' => $actual->nombre]);
+                }
+                $entrenamientos = Entrenamientos::find()->where(['monitor_id' => $actual->id])->all();
+                foreach ($entrenamientos as $entrenamiento) {
+                    $entrenamiento->delete();
+                }
+                $this->findModel($id)->delete();
+                $nuevo->save();
                 $pago = new Pagos();
                 $pago->cliente_id = $nuevo->id;
                 $fecha = new \DateTime('now', new \DateTimeZone('UTC'));
@@ -213,7 +225,7 @@ class MonitoresController extends Controller
                 $pago->concepto = 'Pago en mano';
                 $pago->cantidad = $nuevo->tarifas->precio;
                 $pago->save();
-                return $this->redirect(['//clientes/view', 'id' => $nuevo->id]);
+                return $this->redirect(['clientes/view', 'id' => $nuevo->id]);
             }
         }
 
