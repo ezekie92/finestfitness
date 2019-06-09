@@ -42,6 +42,8 @@ EOF;
 $this->registerJs($js);
 ?>
 
+<?php if (Yii::$app->session->hasFlash('warning')) ?>
+
 <!-- Vista modal para cambiar el monitor asignado a una clase -->
 <?php
     Modal::begin([

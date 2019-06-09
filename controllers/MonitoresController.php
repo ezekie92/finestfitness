@@ -209,7 +209,8 @@ class MonitoresController extends Controller
             if ($nuevo->validate()) {
                 $clases = Clases::find()->where(['monitor' => $actual->id])->count();
                 if ($clases) {
-                    $error = 'Este monitor tiene clases asignadas. Asigne otro monitor a sus clases';
+                    $error = 'Este monitor tiene clases asignadas. Asigne otro monitor a sus clases antes de convertirlo en cliente.';
+                    Yii::$app->session->setFlash('warning', $error);
                     return $this->redirect(['clases/index', 'nombre' => $actual->nombre]);
                 }
                 $entrenamientos = Entrenamientos::find()->where(['monitor_id' => $actual->id])->all();
