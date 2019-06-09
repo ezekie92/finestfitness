@@ -73,6 +73,9 @@ class ClasesController extends Controller
     {
         $searchModel = new ClasesSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        if (isset($_GET['nombre'])) {
+            $dataProvider->query->where(['monitores.nombre' => $_GET['nombre']]);
+        }
 
         return $this->render('index', [
             'searchModel' => $searchModel,

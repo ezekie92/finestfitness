@@ -14,20 +14,24 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'nombre')->textInput(['maxlength' => true]) ?>
+    <?php if ($this->context->action->id != 'convertir'): ?>
 
-    <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
+        <?= $form->field($model, 'nombre')->textInput(['maxlength' => true]) ?>
 
-    <?=
-        $form->field($model, 'fecha_nac')->widget(DateControl::classname(), [
-            'type'=>DateControl::FORMAT_DATE,
-            'widgetOptions' => [
-                'pluginOptions' => [
-                    'autoclose' => true,
+        <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
+
+        <?=
+            $form->field($model, 'fecha_nac')->widget(DateControl::classname(), [
+                'type'=>DateControl::FORMAT_DATE,
+                'widgetOptions' => [
+                    'pluginOptions' => [
+                        'autoclose' => true,
+                    ],
                 ],
-            ],
-        ])
-    ?>
+            ])
+        ?>
+
+    <?php endif ?>
 
     <?= $form->field($model, 'telefono')->textInput() ?>
 
@@ -46,7 +50,7 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'especialidad')->dropDownList($listaEsp, ['prompt' => 'Seleccione una especialidad']) ?>
 
     <div class="form-group">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton($boton, ['class' => 'btn btn-success']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

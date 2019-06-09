@@ -38,6 +38,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => 'Acciones',
+                'template' => '{view}{update}{delete}{convertir}',
                 'buttons'=>[
                     'view'=>function ($url, $model) {
                         return Html::a(
@@ -61,6 +62,19 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'class' => 'btn btn-danger btn-xs',
                                 'data' => [
                                     'confirm' => '¿Seguro que desea dar de baja a ' . $model->nombre . '?',
+                                    'method' => 'post',
+                                ],
+                            ],
+                        );
+                    },
+                    'convertir'=>function ($url, $model) {
+                        return Html::a(
+                            'Convertir',
+                            ['clientes/convertir', 'id' => $model->id],
+                            [
+                                'class' => 'btn btn-success btn-xs',
+                                'data' => [
+                                    'confirm' => '¿Convertir a ' . $model->nombre . ' en monitor?',
                                     'method' => 'post',
                                 ],
                             ],
