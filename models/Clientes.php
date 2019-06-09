@@ -146,6 +146,14 @@ class Clientes extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
+    public function getRutinaActual()
+    {
+        return $this->hasOne(RutinaActual::className(), ['cliente_id' => 'id'])->inverseOf('cliente');
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
     public function getClientesClases()
     {
         return $this->hasMany(ClientesClases::className(), ['cliente_id' => 'id'])->inverseOf('cliente');
