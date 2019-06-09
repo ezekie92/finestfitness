@@ -34,6 +34,11 @@ class Monitores extends \yii\db\ActiveRecord
      * @var string
      */
     const SCENARIO_UPDATE = 'update';
+    /**
+     * Escenario donde se convierte un cliente a monitor.
+     * @var string
+     */
+    const SCENARIO_CONVERTIR = 'convertir';
 
     /**
      * Se usa para comparar las contraseñas al cambiarlas.
@@ -74,6 +79,7 @@ class Monitores extends \yii\db\ActiveRecord
             [['email'], 'unique',
                'targetClass' => Clientes::ClassName(),
                 'targetAttribute' => ['email'],
+                'except' => self::SCENARIO_CONVERTIR,
             ],
         ];
     }

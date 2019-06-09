@@ -230,7 +230,7 @@ class MonitoresController extends Controller
             }
         }
 
-        return $this->render('//clientes/create', [
+        return $this->render('/clientes/create', [
             'model' => $nuevo,
             'listaTarifas' => $this->listaTarifas(),
         ]);

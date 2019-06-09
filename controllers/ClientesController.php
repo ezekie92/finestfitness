@@ -3,7 +3,11 @@
 namespace app\controllers;
 
 use app\models\Clientes;
+use app\models\ClientesClases;
 use app\models\ClientesSearch;
+use app\models\Entrenamientos;
+use app\models\Especialidades;
+use app\models\Monitores;
 use app\models\Pagos;
 use app\models\Tarifas;
 use Yii;
@@ -172,6 +176,44 @@ class ClientesController extends Controller
     }
 
     /**
+     * Convierte un cliente en monitor.
+     * @param  int $id El id del cliente a convertir
+     * @return mixed
+     */
+    public function actionConvertir($id)
+    {
+        $actual = $this->findModel($id);
+        $nuevo = new Monitores(['scenario' => Monitores::SCENARIO_CONVERTIR]);
+        $nuevo->nombre = $actual->nombre;
+        $nuevo->email = $actual->email;
+        $nuevo->fecha_nac = $actual->fecha_nac;
+        $nuevo->contrasena = $actual->contrasena;
+        $nuevo->confirmado = true;
+
+        if ($nuevo->load(Yii::$app->request->post())) {
+            if ($nuevo->validate()) {
+                $entrenamientos = Entrenamientos::find()->where(['cliente_id' => $actual->id])->all();
+                foreach ($entrenamientos as $entrenamiento) {
+                    $entrenamiento->delete();
+                }
+                $clases = ClientesClases::find()->where(['cliente_id' => $actual->id])->all();
+                foreach ($clases as $clase) {
+                    $clase->delete();
+                }
+                $this->findModel($id)->delete();
+                $nuevo->save();
+                return $this->redirect(['monitores/view', 'id' => $nuevo->id]);
+            }
+        }
+
+
+        return $this->render('/monitores/create', [
+            'model' => $nuevo,
+            'listaEsp' => $this->listaEsp(),
+        ]);
+    }
+
+    /**
      * Deletes an existing Clientes model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param int $id
@@ -250,6 +292,15 @@ class ClientesController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    /**
+     * Devuleve una lista de las especialidades que puede tener un monitor.
+     * @return Especialidades especialidad que puede tener un monitor
+     */
+    private function listaEsp()
+    {
+        return Especialidades::find()->select('especialidad')->indexBy('id')->column();
     }
 
     /**
