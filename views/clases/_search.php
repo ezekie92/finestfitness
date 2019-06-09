@@ -19,10 +19,6 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'nombre') ?>
 
-    <?= $form->field($model, 'hora_inicio') ?>
-
-    <?= $form->field($model, 'hora_fin') ?>
-
     <?= $form->field($model, 'dia') ?>
 
     <?php // echo $form->field($model, 'monitor') ?>

@@ -9,13 +9,9 @@ use Yii;
  *
  * @property int $id
  * @property string $nombre
- * @property string $hora_inicio
- * @property string $hora_fin
- * @property int $dia
  * @property int $monitor
  * @property int $plazas
  *
- * @property Dias $dia
  * @property Monitores $monitor
  */
 class Clases extends \yii\db\ActiveRecord
@@ -34,14 +30,12 @@ class Clases extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['nombre', 'hora_inicio', 'hora_fin', 'dia', 'monitor'], 'required'],
-            [['hora_inicio', 'hora_fin'], 'safe'],
-            ['hora_fin', 'compare', 'compareAttribute' => 'hora_inicio', 'operator' => '>'],
-            [['dia', 'monitor', 'plazas'], 'default', 'value' => null],
-            [['dia', 'monitor', 'plazas'], 'integer'],
+            [['nombre', 'fecha', 'monitor'], 'required'],
+            [['fecha'], 'safe'],
+            [['monitor', 'plazas'], 'default', 'value' => null],
+            [['monitor', 'plazas'], 'integer'],
             ['plazas', 'compare', 'compareValue' => '0', 'operator' => '>='],
             [['nombre'], 'string', 'max' => 32],
-            [['dia'], 'exist', 'skipOnError' => true, 'targetClass' => Dias::className(), 'targetAttribute' => ['dia' => 'id']],
             [['monitor'], 'exist', 'skipOnError' => true, 'targetClass' => Monitores::className(), 'targetAttribute' => ['monitor' => 'id']],
         ];
     }
@@ -54,20 +48,10 @@ class Clases extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'nombre' => 'Nombre',
-            'hora_inicio' => 'Hora Inicio',
-            'hora_fin' => 'Hora Fin',
-            'diaClase.dia' => 'Día',
+            'fecha' => 'Fecha',
             'monitorClase.nombre' => 'Monitor',
             'plazas' => 'Plazas',
         ];
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getDiaClase()
-    {
-        return $this->hasOne(Dias::className(), ['id' => 'dia'])->inverseOf('clases');
     }
 
     /**

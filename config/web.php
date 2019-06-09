@@ -51,6 +51,10 @@ $config = [
         ],
         'formatter' => [
             'nullDisplay' => '',
+            'datetimeFormat' => 'php:d-M-Y - H:i',
+            'dateFormat' => 'php:d mm Y',
+            'timeFormat' => 'php:H:i',
+            'timeZone' => 'UTC',
         ],
         'log' => $log,
         'db' => $db,
@@ -70,7 +74,7 @@ $config = [
             'displaySettings' => [
                 Module::FORMAT_DATE => 'dd-MM-yyyy',
                 Module::FORMAT_TIME => 'HH:mm',
-                Module::FORMAT_DATETIME => 'dd-MM-yyyy HH:mm:ss a',
+                Module::FORMAT_DATETIME => 'dd-MM-yyyy HH:mm',
             ],
             // format settings for saving each date attribute (PHP format example)
             'saveSettings' => [

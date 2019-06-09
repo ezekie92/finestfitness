@@ -17,18 +17,15 @@ use kartik\datecontrol\DateControl;
     <?= $form->field($model, 'nombre')->textInput(['maxlength' => true]) ?>
 
     <?=
-        $form->field($model, 'hora_inicio')->widget(DateControl::classname(), [
-            'type'=>DateControl::FORMAT_TIME,
-        ])
+        $form->field($model, 'fecha')->widget(DateControl::classname(), [
+        'type'=>DateControl::FORMAT_DATETIME,
+        'widgetOptions' => [
+            'pluginOptions' => [
+                'autoclose' => true
+            ],
+        ],
+        ]);
     ?>
-
-    <?=
-        $form->field($model, 'hora_fin')->widget(DateControl::classname(), [
-            'type'=>DateControl::FORMAT_TIME,
-        ])
-    ?>
-
-    <?= $form->field($model, 'dia')->dropDownList($listaDias, ['prompt' => 'Seleccione el día']) ?>
 
     <?= $form->field($model, 'monitor')->dropDownList($listaMonitores, ['prompt' => 'Seleccione el monitor']) ?>
 

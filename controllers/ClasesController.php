@@ -5,7 +5,6 @@ namespace app\controllers;
 use app\models\Clases;
 use app\models\ClasesSearch;
 use app\models\ClientesClases;
-use app\models\Dias;
 use app\models\Horarios;
 use app\models\Monitores;
 use Yii;
@@ -76,14 +75,21 @@ class ClasesController extends Controller
         if (isset($_GET['nombre'])) {
             $dataProvider->query->where(['monitores.nombre' => $_GET['nombre']]);
         }
-        $listaDias = $this->listaDias();
-        $horario = Horarios::find()->all();
-
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-            'listaDias' => $listaDias,
-            'horario' => $horario,
+        ]);
+    }
+    /**
+     * Lists all Clases models.
+     * @return mixed
+     */
+    public function actionCalendario()
+    {
+        $clases = Clases::find()->all();
+
+        return $this->render('calendario', [
+            'clases' => $clases,
         ]);
     }
 
@@ -125,11 +131,9 @@ class ClasesController extends Controller
     public function actionCreate()
     {
         $model = new Clases();
-        $model->hora_inicio = $model->hora_fin = '00:00:00';
 
         if ($model->load(Yii::$app->request->post())) {
-            $comprobar = $this->comprobarHorario($model->hora_inicio, $model->hora_fin, $model->dia, $model->diaClase->dia);
-
+            $comprobar = $this->comprobarHorario($model->fecha);
             if ($comprobar) {
                 if ($model->save()) {
                     return $this->redirect(['index']);
@@ -139,7 +143,6 @@ class ClasesController extends Controller
 
         return $this->render('create', [
             'model' => $model,
-            'listaDias' => $this->listaDias(),
             'listaMonitores' => $this->listaMonitores(),
         ]);
     }
@@ -156,7 +159,7 @@ class ClasesController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post())) {
-            $comprobar = $this->comprobarHorario($model->hora_inicio, $model->hora_fin, $model->dia, $model->diaClase->dia);
+            $comprobar = $this->comprobarHorario($model->fecha);
 
             if ($comprobar) {
                 if ($model->save()) {
@@ -167,7 +170,6 @@ class ClasesController extends Controller
 
         return $this->render('update', [
             'model' => $model,
-            'listaDias' => $this->listaDias(),
             'listaMonitores' => $this->listaMonitores(),
         ]);
     }
@@ -250,15 +252,6 @@ class ClasesController extends Controller
     }
 
     /**
-     * Devuelve un listado de los dias.
-     * @return Dias
-     */
-    private function listaDias()
-    {
-        return Dias::find()->select('dia')->indexBy('id')->column();
-    }
-
-    /**
      * Devuelve un listado de monitores.
      * @return Monitores el monitor que puede imparte la clase
      */
@@ -270,29 +263,37 @@ class ClasesController extends Controller
     /**
      * Comprueba que el horario de una clase está dentro del horario de apertura
      * y cierre del gimnasio en el día en el que se quiere impartir la clase.
-     * @param  string $inicio La hora a la que empieza la clase
-     * @param  string $fin    La hora a la que termina la clase
-     * @param  int    $dia    El id del día de la semana
-     * @param  string $nDia   El nombre del día de la semana
+     * @param mixed $fecha
      * @return mixed          True si no da error, o flash en caso de haberlo
      */
-    private function comprobarHorario($inicio, $fin, $dia, $nDia)
+    private function comprobarHorario($fecha)
     {
+        $dia = date('l', strtotime($fecha));
+        $dias = [
+            'Monday' => '1',
+            'Tuesday' => '2',
+            'Wednesday' => '3',
+            'Thursday' => '4',
+            'Friday' => '5',
+            'Saturday' => '6',
+            'Sunday' => '7',
+        ];
+        $dia = $dias[$dia];
         $apertura = Horarios::find()->select('apertura')->where(['id' => $dia])->scalar();
         $cierre = Horarios::find()->select('cierre')->where(['id' => $dia])->scalar();
 
-        if (strtotime($inicio) < strtotime($apertura) ||
-            strtotime($inicio) > strtotime($cierre) ||
-            strtotime($fin) < strtotime($apertura) ||
-            strtotime($fin) > strtotime($cierre)) {
-            $mensaje = 'Las clases del ' . $nDia .
+
+        if ($apertura == null) {
+            $mensaje = 'El gimnasio no abre el ' . date('d-m-Y', strtotime($fecha));
+            return Yii::$app->session->setFlash('danger', $mensaje);
+        }
+        if ($cierre < date('H:i:s', strtotime($fecha)) || $apertura > date('H:i:s', strtotime($fecha))) {
+            $mensaje = 'Las clases del ' . date('d-m-Y', strtotime($fecha)) .
                         " deben empezar después de las $apertura" .
                         " y terminar antes de las $cierre.";
             return Yii::$app->session->setFlash('danger', $mensaje);
-        } elseif (strtotime($inicio) > strtotime($fin)) {
-            $mensaje = 'Las clases no pueden terminar antes de la hora a la que empiezan.';
-            return Yii::$app->session->setFlash('danger', $mensaje);
         }
+
         return true;
     }
 }

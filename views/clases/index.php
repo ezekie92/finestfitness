@@ -63,9 +63,11 @@ $this->registerJs($js);
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <p>
-        <?= Html::a('Crear Clase', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
+    <?php if (Yii::$app->user->identity->getTipoId() == 'administradores'): ?>
+        <p>
+            <?= Html::a('Crear Clase', ['create'], ['class' => 'btn btn-success']) ?>
+        </p>        
+    <?php endif; ?>
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
@@ -75,9 +77,7 @@ $this->registerJs($js);
             'filterModel' => $searchModel,
             'columns' => [
                 'nombre',
-                'hora_inicio',
-                'hora_fin',
-                'diaClase.dia',
+                'fecha:datetime',
                 'monitorClase.nombre',
                 [
                     'attribute' => 'plazas',
