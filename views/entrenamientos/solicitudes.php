@@ -20,22 +20,20 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'columns' => [
             'cliente.nombre:text:Cliente',
-            'hora_inicio',
-            'hora_fin',
-            'diaSemana.dia',
+            'fecha',
 
             ['class' => 'yii\grid\ActionColumn',
                 'header' => 'Aceptar / Rechazar',
                 'template'=>'{aceptar} {rechazar}',
                 'buttons'=>[
                     'aceptar'=>function ($url, $model) {
-                        return Html::beginForm(['entrenamientos/decidir', 'cliente_id' => $model->cliente_id, 'monitor_id' => $model->monitor_id, 'dia' => $model->dia], 'post')
+                        return Html::beginForm(['entrenamientos/decidir', 'cliente_id' => $model->cliente_id, 'monitor_id' => $model->monitor_id, 'fecha' => $model->fecha], 'post')
                         . Html::hiddenInput('estado', 1)
                         . Html::submitButton('Aceptar', ['class' => 'btn-xs btn-success'])
                         . Html::endForm();
                     },
                     'rechazar' => function ($url, $model) {
-                        return Html::beginForm(['entrenamientos/decidir', 'cliente_id' => $model->cliente_id, 'monitor_id' => $model->monitor_id, 'dia' => $model->dia], 'post')
+                        return Html::beginForm(['entrenamientos/decidir', 'cliente_id' => $model->cliente_id, 'monitor_id' => $model->monitor_id, 'fecha' => $model->fecha], 'post')
                         . Html::hiddenInput('estado', 0)
                         . Html::submitButton('Rechazar', ['class' => 'btn-xs btn-danger'])
                         . Html::endForm();

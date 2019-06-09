@@ -15,18 +15,15 @@ use kartik\datecontrol\DateControl;
     <?php $form = ActiveForm::begin(); ?>
 
     <?=
-        $form->field($model, 'hora_inicio')->widget(DateControl::classname(), [
-            'type'=>DateControl::FORMAT_TIME,
-        ])
+        $form->field($model, 'fecha')->widget(DateControl::classname(), [
+        'type'=>DateControl::FORMAT_DATETIME,
+        'widgetOptions' => [
+            'pluginOptions' => [
+                'autoclose' => true
+            ],
+        ],
+        ]);
     ?>
-
-    <?=
-        $form->field($model, 'hora_fin')->widget(DateControl::classname(), [
-            'type'=>DateControl::FORMAT_TIME,
-        ])
-    ?>
-
-    <?= $form->field($model, 'dia')->dropDownList($listaDias) ?>
 
     <div class="form-group">
         <?= Html::submitButton('Solicitar', ['class' => 'btn btn-success']) ?>

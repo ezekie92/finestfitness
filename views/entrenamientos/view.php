@@ -31,9 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'cliente_id',
             'monitor_id',
-            'hora_inicio',
-            'hora_fin',
-            'dia',
+            'fecha',
         ],
     ]) ?>
 

@@ -19,11 +19,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'monitor_id') ?>
 
-    <?= $form->field($model, 'hora_inicio') ?>
-
-    <?= $form->field($model, 'hora_fin') ?>
-
-    <?= $form->field($model, 'dia') ?>
+    <?= $form->field($model, 'fecha') ?>
 
     <div class="form-group">
         <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>

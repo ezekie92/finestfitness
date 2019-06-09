@@ -113,14 +113,9 @@ CREATE TABLE entrenamientos
                             REFERENCES monitores (id)
                             ON DELETE NO ACTION
                             ON UPDATE CASCADE
-  , hora_inicio     TIME
-  , hora_fin        TIME
-  , dia             BIGINT  NOT NULL
-                            REFERENCES dias (id)
-                            ON DELETE NO ACTION
-                            ON UPDATE CASCADE
+  , fecha           TIMESTAMP   NOT NULL
   , estado          BOOLEAN
-  , PRIMARY KEY(cliente_id, monitor_id, dia)
+  , PRIMARY KEY(cliente_id, monitor_id, fecha)
 );
 
 
@@ -253,8 +248,8 @@ INSERT INTO clases (nombre, fecha, monitor, plazas)
 VALUES('Zumba', '2019-06-10 10:00:00', 1, 20)
     , ('Spinning', '2019-06-12 12:00:00', 2, 10);
 
-INSERT INTO entrenamientos (cliente_id, monitor_id, hora_inicio, hora_fin, dia, estado)
-VALUES (3, 2, '16:30', '17:45', 1, true);
+INSERT INTO entrenamientos (cliente_id, monitor_id, fecha, estado)
+VALUES (3, 2, '2019-06-13 10:00:00', true);
 
 INSERT INTO rutinas (nombre, cliente_id)
 VALUES('Básicos', 1);
