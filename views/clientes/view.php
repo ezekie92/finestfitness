@@ -20,6 +20,12 @@ $this->params['breadcrumbs'][] = $this->title;
     <p>
         <?php if (Yii::$app->user->identity->getTipoId() != 'monitores'): ?>
             <?= Html::a('Modificar datos', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+        <?php else: ?>
+            <?php if ($model->rutinaActual): ?>
+                <?= Html::a('Asignar rutina', ['rutina-actual/update', 'cliente_id' => $model->id, 'rutina_id' => $model->rutinaActual->rutina_id], ['class' => 'btn btn-primary']) ?>
+            <?php else: ?>
+                <?= Html::a('Asignar rutina', ['rutina-actual/create', 'cliente_id' => $model->id], ['class' => 'btn btn-primary']) ?>
+            <?php endif; ?>
         <?php endif; ?>
         <?php //Html::a('Dar de baja', ['delete', 'id' => $model->id], [
             // 'class' => 'btn btn-danger',
@@ -80,6 +86,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => 'date',
                 'visible' => Yii::$app->user->identity->getTipoId() != 'monitores',
             ],
+            'rutinaActual.rutina.nombre:text:Rutina Actual'
         ],
     ]) ?>
 

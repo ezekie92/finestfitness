@@ -63,4 +63,12 @@ class Rutinas extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Clientes::className(), ['id' => 'cliente_id'])->inverseOf('rutinas');
     }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getRutinaActual()
+    {
+        return $this->hasMany(RutinaActual::className(), ['rutina_id' => 'id'])->inverseOf('rutina');
+    }
 }

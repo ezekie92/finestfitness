@@ -76,10 +76,14 @@ class ClasesController extends Controller
         if (isset($_GET['nombre'])) {
             $dataProvider->query->where(['monitores.nombre' => $_GET['nombre']]);
         }
+        $listaDias = $this->listaDias();
+        $horario = Horarios::find()->all();
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'listaDias' => $listaDias,
+            'horario' => $horario,
         ]);
     }
 

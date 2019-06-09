@@ -141,6 +141,22 @@ CREATE TABLE rutinas
                             ON UPDATE CASCADE
 );
 
+DROP TABLE IF EXISTS rutina_actual CASCADE;
+
+CREATE TABLE rutina_actual
+(
+    cliente_id      BIGINT  UNIQUE NOT NULL
+                            REFERENCES clientes (id)
+                            ON DELETE NO ACTION
+                            ON UPDATE CASCADE
+  , rutina_id       BIGINT  NOT NULL
+                            REFERENCES rutinas (id)
+                            ON DELETE NO ACTION
+                            ON UPDATE CASCADE
+  , PRIMARY KEY(cliente_id, rutina_id)
+
+);
+
 DROP TABLE IF EXISTS ejercicios CASCADE;
 
 CREATE TABLE ejercicios
