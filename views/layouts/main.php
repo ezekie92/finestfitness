@@ -20,12 +20,31 @@ AppAsset::register($this);
     <meta charset="<?= Yii::$app->charset ?>">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+    <script src="jquery-night-mode-master/js/jquery.night.mode.js"></script>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="jquery-night-mode-master/css/night-mode.css">
     <?php $this->registerCsrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
 </head>
 <body>
 <?php $this->beginBody() ?>
+
+<script type="text/javascript">
+
+    $("body").nightMode({
+    // element(s) to keep normal styles
+    keepNormal: "button",
+    // shows brightness controller
+    adjustBrightness: true,
+    // auto enable night mode at 8 pm to 4 am
+    autoEnable: false,
+    // success text
+    successText: "¡Modo noche activado!",
+    });
+</script>
 
 <?php
 if (!Yii::$app->user->isGuest) {
