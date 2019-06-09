@@ -86,7 +86,11 @@ class ClasesController extends Controller
      */
     public function actionCalendario()
     {
-        $clases = Clases::find()->all();
+        if (Yii::$app->user->identity->getTipoId() == 'monitores') {
+            $clases = Clases::find()->where(['monitor' => Yii::$app->user->identity->getNId()])->all();
+        } else {
+            $clases = Clases::find()->all();
+        }
 
         return $this->render('calendario', [
             'clases' => $clases,

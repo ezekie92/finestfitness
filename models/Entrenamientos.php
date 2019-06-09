@@ -7,12 +7,10 @@ namespace app\models;
  *
  * @property int $cliente_id
  * @property int $monitor_id
- * @property string $hora_inicio
- * @property string $hora_fin
- * @property int $dia
+ * @property string $fecha
+ * @property bool $estado
  *
  * @property Clientes $cliente
- * @property Dias $dia
  * @property Monitores $monitor
  */
 class Entrenamientos extends \yii\db\ActiveRecord
@@ -31,15 +29,13 @@ class Entrenamientos extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['cliente_id', 'monitor_id', 'dia'], 'required'],
-            [['cliente_id', 'monitor_id', 'dia'], 'default', 'value' => null],
-            [['cliente_id', 'monitor_id', 'dia'], 'integer'],
-            [['hora_inicio', 'hora_fin'], 'safe'],
-            ['hora_fin', 'compare', 'compareAttribute' => 'hora_inicio', 'operator' => '>'],
+            [['cliente_id', 'monitor_id', 'fecha'], 'required'],
+            [['cliente_id', 'monitor_id'], 'default', 'value' => null],
+            [['cliente_id', 'monitor_id'], 'integer'],
+            [['fecha'], 'safe'],
             [['estado'], 'boolean'],
-            [['cliente_id', 'monitor_id', 'dia'], 'unique', 'targetAttribute' => ['cliente_id', 'monitor_id', 'dia']],
+            [['cliente_id', 'monitor_id', 'fecha'], 'unique', 'targetAttribute' => ['cliente_id', 'monitor_id', 'fecha']],
             [['cliente_id'], 'exist', 'skipOnError' => true, 'targetClass' => Clientes::className(), 'targetAttribute' => ['cliente_id' => 'id']],
-            [['dia'], 'exist', 'skipOnError' => true, 'targetClass' => Dias::className(), 'targetAttribute' => ['dia' => 'id']],
             [['monitor_id'], 'exist', 'skipOnError' => true, 'targetClass' => Monitores::className(), 'targetAttribute' => ['monitor_id' => 'id']],
         ];
     }
@@ -52,9 +48,7 @@ class Entrenamientos extends \yii\db\ActiveRecord
         return [
             'cliente_id' => 'Cliente ID',
             'monitor_id' => 'Monitor ID',
-            'hora_inicio' => 'Hora Inicio',
-            'hora_fin' => 'Hora Fin',
-            'dia' => 'Dia',
+            'fecha' => 'Día',
             'estado' => 'Aceptado',
         ];
     }
@@ -65,14 +59,6 @@ class Entrenamientos extends \yii\db\ActiveRecord
     public function getCliente()
     {
         return $this->hasOne(Clientes::className(), ['id' => 'cliente_id'])->inverseOf('entrenamientos');
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getDiaSemana()
-    {
-        return $this->hasOne(Dias::className(), ['id' => 'dia'])->inverseOf('entrenamientos');
     }
 
     /**

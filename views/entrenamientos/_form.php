@@ -1,5 +1,7 @@
 <?php
 
+use kartik\datecontrol\DateControl;
+
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
@@ -16,16 +18,21 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'monitor_id')->textInput() ?>
 
-    <?= $form->field($model, 'hora_inicio')->textInput() ?>
-
-    <?= $form->field($model, 'hora_fin')->textInput() ?>
-
-    <?= $form->field($model, 'dia')->textInput() ?>
+    <?=
+        $form->field($model, 'fecha')->widget(DateControl::classname(), [
+        'type'=>DateControl::FORMAT_DATETIME,
+        'widgetOptions' => [
+            'pluginOptions' => [
+                'autoclose' => true
+            ],
+        ],
+        ]);
+    ?>
 
     <?= $form->field($model, 'estado')->textInput() ?>
 
     <div class="form-group">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton('Crear', ['class' => 'btn btn-success']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

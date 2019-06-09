@@ -17,15 +17,15 @@ class EntrenamientosSearch extends Entrenamientos
     public function rules()
     {
         return [
-            [['cliente_id', 'monitor_id', 'dia'], 'integer'],
+            [['cliente_id', 'monitor_id'], 'integer'],
             [['estado'], 'boolean'],
-            [['hora_inicio', 'hora_fin', 'cliente.nombre', 'monitor.nombre', 'diaSemana.dia'], 'safe'],
+            [['fecha', 'cliente.nombre', 'monitor.nombre'], 'safe'],
         ];
     }
 
     public function attributes()
     {
-        return array_merge(parent::attributes(), ['cliente.nombre', 'monitor.nombre', 'diaSemana.dia']);
+        return array_merge(parent::attributes(), ['cliente.nombre', 'monitor.nombre']);
     }
 
     /**
@@ -47,10 +47,11 @@ class EntrenamientosSearch extends Entrenamientos
     public function search($params)
     {
         $tipo = Yii::$app->user->identity->getTipoId();
-        $query = Entrenamientos::find()->joinWith(['cliente', 'monitor', 'diaSemana']);
+        $query = Entrenamientos::find()->joinWith(['cliente', 'monitor']);
 
         if ($tipo == 'clientes') {
             $query->where(['cliente_id' => Yii::$app->user->identity->getNId()]);
+            $query->andWhere(['estado' => 1]);
         } elseif ($tipo == 'monitores') {
             $query->where(['monitor_id' => Yii::$app->user->identity->getNId()]);
             $query->andWhere(['estado' => 1]);
@@ -60,7 +61,7 @@ class EntrenamientosSearch extends Entrenamientos
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
-            'sort' => ['defaultOrder' => ['diaSemana.dia' => SORT_ASC, 'hora_inicio' => SORT_ASC]],
+            'sort' => ['defaultOrder' => ['fecha' => SORT_ASC]],
         ]);
 
         $dataProvider->sort->attributes['cliente.nombre'] = [
@@ -71,11 +72,6 @@ class EntrenamientosSearch extends Entrenamientos
         $dataProvider->sort->attributes['monitor.nombre'] = [
            'asc' => ['monitores.nombre' => SORT_ASC],
            'desc' => ['monitores.nombre' => SORT_DESC],
-        ];
-
-        $dataProvider->sort->attributes['diaSemana.dia'] = [
-           'asc' => ['dias.id' => SORT_ASC],
-           'desc' => ['dias.id' => SORT_DESC],
         ];
 
         $this->load($params);
@@ -90,16 +86,12 @@ class EntrenamientosSearch extends Entrenamientos
         $query->andFilterWhere([
             'cliente_id' => $this->cliente_id,
             'monitor_id' => $this->monitor_id,
-            'hora_inicio' => $this->hora_inicio,
-            'hora_fin' => $this->hora_fin,
-            'dia' => $this->dia,
+            'fecha' => $this->fecha,
             'estado' => $this->estado,
         ]);
 
         $query->andFilterWhere(['ilike', 'clientes.nombre', $this->getAttribute('cliente.nombre')])
-        ->andFilterWhere(['ilike', 'dias.dia', $this->getAttribute('diaSemana.dia')])
         ->andFilterWhere(['ilike', 'monitores.nombre', $this->getAttribute('monitor.nombre')]);
-
 
         return $dataProvider;
     }

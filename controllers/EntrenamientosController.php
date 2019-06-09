@@ -2,7 +2,6 @@
 
 namespace app\controllers;
 
-use app\models\Dias;
 use app\models\Entrenamientos;
 use app\models\EntrenamientosSearch;
 use app\models\Horarios;
@@ -32,7 +31,7 @@ class EntrenamientosController extends Controller
                 'rules' => [
                     [
                         'allow' => true,
-                        'actions' => ['index', 'view', 'update', 'delete'],
+                        'actions' => ['index', 'view', 'update', 'delete', 'create'],
                         'roles' => ['@'],
                         'matchCallback' => function ($rule, $action) {
                             return Yii::$app->user->identity->getTipoId() == 'administradores';
@@ -48,7 +47,7 @@ class EntrenamientosController extends Controller
                     ],
                     [
                         'allow' => true,
-                        'actions' => ['index', 'solicitar'],
+                        'actions' => ['index', 'solicitar', 'delete'],
                         'roles' => ['@'],
                         'matchCallback' => function ($rule, $action) {
                             return Yii::$app->user->identity->getTipoId() == 'clientes';
@@ -110,6 +109,15 @@ class EntrenamientosController extends Controller
         ]);
     }
 
+    public function actionCalendario()
+    {
+        $entrenamientos = Entrenamientos::find()->where(['monitor_id' => Yii::$app->user->identity->getNId()])->all();
+
+        return $this->render('calendario', [
+            'entrenamientos' => $entrenamientos,
+        ]);
+    }
+
     /**
      * Creates a new Entrenamientos model.
      * If creation is successful, the browser will be redirected to the 'view' page.
@@ -120,8 +128,7 @@ class EntrenamientosController extends Controller
         $model = new Entrenamientos();
 
         if ($model->load(Yii::$app->request->post())) {
-            $comprobar = $this->comprobarHorario($model->hora_inicio, $model->hora_fin, $model->dia, $model->diaSemana->dia);
-
+            $comprobar = $this->comprobarHorario($model->fecha);
             if ($comprobar) {
                 if ($model->save()) {
                     return $this->redirect(['index']);
@@ -148,8 +155,7 @@ class EntrenamientosController extends Controller
         $model = $this->findModel($cliente_id, $monitor_id, $dia);
 
         if ($model->load(Yii::$app->request->post())) {
-            $comprobar = $this->comprobarHorario($model->hora_inicio, $model->hora_fin, $model->dia, $model->diaSemana->dia);
-
+            $comprobar = $this->comprobarHorario($model->fecha);
             if ($comprobar) {
                 if ($model->save()) {
                     return $this->redirect(['index']);
@@ -167,12 +173,12 @@ class EntrenamientosController extends Controller
      * Permite aceptar o rechazar las solicitudes de entrenamiento.
      * @param  int $cliente_id El id del cliente
      * @param  int $monitor_id El id del monitor
-     * @param  int $dia        El id del día
+     * @param mixed $fecha
      * @return mixed
      */
-    public function actionDecidir($cliente_id, $monitor_id, $dia)
+    public function actionDecidir($cliente_id, $monitor_id, $fecha)
     {
-        $model = $this->findModel($cliente_id, $monitor_id, $dia);
+        $model = $this->findModel($cliente_id, $monitor_id, $fecha);
 
         $model->estado = Yii::$app->request->post('estado');
         // if ($model->load(Yii::$app->request->post())) {
@@ -199,7 +205,7 @@ class EntrenamientosController extends Controller
         }
 
         if ($model->load(Yii::$app->request->post())) {
-            if ($this->comprobarEntrenamiento($model)) {
+            if ($this->comprobarEntrenamiento($model) && $this->comprobarHorario($model->fecha)) {
                 if ($model->save()) {
                     Yii::$app->session->setFlash('success', 'Solicitud enviada con éxito.');
                 } else {
@@ -211,7 +217,6 @@ class EntrenamientosController extends Controller
 
         return $this->renderAjax('_solicitud', [
             'model' => $model,
-            'listaDias' => $this->listaDias(),
         ]);
     }
 
@@ -232,21 +237,13 @@ class EntrenamientosController extends Controller
                     'asc' => ['clientes.nombre' => SORT_ASC],
                     'desc' => ['clientes.nombre' => SORT_DESC],
                 ],
-                'hora_inicio' => [
-                    'asc' => ['hora_inicio' => SORT_ASC],
-                    'desc' => ['hora_inicio' => SORT_DESC],
-                ],
-                'hora_fin' => [
-                    'asc' => ['hora_fin' => SORT_ASC],
-                    'desc' => ['hora_fin' => SORT_DESC],
-                ],
-                'diaSemana.dia' => [
-                    'asc' => ['dias.id' => SORT_ASC],
-                    'desc' => ['dias.id' => SORT_DESC],
+                'fecha' => [
+                    'asc' => ['fecha' => SORT_ASC],
+                    'desc' => ['fecha' => SORT_DESC],
                 ],
             ],
             'defaultOrder' => [
-               'diaSemana.dia' => SORT_ASC,
+               'fecha' => SORT_ASC,
             ],
         ]);
 
@@ -260,13 +257,13 @@ class EntrenamientosController extends Controller
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param int $cliente_id
      * @param int $monitor_id
-     * @param mixed $dia
+     * @param mixed $fecha
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionDelete($cliente_id, $monitor_id, $dia)
+    public function actionDelete($cliente_id, $monitor_id, $fecha)
     {
-        $this->findModel($cliente_id, $monitor_id, $dia)->delete();
+        $this->findModel($cliente_id, $monitor_id, $fecha)->delete();
 
         return $this->redirect(['index']);
     }
@@ -276,13 +273,13 @@ class EntrenamientosController extends Controller
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param int $cliente_id
      * @param int $monitor_id
-     * @param mixed $dia
+     * @param mixed $fecha
      * @return Entrenamientos the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($cliente_id, $monitor_id, $dia)
+    protected function findModel($cliente_id, $monitor_id, $fecha)
     {
-        if (($model = Entrenamientos::findOne(['cliente_id' => $cliente_id, 'monitor_id' => $monitor_id, 'dia' => $dia])) !== null) {
+        if (($model = Entrenamientos::findOne(['cliente_id' => $cliente_id, 'monitor_id' => $monitor_id, 'fecha' => $fecha])) !== null) {
             return $model;
         }
 
@@ -293,29 +290,37 @@ class EntrenamientosController extends Controller
      * Comprueba que el horario de una sesión de entrenamiento está dentro del
      * horario de apertura y cierre del gimnasio en el día en el que se quiere
      * llevar a cabo.
-     * @param  string $inicio La hora a la que empieza el entrenamiento
-     * @param  string $fin    La hora a la que termina el entrenamiento
-     * @param  int    $dia    El id del día de la semana
-     * @param  string $nDia   El nombre del día de la semana
+     * @param mixed $fecha
      * @return mixed          True si no da error, o flash en caso de haberlo
      */
-    private function comprobarHorario($inicio, $fin, $dia, $nDia)
+    private function comprobarHorario($fecha)
     {
+        $dia = date('l', strtotime($fecha));
+        $dias = [
+            'Monday' => '1',
+            'Tuesday' => '2',
+            'Wednesday' => '3',
+            'Thursday' => '4',
+            'Friday' => '5',
+            'Saturday' => '6',
+            'Sunday' => '7',
+        ];
+        $dia = $dias[$dia];
         $apertura = Horarios::find()->select('apertura')->where(['id' => $dia])->scalar();
         $cierre = Horarios::find()->select('cierre')->where(['id' => $dia])->scalar();
 
-        if (strtotime($inicio) < strtotime($apertura) ||
-            strtotime($inicio) > strtotime($cierre) ||
-            strtotime($fin) < strtotime($apertura) ||
-            strtotime($fin) > strtotime($cierre)) {
-            $mensaje = 'Los entrenamientos del ' . $nDia .
+
+        if ($apertura == null) {
+            $mensaje = 'El gimnasio no abre el ' . date('d-m-Y', strtotime($fecha));
+            return Yii::$app->session->setFlash('danger', $mensaje);
+        }
+        if ($cierre < date('H:i:s', strtotime($fecha)) || $apertura > date('H:i:s', strtotime($fecha))) {
+            $mensaje = 'Los entrenamientos del ' . date('d-m-Y', strtotime($fecha)) .
                         " deben empezar después de las $apertura" .
                         " y terminar antes de las $cierre.";
             return Yii::$app->session->setFlash('danger', $mensaje);
-        } elseif (strtotime($inicio) > strtotime($fin)) {
-            $mensaje = 'Las entrenamientos no pueden terminar antes de la hora a la que empiezan.';
-            return Yii::$app->session->setFlash('danger', $mensaje);
         }
+
         return true;
     }
 
@@ -328,28 +333,20 @@ class EntrenamientosController extends Controller
     {
         // TODO V3: Comprobar que el monitor no tiene entrenamientos a esa hora ese día
         // Comprobar que el cliente no tiene entrenamientos ni clases a esa hora ese día
-        $entrenamientos = Entrenamientos::find()->where(['cliente_id' => $model->cliente_id])->andWhere(['monitor_id' => $model->monitor_id])->andWhere(['dia' => $model->dia])->count();
-        $monitor = Monitores::findOne($model->monitor_id);
-        if ($entrenamientos) {
-            $mensaje = 'Ya tiene un entrenamiento el ' . $model->diaSemana->dia . ' con este monitor.';
-            return Yii::$app->session->setFlash('danger', $mensaje);
-        } elseif (strtotime($model->hora_inicio) >= strtotime($model->hora_fin)) {
-            $mensaje = 'El entrenamiento no puede comenzar después de la hora a la que finaliza.';
-            return Yii::$app->session->setFlash('danger', $mensaje);
-        } elseif (strtotime($model->hora_inicio) < strtotime($monitor->horario_entrada) ||
-            strtotime($model->hora_fin) > strtotime($monitor->horario_salida)) {
-            $mensaje = 'El horario solicitado está fuera del horario de trabajo del monitor.';
-            return Yii::$app->session->setFlash('danger', $mensaje);
+        $entrenamientos = Entrenamientos::find()->where(['cliente_id' => $model->cliente_id])->andWhere(['monitor_id' => $model->monitor_id])->all();
+        foreach ($entrenamientos as $key => $value) {
+            if (date('d-m-Y', strtotime($value->fecha)) == date('d-m-Y', strtotime($model->fecha))) {
+                $mensaje = 'Ya tiene entrenamiento ese día.';
+                return Yii::$app->session->setFlash('danger', $mensaje);
+            }
         }
-        return true;
-    }
+        $monitor = Monitores::findOne($model->monitor_id);
 
-    /**
-     * Devuelve un listado de los dias.
-     * @return Dias
-     */
-    private function listaDias()
-    {
-        return Dias::find()->select('dia')->indexBy('id')->column();
+        // elseif (strtotime($model->hora_inicio) < strtotime($monitor->horario_entrada) ||
+        //     strtotime($model->hora_fin) > strtotime($monitor->horario_salida)) {
+        //     $mensaje = 'El horario solicitado está fuera del horario de trabajo del monitor.';
+        //     return Yii::$app->session->setFlash('danger', $mensaje);
+        // }
+        return true;
     }
 }

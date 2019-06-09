@@ -44,9 +44,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'label' => 'Monitor',
                 'visible' => Yii::$app->user->identity->getTipoId() != 'monitores',
             ],
-            'hora_inicio',
-            'hora_fin',
-            'diaSemana.dia',
+            'fecha:datetime',
             'estado:boolean',
 
             [
@@ -55,7 +53,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'template' => '{delete}',
                 'buttons' => [
                     'delete' => function($url, $model){
-                        return Html::a('<span class="glyphicon glyphicon-remove"></span>', ['delete', 'cliente_id' => $model->cliente_id, 'monitor_id' => $model->monitor_id, 'dia' => $model->dia],
+                        return Html::a('<span class="glyphicon glyphicon-remove"></span>', ['delete', 'cliente_id' => $model->cliente_id, 'monitor_id' => $model->monitor_id, 'fecha' => $model->fecha],
                         [
                             'class' => '',
                             'data' => [

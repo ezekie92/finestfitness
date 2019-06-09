@@ -95,6 +95,7 @@ if (!Yii::$app->user->isGuest) {
                 'items' => [
                     ['label' => 'Clases', 'url' => ['/clases/index']],
                     ['label' => 'Mis clases', 'url' => ['/clases/clases-monitor']],
+                    ['label' => 'Calendario', 'url' => ['/clases/calendario']],
                 ],
             ],
             [
@@ -102,6 +103,7 @@ if (!Yii::$app->user->isGuest) {
                 'items' => [
                     ['label' => 'Mis entrenamientos', 'url' => ['/entrenamientos/clientes-entrenador']],
                     ['label' => 'Solicitudes', 'url' => ['/entrenamientos/solicitudes']],
+                    ['label' => 'Calendario', 'url' => ['/entrenamientos/calendario']],
                 ]
             ],
         ];
