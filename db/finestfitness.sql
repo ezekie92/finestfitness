@@ -94,9 +94,8 @@ CREATE TABLE clases
     id              BIGSERIAL   PRIMARY KEY
   , nombre          VARCHAR(32) NOT NULL
   , fecha           TIMESTAMP   NOT NULL
-  , monitor         BIGINT      NOT NULL
-                                REFERENCES monitores (id)
-                                ON DELETE NO ACTION
+  , monitor         BIGINT      REFERENCES monitores (id)
+                                ON DELETE SET NULL
                                 ON UPDATE CASCADE
   , plazas          SMALLINT
 );
@@ -107,11 +106,11 @@ CREATE TABLE entrenamientos
 (
     cliente_id      BIGINT  NOT NULL
                             REFERENCES clientes (id)
-                            ON DELETE NO ACTION
+                            ON DELETE CASCADE
                             ON UPDATE CASCADE
   , monitor_id      BIGINT  NOT NULL
                             REFERENCES monitores (id)
-                            ON DELETE NO ACTION
+                            ON DELETE CASCADE
                             ON UPDATE CASCADE
   , fecha           TIMESTAMP   NOT NULL
   , estado          BOOLEAN
@@ -127,7 +126,7 @@ CREATE TABLE rutinas
   , nombre      VARCHAR(25) NOT NULL
   , cliente_id  BIGINT      NOT NULL
                             REFERENCES clientes (id)
-                            ON DELETE NO ACTION
+                            ON DELETE CASCADE
                             ON UPDATE CASCADE
 );
 
@@ -137,11 +136,11 @@ CREATE TABLE rutina_actual
 (
     cliente_id      BIGINT  UNIQUE NOT NULL
                             REFERENCES clientes (id)
-                            ON DELETE NO ACTION
+                            ON DELETE CASCADE
                             ON UPDATE CASCADE
   , rutina_id       BIGINT  NOT NULL
                             REFERENCES rutinas (id)
-                            ON DELETE NO ACTION
+                            ON DELETE CASCADE
                             ON UPDATE CASCADE
   , PRIMARY KEY(cliente_id, rutina_id)
 
@@ -151,20 +150,20 @@ DROP TABLE IF EXISTS ejercicios CASCADE;
 
 CREATE TABLE ejercicios
 (
-    id           BIGSERIAL   PRIMARY KEY
-    , nombre       VARCHAR(60) NOT NULL
-    , dia_id       BIGINT      NOT NULL
-    REFERENCES dias (id)
-    ON DELETE NO ACTION
-    ON UPDATE CASCADE
-    , rutina_id    BIGINT      NOT NULL
-    REFERENCES rutinas (id)
-    ON DELETE NO ACTION
-    ON UPDATE CASCADE
-    , series       VARCHAR(5)
-    , repeticiones VARCHAR(15)
-    , descanso     SMALLINT
-    , peso         SMALLINT
+    id              BIGSERIAL   PRIMARY KEY
+  , nombre          VARCHAR(60) NOT NULL
+  , dia_id          BIGINT      NOT NULL
+                                REFERENCES dias (id)
+                                ON DELETE NO ACTION
+                                ON UPDATE CASCADE
+  , rutina_id       BIGINT      NOT NULL
+                                REFERENCES rutinas (id)
+                                ON DELETE CASCADE
+                                ON UPDATE CASCADE
+  , series          VARCHAR(5)
+  , repeticiones    VARCHAR(15)
+  , descanso        SMALLINT
+  , peso            SMALLINT
     );
 
 DROP TABLE IF EXISTS horarios CASCADE;
@@ -186,11 +185,11 @@ CREATE TABLE clientes_clases
 (
     cliente_id      BIGINT  NOT NULL
                             REFERENCES clientes (id)
-                            ON DELETE NO ACTION
+                            ON DELETE CASCADE
                             ON UPDATE CASCADE
   , clase_id        BIGINT  NOT NULL
                             REFERENCES clases (id)
-                            ON DELETE NO ACTION
+                            ON DELETE CASCADE
                             ON UPDATE CASCADE
   , PRIMARY KEY(cliente_id, clase_id)
 );
