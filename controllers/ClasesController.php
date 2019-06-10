@@ -312,6 +312,13 @@ class ClasesController extends Controller
         return true;
     }
 
+    /**
+     * Comprueba que el cliente no tenga un entrenamiento o clase que coincida
+     * con el horario de la clase a la que quiere inscribirse.
+     * @param  int    $id      El id del cliente
+     * @param  string $inicio  La fecha y hora de inicio de la clase en cuestión
+     * @return bool            Si puede inscribirse o no
+     */
     private function comprobarCompatibilidad($id, $inicio)
     {
         $fin = strtotime($inicio) + 60 * 60;

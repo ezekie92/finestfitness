@@ -9,10 +9,13 @@ use Yii;
  *
  * @property int $id
  * @property string $nombre
+ * @property string $fecha
  * @property int $monitor
  * @property int $plazas
  *
- * @property Monitores $monitor
+ * @property Monitores $monitor0
+ * @property ClientesClases[] $clientesClases
+ * @property Clientes[] $clientes
  */
 class Clases extends \yii\db\ActiveRecord
 {
