@@ -4,7 +4,6 @@ namespace app\models;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\Monitores;
 
 /**
  * MonitoresSearch represents the model behind the search form of `app\models\Monitores`.
@@ -18,9 +17,15 @@ class MonitoresSearch extends Monitores
     {
         return [
             [['id', 'especialidad'], 'integer'],
-            [['nombre', 'email', 'contrasena', 'fecha_nac', 'foto', 'horario_entrada', 'horario_salida'], 'safe'],
+            [['nombre', 'email', 'contrasena', 'fecha_nac', 'foto', 'horario_entrada', 'horario_salida', 'esp.especialidad'], 'safe'],
             [['telefono'], 'number'],
+            [['confirmado'], 'boolean'],
         ];
+    }
+
+    public function attributes()
+    {
+        return array_merge(parent::attributes(), ['esp.especialidad']);
     }
 
     /**
@@ -33,7 +38,7 @@ class MonitoresSearch extends Monitores
     }
 
     /**
-     * Creates data provider instance with search query applied
+     * Creates data provider instance with search query applied.
      *
      * @param array $params
      *
@@ -41,13 +46,18 @@ class MonitoresSearch extends Monitores
      */
     public function search($params)
     {
-        $query = Monitores::find();
+        $query = Monitores::find()->joinWith('esp');
 
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
+
+        $dataProvider->sort->attributes['esp.especialidad'] = [
+           'asc' => ['especialidades.especialidad' => SORT_ASC],
+           'desc' => ['especialidades.especialidad' => SORT_DESC],
+        ];
 
         $this->load($params);
 
@@ -65,12 +75,15 @@ class MonitoresSearch extends Monitores
             'horario_entrada' => $this->horario_entrada,
             'horario_salida' => $this->horario_salida,
             'especialidad' => $this->especialidad,
+            'confirmado' => $this->confirmado,
         ]);
 
         $query->andFilterWhere(['ilike', 'nombre', $this->nombre])
             ->andFilterWhere(['ilike', 'email', $this->email])
             ->andFilterWhere(['ilike', 'contrasena', $this->contrasena])
-            ->andFilterWhere(['ilike', 'foto', $this->foto]);
+            ->andFilterWhere(['ilike', 'foto', $this->foto])
+            ->andFilterWhere(['ilike', 'especialidades.especialidad', $this->getAttribute('esp.especialidad')]);
+
 
         return $dataProvider;
     }

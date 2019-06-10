@@ -31,7 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'peso:shortWeight',
             'altura',
             'telefono',
-            'tarifas.tarifa',
+            'tarifaNombre.tarifa',
             'fecha_alta:date',
             'confirmado:boolean',
 

@@ -11,6 +11,8 @@ use Yii;
  * @property string $nombre
  * @property string $email
  * @property string $contrasena
+ * @property string $token
+ * @property bool $confirmado
  */
 class Administradores extends \yii\db\ActiveRecord
 {
@@ -45,6 +47,7 @@ class Administradores extends \yii\db\ActiveRecord
     {
         return [
             [['nombre', 'email'], 'required'],
+            [['confirmado'], 'boolean'],
             [['contrasena'], 'required', 'on' => [self::SCENARIO_CREATE]],
             [['contrasena_repeat'], 'safe', 'on' => [self::SCENARIO_UPDATE]],
             [['contrasena'], 'compare', 'on' => [self::SCENARIO_UPDATE]],

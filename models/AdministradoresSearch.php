@@ -4,7 +4,6 @@ namespace app\models;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\Administradores;
 
 /**
  * AdministradoresSearch represents the model behind the search form of `app\models\Administradores`.
@@ -19,6 +18,7 @@ class AdministradoresSearch extends Administradores
         return [
             [['id'], 'integer'],
             [['nombre', 'email', 'contrasena'], 'safe'],
+            [['confirmado'], 'boolean'],
         ];
     }
 
@@ -32,7 +32,7 @@ class AdministradoresSearch extends Administradores
     }
 
     /**
-     * Creates data provider instance with search query applied
+     * Creates data provider instance with search query applied.
      *
      * @param array $params
      *
@@ -59,6 +59,7 @@ class AdministradoresSearch extends Administradores
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
+            'confirmado' => $this->confirmado,
         ]);
 
         $query->andFilterWhere(['ilike', 'nombre', $this->nombre])

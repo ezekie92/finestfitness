@@ -18,9 +18,15 @@ use Yii;
  * @property string $telefono
  * @property int $tarifa
  * @property string $fecha_alta
+ * @property string $token
+ * @property bool $confirmado
  *
  * @property Tarifas $tarifa
+ * @property ClientesClases[] $clientesClases
+ * @property Clases[] $clases
  * @property Entrenamientos[] $entrenamientos
+ * @property Pagos[] $pagos
+ * @property RutinaActual $rutinaActual
  * @property Monitores[] $monitores
  * @property Rutinas[] $rutinas
  */
@@ -71,6 +77,7 @@ class Clientes extends \yii\db\ActiveRecord
             [['peso', 'altura', 'tarifa'], 'default', 'value' => null],
             [['peso', 'altura', 'tarifa'], 'integer'],
             [['telefono'], 'number'],
+            [['confirmado'], 'boolean'],
             [['nombre'], 'string', 'max' => 32],
             [['email', 'contrasena'], 'string', 'max' => 60],
             [['foto'], 'string', 'max' => 255],
@@ -114,7 +121,7 @@ class Clientes extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getTarifas()
+    public function getTarifaNombre()
     {
         return $this->hasOne(Tarifas::className(), ['id' => 'tarifa'])->inverseOf('clientes');
     }

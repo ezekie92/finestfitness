@@ -17,9 +17,15 @@ class ClientesSearch extends Clientes
     {
         return [
             [['id', 'peso', 'altura', 'tarifa'], 'integer'],
-            [['nombre', 'email', 'contrasena', 'fecha_nac', 'foto', 'fecha_alta'], 'safe'],
+            [['nombre', 'email', 'contrasena', 'fecha_nac', 'foto', 'fecha_alta', 'tarifaNombre.tarifa'], 'safe'],
             [['telefono'], 'number'],
+            [['confirmado'], 'boolean'],
         ];
+    }
+
+    public function attributes()
+    {
+        return array_merge(parent::attributes(), ['tarifaNombre.tarifa']);
     }
 
     /**
@@ -40,13 +46,18 @@ class ClientesSearch extends Clientes
      */
     public function search($params)
     {
-        $query = Clientes::find();
+        $query = Clientes::find()->joinWith('tarifaNombre');
 
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
+
+        $dataProvider->sort->attributes['tarifaNombre.tarifa'] = [
+           'asc' => ['tarifas.tarifa' => SORT_ASC],
+           'desc' => ['tarifas.tarifa' => SORT_DESC],
+        ];
 
         $this->load($params);
 
@@ -65,12 +76,15 @@ class ClientesSearch extends Clientes
             'telefono' => $this->telefono,
             'tarifa' => $this->tarifa,
             'fecha_alta' => $this->fecha_alta,
+            'confirmado' => $this->confirmado,
         ]);
 
         $query->andFilterWhere(['ilike', 'nombre', $this->nombre])
             ->andFilterWhere(['ilike', 'email', $this->email])
             ->andFilterWhere(['ilike', 'contrasena', $this->contrasena])
-            ->andFilterWhere(['ilike', 'foto', $this->foto]);
+            ->andFilterWhere(['ilike', 'foto', $this->foto])
+            ->andFilterWhere(['ilike', 'tarifas.tarifa', $this->getAttribute('tarifaNombre.tarifa')]);
+
 
         return $dataProvider;
     }

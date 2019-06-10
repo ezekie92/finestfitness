@@ -17,10 +17,11 @@ use Yii;
  * @property string $horario_entrada
  * @property string $horario_salida
  * @property int $especialidad
+ * @property string $token
+ * @property bool $confirmado
  *
  * @property Clases[] $clases
  * @property Entrenamientos[] $entrenamientos
- * @property Clientes[] $clientes0
  */
 class Monitores extends \yii\db\ActiveRecord
 {
@@ -68,6 +69,7 @@ class Monitores extends \yii\db\ActiveRecord
             [['telefono'], 'number'],
             [['especialidad'], 'default', 'value' => null],
             [['especialidad'], 'integer'],
+            [['confirmado'], 'boolean'],
             [['nombre'], 'string', 'max' => 32],
             [['email', 'contrasena'], 'string', 'max' => 60],
             [['foto'], 'string', 'max' => 255],
