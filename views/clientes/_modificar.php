@@ -1,9 +1,10 @@
 <?php
 
 use kartik\datecontrol\DateControl;
-
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use kartik\file\FileInput;
+
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Clientes */
@@ -39,6 +40,17 @@ use yii\widgets\ActiveForm;
     <?php else : ?>
         <?= $form->field($model, 'tarifa')->dropDownList($listaTarifas) ?>
     <?php endif ?>
+
+    <?= $form->field($model, 'foto')->widget(FileInput::class, [
+        'options' => ['accept' => 'image/*'],
+        'pluginOptions' => [
+            'showPreview' => true,
+            'showRemove' => false,
+            'showUpload' => false,
+            'maxFileSize'=>5000,
+            'browseLabel' =>  'Subir foto'
+            ]
+        ])  ?>
 
 
     <div class="form-group">

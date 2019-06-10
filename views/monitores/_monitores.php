@@ -8,8 +8,8 @@ use yii\helpers\Html;
 
 <article class="container" data-key="<?= $model->id ?>">
     <div class="row">
-        <div class="col-md-1">
-            <img src="" alt="Aquí irá la foto">
+        <div class="col-md-2">
+            <?= Html::img(Yii::getAlias('@foto') . '/' . $model->foto, ['class' => 'mini']) ?>
         </div>
         <div class="col-md-4">
             <h2><?= $model->nombre ?><small> (<?= $model->esp->especialidad ?>)</small></h2>
