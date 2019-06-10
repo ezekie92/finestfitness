@@ -18,6 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
+        <?= Html::img(Yii::getAlias('@foto') . '/' . $model->foto, ['class' => 'mini']) ?>
 
         <?php if (Yii::$app->user->identity->getTipoId() != 'monitores'): ?>
             <?= Html::a('Modificar datos', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>

@@ -16,6 +16,8 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
+        <?= Html::img(Yii::getAlias('@foto') . '/' . $model->foto, ['class' => 'mini']) ?>
+
         <?= Html::a('Modificar datos', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
         <?php // Html::a('Dar de baja', ['delete', 'id' => $model->id], [
             // 'class' => 'btn btn-danger',

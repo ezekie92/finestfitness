@@ -123,3 +123,8 @@ a.desc:after {
 .horario th a:hover {
     color: red;
 }
+
+.mini {
+    height: 90px;
+    width: auto;
+}

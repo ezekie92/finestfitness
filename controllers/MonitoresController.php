@@ -18,6 +18,8 @@ use yii\helpers\Url;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 
+require 'upload.php';
+
 /**
  * MonitoresController implements the CRUD actions for Monitores model.
  */
@@ -150,8 +152,16 @@ class MonitoresController extends Controller
         $model = $this->findModel($id);
         $model->scenario = Monitores::SCENARIO_UPDATE;
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            if ($_FILES['Monitores']['name']['foto']) {
+                $model->foto = explode('.', $model->email)[0];
+                borrar($model->foto);
+                subir($model->foto);
+                Yii::$app->session->setFlash('success', 'Foto cambiada correctamente: Puede tardar un poco en cargar.');
+            }
+            if ($model->save()) {
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
         }
 
         $model->contrasena = '';

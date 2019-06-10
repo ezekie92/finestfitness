@@ -15,6 +15,7 @@ $config = [
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
         '@npm' => '@vendor/npm-asset',
+        '@foto' => 'https://' . getenv('BUCKET') . '.s3.eu-west-3.amazonaws.com',
     ],
     'language' => 'es-ES',
     'components' => [

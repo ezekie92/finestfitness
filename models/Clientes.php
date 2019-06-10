@@ -206,6 +206,9 @@ class Clientes extends \yii\db\ActiveRecord
                     ->generatePasswordHash($this->contrasena);
                 $this->token = Yii::$app->security->generateRandomString();
             }
+            if ($this->foto === '') {
+                $this->foto = $this->getOldAttribute('foto');
+            }
         }
         return true;
     }

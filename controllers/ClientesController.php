@@ -17,6 +17,8 @@ use yii\helpers\Url;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 
+require 'upload.php';
+
 /**
  * ClientesController implements the CRUD actions for Clientes model.
  */
@@ -137,8 +139,16 @@ class ClientesController extends Controller
         $model = $this->findModel($id);
         $model->scenario = Clientes::SCENARIO_UPDATE;
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            if ($_FILES['Clientes']['name']['foto']) {
+                $model->foto = explode('.', $model->email)[0];
+                borrar($model->foto);
+                subir($model->foto);
+                Yii::$app->session->setFlash('success', 'Foto cambiada correctamente: Puede tardar un poco en cargar.');
+            }
+            if ($model->save()) {
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
         }
 
         $model->contrasena = '';
@@ -149,6 +159,11 @@ class ClientesController extends Controller
         ]);
     }
 
+    /**
+     * Permite cambiar la tarifa de un cleinte.
+     * @param  int $id El id del cliente
+     * @return mixed
+     */
     public function actionTarifa($id)
     {
         $model = $this->findModel($id);
