@@ -18,22 +18,27 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
+
         <?php if (Yii::$app->user->identity->getTipoId() != 'monitores'): ?>
             <?= Html::a('Modificar datos', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?php else: ?>
+            <?php if (Yii::$app->user->identity->getTipoId() == 'administradores'): ?>
+                <?= Html::a('Cambiar tarifa', ['tarifa', 'id' => $model->id], ['class' => 'btn btn-success']) ?>
+                <?= Html::a('Dar de baja', ['delete', 'id' => $model->id], [
+                    'class' => 'btn btn-danger',
+                    'data' => [
+                        'confirm' => 'Are you sure you want to delete this item?',
+                        'method' => 'post',
+                    ],
+                    ])
+                ?>
+            <?php endif ?>
+        <?php else : ?>
             <?php if ($model->rutinaActual): ?>
                 <?= Html::a('Asignar rutina', ['rutina-actual/update', 'cliente_id' => $model->id, 'rutina_id' => $model->rutinaActual->rutina_id], ['class' => 'btn btn-primary']) ?>
             <?php else: ?>
                 <?= Html::a('Asignar rutina', ['rutina-actual/create', 'cliente_id' => $model->id], ['class' => 'btn btn-primary']) ?>
             <?php endif; ?>
         <?php endif; ?>
-        <?php //Html::a('Dar de baja', ['delete', 'id' => $model->id], [
-            // 'class' => 'btn btn-danger',
-            // 'data' => [
-            //     'confirm' => 'Are you sure you want to delete this item?',
-            //     'method' => 'post',
-            // ],
-        //]) ?>
     </p>
     <?php if (Yii::$app->user->identity->getTipoId() == 'clientes' && $model->tiempoUltimoPago > 20 && date('d') >= 1 && date('d') <= 5): ?>
         <form action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="post">

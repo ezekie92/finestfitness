@@ -149,6 +149,22 @@ class ClientesController extends Controller
         ]);
     }
 
+    public function actionTarifa($id)
+    {
+        $model = $this->findModel($id);
+        $model->contrasena = '';
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            Yii::$app->session->setFlash('success', 'Tarifa cambiada a: Tarifa ' . $model->tarifas->tarifa);
+            return $this->redirect(['view', 'id' => $model->id]);
+        }
+
+        return $this->render('update', [
+            'model' => $model,
+            'listaTarifas' => $this->listaTarifas(),
+        ]);
+    }
+
     /**
      * Modifica la contraseña de un cliente existente
      * Si se lleva a cabo con éxito, redirige a login.
