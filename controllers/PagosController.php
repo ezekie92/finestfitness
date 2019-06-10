@@ -87,7 +87,8 @@ class PagosController extends Controller
         $model->fecha = date('Y-m-d H:i:s');
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            Yii::$app->session->setFlash('success', 'Pago introducido correctamente.');
+            return $this->redirect(['clientes/view', 'id' => $id]);
         }
 
         return $this->render('create', [
