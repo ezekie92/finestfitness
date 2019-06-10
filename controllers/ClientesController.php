@@ -254,6 +254,7 @@ class ClientesController extends Controller
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
+        $this->eliminarNoConfirmados();
 
         return $this->redirect(['index']);
     }
@@ -429,5 +430,17 @@ class ClientesController extends Controller
         $pago->cantidad = $cliente->tarifas->precio;
 
         return $pago->save();
+    }
+
+    /**
+     * Elimina los clientes no confirmados en el plazo de un mes.
+     */
+    private function eliminarNoConfirmados()
+    {
+        $fecha = date('Y-m-d H:i:s', strtotime('-1 month'));
+        $clientes = Clientes::find()->select('id')->where(['confirmado' => false])->andWhere(['<=', 'fecha_alta', $fecha])->column();
+        foreach ($clientes as $cliente) {
+            $this->findModel($cliente)->delete();
+        }
     }
 }
