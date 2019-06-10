@@ -43,6 +43,11 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'monitor.nombre',
                 'label' => 'Monitor',
                 'visible' => Yii::$app->user->identity->getTipoId() != 'monitores',
+                'format' => 'raw',
+                'value' => function ($data) {
+                    return Html::a($data->monitor->nombre, ['monitores/view', 'id' => $data->monitor_id]);
+                },
+
             ],
             'fecha:datetime',
             'estado:boolean',

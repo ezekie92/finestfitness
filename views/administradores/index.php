@@ -25,7 +25,14 @@ $this->params['breadcrumbs'][] = $this->title;
         'filterModel' => $searchModel,
         'columns' => [
 
-            'nombre',
+            [
+                'attribute' => 'nombre',
+                'format' => 'raw',
+                'value' => function ($data) {
+                    return Html::a($data->nombre, ['administradores/view', 'id' => $data->id]);
+                },
+
+            ],
             'email:email',
             'confirmado:boolean',
 

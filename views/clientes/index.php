@@ -25,13 +25,27 @@ $this->params['breadcrumbs'][] = $this->title;
         'filterModel' => $searchModel,
         'columns' => [
 
-            'nombre',
+            [
+                'attribute' => 'nombre',
+                'format' => 'raw',
+                'value' => function ($data) {
+                    return Html::a($data->nombre, ['clientes/view', 'id' => $data->id]);
+                },
+
+            ],
             'email:email',
             'fecha_nac:date',
             'peso:shortWeight',
             'altura',
             'telefono',
-            'tarifaNombre.tarifa',
+            [
+                'attribute' => 'tarifaNombre.tarifa',
+                'format' => 'raw',
+                'value' => function ($data) {
+                    return Html::a($data->tarifaNombre->tarifa, ['tarifas/view', 'id' => $data->tarifaNombre->id]);
+                },
+
+            ],
             'fecha_alta:date',
             'confirmado:boolean',
 

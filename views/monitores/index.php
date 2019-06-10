@@ -25,13 +25,27 @@ $this->params['breadcrumbs'][] = $this->title;
         'filterModel' => $searchModel,
         'columns' => [
 
-            'nombre',
+            [
+                'attribute' => 'nombre',
+                'format' => 'raw',
+                'value' => function ($data) {
+                    return Html::a($data->nombre, ['monitores/view', 'id' => $data->id]);
+                },
+
+            ],
             'email:email',
             'fecha_nac:date',
             'telefono',
             'horario_entrada:time',
             'horario_salida:time',
-            'esp.especialidad',
+            [
+                'attribute' => 'esp.especialidad',
+                'format' => 'raw',
+                'value' => function ($data) {
+                    return Html::a($data->esp->especialidad, ['especialidades/view', 'id' => $data->esp->id]);
+                },
+
+            ],
             'confirmado:boolean',
 
             [
