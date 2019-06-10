@@ -14,13 +14,14 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'nombre')->textInput(['maxlength' => true]) ?>
+    <?php if ($this->context->action->id != 'tarifa'): ?>
+        <?= $form->field($model, 'nombre')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'contrasena')->passwordInput(['maxlength' => true]) ?>
+        <?= $form->field($model, 'contrasena')->passwordInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'contrasena_repeat')->passwordInput(['maxlength' => true]) ?>
+        <?= $form->field($model, 'contrasena_repeat')->passwordInput(['maxlength' => true]) ?>
 
-    <?=
+        <?=
         $form->field($model, 'fecha_nac')->widget(DateControl::classname(), [
             'type'=>DateControl::FORMAT_DATE,
             'widgetOptions' => [
@@ -29,12 +30,16 @@ use yii\widgets\ActiveForm;
                 ],
             ],
         ])
-    ?>
-    <?= $form->field($model, 'peso')->textInput() ?>
+        ?>
+        <?= $form->field($model, 'peso')->textInput() ?>
 
-    <?= $form->field($model, 'altura')->textInput() ?>
+        <?= $form->field($model, 'altura')->textInput() ?>
 
-    <?= $form->field($model, 'telefono')->textInput() ?>
+        <?= $form->field($model, 'telefono')->textInput() ?>
+    <?php else : ?>
+        <?= $form->field($model, 'tarifa')->dropDownList($listaTarifas) ?>
+    <?php endif ?>
+
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
