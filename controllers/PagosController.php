@@ -76,6 +76,26 @@ class PagosController extends Controller
     }
 
     /**
+     * Crea un nuevo modelo de pago, usando el id de un cliente y la fecha actual.
+     * @return mixed
+     * @param mixed $id
+     */
+    public function actionManual($id)
+    {
+        $model = new Pagos();
+        $model->cliente_id = $id;
+        $model->fecha = date('Y-m-d H:i:s');
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
+        }
+
+        return $this->render('create', [
+            'model' => $model,
+        ]);
+    }
+
+    /**
      * Updates an existing Pagos model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param int $id

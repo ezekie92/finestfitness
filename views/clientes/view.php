@@ -24,6 +24,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <?= Html::a('Modificar datos', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
             <?php if (Yii::$app->user->identity->getTipoId() == 'administradores'): ?>
                 <?= Html::a('Cambiar tarifa', ['tarifa', 'id' => $model->id], ['class' => 'btn btn-success']) ?>
+                <?= Html::a('Insertar pago', ['pagos/manual', 'id' => $model->id], ['class' => 'btn btn-warning']) ?>
                 <?= Html::a('Dar de baja', ['delete', 'id' => $model->id], [
                     'class' => 'btn btn-danger',
                     'data' => [

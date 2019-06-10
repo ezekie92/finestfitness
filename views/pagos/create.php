@@ -5,7 +5,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\Pagos */
 
-$this->title = 'Create Pagos';
+$this->title = 'Introducir Pago';
 $this->params['breadcrumbs'][] = ['label' => 'Pagos', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
