@@ -182,11 +182,20 @@ class EntrenamientosController extends Controller
         $model = $this->findModel($cliente_id, $monitor_id, $fecha);
 
         $model->estado = Yii::$app->request->post('estado');
-        // if ($model->load(Yii::$app->request->post())) {
-        if ($model->save()) {
+        if ($model->estado) {
+            $comprobar = $this->comprobarCompatibilidadMonitor($model);
+            if ($comprobar) {
+                if ($model->save()) {
+                    Yii::$app->session->setFlash('success', 'Entrenamiento aceptado.');
+                    return $this->redirect(['solicitudes']);
+                }
+            }
             return $this->redirect(['solicitudes']);
         }
-        // }
+        if ($model->save()) {
+            Yii::$app->session->setFlash('danger', 'Entrenamiento rechazado.');
+            return $this->redirect(['solicitudes']);
+        }
     }
 
     /**
@@ -348,6 +357,42 @@ class EntrenamientosController extends Controller
             array_push($fechas, $fecha);
         }
         $entrenamientos = Entrenamientos::find()->select('fecha')->where(['cliente_id' => $model->cliente_id])->andWhere(['estado' => 1])->column();
+        foreach ($entrenamientos as $entrenamiento) {
+            array_push($fechas, $entrenamiento);
+        }
+
+        $mensaje = 'Ya tienes clases o entrenamientos ese día a esa hora';
+        foreach ($fechas as $key => $value) {
+            $fechas[$key] = strtotime($value) + 60 * 60;
+            $fechas[$key] = date('Y-m-d H:i:s', $fechas[$key]);
+            if ($inicio > $value && $inicio < $fechas[$key]) {
+                return Yii::$app->session->setFlash('danger', $mensaje);
+            }
+            if ($fin > $value && $fin < $fechas[$key]) {
+                return Yii::$app->session->setFlash('danger', $mensaje);
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Comprueba que un monitor no tenga clases o entrenamientos para poder aceptar
+     * un nuevo entrenamiento.
+     * @param  Entrenamientos $model El modelo del entrenamiento solicitado
+     * @return null|bool
+     */
+    private function comprobarCompatibilidadMonitor($model)
+    {
+        $inicio = $model->fecha;
+        $fin = strtotime($inicio) + 60 * 60;
+        $fin = date('Y-m-d H:i:s', $fin);
+        $fechas = [];
+        $clases = Clases::find()->select('id')->where(['monitor' => $model->monitor_id])->column();
+        foreach ($clases as $clase) {
+            $fecha = Clases::find()->select('fecha')->where(['id' => $clase])->scalar();
+            array_push($fechas, $fecha);
+        }
+        $entrenamientos = Entrenamientos::find()->select('fecha')->where(['monitor_id' => $model->monitor_id])->andWhere(['estado' => 1])->column();
         foreach ($entrenamientos as $entrenamiento) {
             array_push($fechas, $entrenamiento);
         }
