@@ -5,6 +5,7 @@ namespace app\controllers;
 use app\models\Clases;
 use app\models\ClasesSearch;
 use app\models\ClientesClases;
+use app\models\Entrenamientos;
 use app\models\Horarios;
 use app\models\Monitores;
 use Yii;
@@ -195,8 +196,13 @@ class ClasesController extends Controller
         $model->clase_id = (int) Yii::$app->request->post('clase_id');
         $clase = $this->findModel($model->clase_id);
         if ($clase->plazasLibres()) {
-            Yii::$app->session->setFlash('success', 'Te has inscrito correctamente.');
-            $model->save();
+            $compatible = $this->comprobarCompatibilidad($model->cliente_id, $clase->fecha);
+            if ($compatible) {
+                Yii::$app->session->setFlash('success', 'Te has inscrito correctamente.');
+                $model->save();
+            } else {
+                Yii::$app->session->setFlash('danger', 'Ya tienes una clase o entrenamiento ese día a esa hora.');
+            }
         } else {
             Yii::$app->session->setFlash('danger', 'No quedan plazas libres.');
         }
@@ -303,6 +309,33 @@ class ClasesController extends Controller
             return Yii::$app->session->setFlash('danger', $mensaje);
         }
 
+        return true;
+    }
+
+    private function comprobarCompatibilidad($id, $inicio)
+    {
+        $fin = strtotime($inicio) + 60 * 60;
+        $fin = date('Y-m-d H:i:s', $fin);
+        $clases = ClientesClases::find()->select('clase_id')->where(['cliente_id' => $id])->column();
+        $fechas = [];
+        foreach ($clases as $clase) {
+            $fecha = Clases::find()->select('fecha')->where(['id' => $clase])->scalar();
+            array_push($fechas, $fecha);
+        }
+        $entrenamientos = Entrenamientos::find()->select('fecha')->where(['cliente_id' => $id])->andWhere(['estado' => 1])->column();
+        foreach ($entrenamientos as $entrenamiento) {
+            array_push($fechas, $entrenamiento);
+        }
+        foreach ($fechas as $key => $value) {
+            $fechas[$key] = strtotime($value) + 60 * 60;
+            $fechas[$key] = date('Y-m-d H:i:s', $fechas[$key]);
+            if ($inicio > $value && $inicio < $fechas[$key]) {
+                return false;
+            }
+            if ($fin > $value && $fin < $fechas[$key]) {
+                return false;
+            }
+        }
         return true;
     }
 }
