@@ -110,6 +110,10 @@ class EntrenamientosController extends Controller
         ]);
     }
 
+    /**
+     * Renderiza una vista a modo de calendario de los entrenamientos.
+     * @return mixed
+     */
     public function actionCalendario()
     {
         $entrenamientos = Entrenamientos::find()->where(['monitor_id' => Yii::$app->user->identity->getNId()])->all();

@@ -53,6 +53,10 @@ final class Identity implements IdentityInterface
      * @var string
      */
     private $_password;
+    /**
+     * Si está confirmado o no.
+     * @var bool
+     */
     private $_conf;
 
     public static function findIdentity($id)
@@ -139,6 +143,11 @@ final class Identity implements IdentityInterface
         return $identity;
     }
 
+    /**
+     * Devuelve el estado de validación de un usuario a partir de su email.
+     * @param  string $email El email a comprobar
+     * @return mixed
+     */
     public static function confirmado($email)
     {
         $model = Clientes::find()->where(['email' => $email])->one();
@@ -156,6 +165,12 @@ final class Identity implements IdentityInterface
         return $model->confirmado;
     }
 
+    /**
+     * Comprueba que si el usuario es cliente y de ser así que haya pagado la
+     * última mensualidad.
+     * @param  string $email El email a comprobar
+     * @return bool
+     */
     public static function pago($email)
     {
         $model = Clientes::find()->where(['email' => $email])->one();
