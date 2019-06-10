@@ -37,24 +37,24 @@ use kartik\file\FileInput;
         <?= $form->field($model, 'altura')->textInput() ?>
 
         <?= $form->field($model, 'telefono')->textInput() ?>
+
+        <?= $form->field($model, 'foto')->widget(FileInput::class, [
+            'options' => ['accept' => 'image/*'],
+            'pluginOptions' => [
+                'showPreview' => true,
+                'showRemove' => false,
+                'showUpload' => false,
+                'maxFileSize'=>5000,
+                'browseLabel' =>  'Subir foto'
+            ]
+            ])  ?>
     <?php else : ?>
         <?= $form->field($model, 'tarifa')->dropDownList($listaTarifas) ?>
     <?php endif ?>
 
-    <?= $form->field($model, 'foto')->widget(FileInput::class, [
-        'options' => ['accept' => 'image/*'],
-        'pluginOptions' => [
-            'showPreview' => true,
-            'showRemove' => false,
-            'showUpload' => false,
-            'maxFileSize'=>5000,
-            'browseLabel' =>  'Subir foto'
-            ]
-        ])  ?>
-
 
     <div class="form-group">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

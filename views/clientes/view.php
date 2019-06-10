@@ -84,7 +84,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'visible' => Yii::$app->user->identity->getTipoId() != 'monitores',
             ],
             [
-                'attribute' => 'tarifas.tarifa',
+                'attribute' => 'tarifaNombre.tarifa',
                 'visible' => Yii::$app->user->identity->getTipoId() != 'monitores',
             ],
             [
