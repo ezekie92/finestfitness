@@ -2,10 +2,11 @@
 
 namespace app\controllers;
 
+use app\models\Clases;
+use app\models\ClientesClases;
 use app\models\Entrenamientos;
 use app\models\EntrenamientosSearch;
 use app\models\Horarios;
-use app\models\Monitores;
 use Yii;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
@@ -205,7 +206,7 @@ class EntrenamientosController extends Controller
         }
 
         if ($model->load(Yii::$app->request->post())) {
-            if ($this->comprobarEntrenamiento($model) && $this->comprobarHorario($model->fecha)) {
+            if ($this->comprobarCompatibilidadCliente($model) && $this->comprobarHorario($model->fecha)) {
                 if ($model->save()) {
                     Yii::$app->session->setFlash('success', 'Solicitud enviada con éxito.');
                 } else {
@@ -329,24 +330,39 @@ class EntrenamientosController extends Controller
      * @param  Entrenamientos $model El entrenamiento que se desea crear
      * @return [type]        [description]
      */
-    private function comprobarEntrenamiento($model)
+    /**
+     * Comprueba que un cliente no tenga clases o entrenamientos que coincidan
+     * con el entrenamiento solicitado.
+     * @param  Entrenamientos $model Los datos (modelo) del entrenamiento solicitado
+     * @return null|bool
+     */
+    private function comprobarCompatibilidadCliente($model)
     {
-        // TODO V3: Comprobar que el monitor no tiene entrenamientos a esa hora ese día
-        // Comprobar que el cliente no tiene entrenamientos ni clases a esa hora ese día
-        $entrenamientos = Entrenamientos::find()->where(['cliente_id' => $model->cliente_id])->andWhere(['monitor_id' => $model->monitor_id])->all();
-        foreach ($entrenamientos as $key => $value) {
-            if (date('d-m-Y', strtotime($value->fecha)) == date('d-m-Y', strtotime($model->fecha))) {
-                $mensaje = 'Ya tiene entrenamiento ese día.';
+        $inicio = $model->fecha;
+        $fin = strtotime($inicio) + 60 * 60;
+        $fin = date('Y-m-d H:i:s', $fin);
+        $fechas = [];
+        $clases = ClientesClases::find()->select('clase_id')->where(['cliente_id' => $model->cliente_id])->column();
+        foreach ($clases as $clase) {
+            $fecha = Clases::find()->select('fecha')->where(['id' => $clase])->scalar();
+            array_push($fechas, $fecha);
+        }
+        $entrenamientos = Entrenamientos::find()->select('fecha')->where(['cliente_id' => $model->cliente_id])->andWhere(['estado' => 1])->column();
+        foreach ($entrenamientos as $entrenamiento) {
+            array_push($fechas, $entrenamiento);
+        }
+
+        $mensaje = 'Ya tienes clases o entrenamientos ese día a esa hora';
+        foreach ($fechas as $key => $value) {
+            $fechas[$key] = strtotime($value) + 60 * 60;
+            $fechas[$key] = date('Y-m-d H:i:s', $fechas[$key]);
+            if ($inicio > $value && $inicio < $fechas[$key]) {
+                return Yii::$app->session->setFlash('danger', $mensaje);
+            }
+            if ($fin > $value && $fin < $fechas[$key]) {
                 return Yii::$app->session->setFlash('danger', $mensaje);
             }
         }
-        $monitor = Monitores::findOne($model->monitor_id);
-
-        // elseif (strtotime($model->hora_inicio) < strtotime($monitor->horario_entrada) ||
-        //     strtotime($model->hora_fin) > strtotime($monitor->horario_salida)) {
-        //     $mensaje = 'El horario solicitado está fuera del horario de trabajo del monitor.';
-        //     return Yii::$app->session->setFlash('danger', $mensaje);
-        // }
         return true;
     }
 }
