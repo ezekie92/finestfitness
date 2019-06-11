@@ -190,7 +190,7 @@ if (!Yii::$app->user->isGuest) {
     <div class="container">
         <p class="pull-left">&copy; FinestFitness </p>
 
-        <p class="pull-right"><b>Vísitanos en:</b> Av. de Huelva, s/n, 11540 Sanlúcar de Barrameda, Cádiz</p>
+        <p class="pull-right"><em>Vísitanos en: Av. de Huelva, s/n, 11540 Sanlúcar de Barrameda, Cádiz</em></p>
     </div>
 </footer>
 

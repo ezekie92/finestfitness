@@ -49,8 +49,27 @@
 <a class="list-group-item" href="#navigation-68" data-toggle="collapse" data-parent="#navigation">Conclusiones <b class="caret"></b></a><div id="navigation-68" class="submenu panel-collapse collapse"><a class="list-group-item" href="./conclusiones.html">Conclusiones</a></div>
 <a class="list-group-item" href="#navigation-69" data-toggle="collapse" data-parent="#navigation">Anexos <b class="caret"></b></a><div id="navigation-69" class="submenu panel-collapse collapse"><a class="list-group-item" href="./anexos.html">Anexos</a></div></div>    </div>
     <div class="col-md-9 guide-content" role="main">
-        <h1>Dificultades encontradas <span id="dificultades-encontradas"></span><a href="#dificultades-encontradas" class="hashlink">&para;</a></h1><p>La primera dificultad fue el poder iniciar sesión. Hay más de un tipo de usuario en la aplicación. Lo primero que pensé fue crear una tabla donde se almacenase un id que apuntase al id del usuario en cuestión, pero quería mostrar el nombre del usuario logueado, no su id, así que tras buscar información y meditarlo, decidí optar por crear un modelo que distinguiese entre el tipo de usuario que se loguea y tome los datos necesarios de este para su posterior uso.</p>
-<p>Incluir aquí el elemento de innovación que se indicó en la propuesta.</p>
+        <h1>Dificultades encontradas <span id="dificultades-encontradas"></span><a href="#dificultades-encontradas" class="hashlink">&para;</a></h1><p>La primera dificultad surgió al crear la BD, necesitaba tres tipos de usuarios, pero pensé que podría incluirlos en una sola tabla. Llegado cierto punto, esto se hizo inviable y tuve que dividir esa tabla en tres.</p>
+<p>La siguiente dificultad fue el poder iniciar sesión, por tener más de un tipo de usuario en la aplicación. Lo primero que pensé fue crear una tabla donde se almacenase un id que apuntase al id del usuario en cuestión, pero quería mostrar el nombre del usuario logueado, no su id, así que tras buscar información y meditarlo, decidí optar por crear un modelo, el cual definí como el <em>Identity Class</em> de la aplicación, que se encargase de distinguir el tipo de usuario que se loguea (a partir de su email), para así tomar los datos de la tabla correspondiente.</p>
+<p>Quería incluir un calendario para las <em>issues</em></p>
+<ul>
+<li><p><a href="https://github.com/ezekie92/finestfitness/issues/66"># (R66) Ver todo
+entrenador</a></p>
+</li>
+<li><p><a href="https://github.com/ezekie92/finestfitness/issues/78"># (R78) Ver clases
+cliente</a></p>
+</li>
+</ul>
+<p>Y pese a que habían muchas librerías y widgets, no conseguía hacer funcionar ninguno, por más que siguiese la documentación oficial, o la guía de algún foro. Finalmente pude utilizar <a href="https://fullcalendar.io/">FullCalendar</a>, pero conllevó volver a cambiar la base de datos, ya que la manera de almacenar el día, inicio y final de las clases/entrenamientos no resultaba compatible con los datos que tenía que pasarle a la configuración del script.</p>
+<h3>Uso de Amazon S3 <span id="uso-de-amazon-s3"></span><a href="#uso-de-amazon-s3" class="hashlink">&para;</a></h3><ul>
+<li>Pese a que no lo considero algo realmente importante en este tipo proyecto, me parecía que, el incluir imágenes, podría resultar interesante. Frente a otras opciones, como Dropbox, esta me parecía la más potente de cara a la escalabilidad del proyecto.</li>
+<li>Quizá la principal dificultad aquí fue el encontrar la documentación concisa y  actualizada.</li>
+</ul>
+<h3>Uso de PayPal <span id="uso-de-paypal"></span><a href="#uso-de-paypal" class="hashlink">&para;</a></h3><ul>
+<li>Decidí incluir una pasarela de pago mediante PayPal para realizar el pago de las mensualidades del gimnasio. Recayendo la responsabilidad de realizar el susodicho sobre el cliente. Me decanté por PayPal por ser una gran alternativa a los bancos, y por la facilidad de uso como cliente.</li>
+<li>Aquí apenas encontré dificultades para su uso. Fue más difícil la logística derivada de la gestión de pagos, que el uso de la API de PayPal,</li>
+</ul>
+<p> <strong>En resumen:</strong> los cambios a la base de datos, seguramente por un mal planteamiento inicial, ha resultado ser lo que más problemas me ha causado.</p>
         <div class="toplink"><a href="#" class="h1" title="go to top"><span class="glyphicon glyphicon-arrow-up"></a></div>
     </div>
 </div>
@@ -59,7 +78,7 @@
 </div>
 
 <footer class="footer">
-        <p class="pull-right"><small>Page generated on Mon, 10 Jun 2019 23:20:54 +0000</small></p>
+        <p class="pull-right"><small>Page generated on Tue, 11 Jun 2019 10:20:14 +0000</small></p>
     Powered by <a href="http://www.yiiframework.com/" rel="external">Yii Framework</a></footer>
 
 <script>jQuery(function ($) {

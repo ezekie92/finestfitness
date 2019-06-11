@@ -49,7 +49,16 @@
 <a class="list-group-item" href="#navigation-20" data-toggle="collapse" data-parent="#navigation">Conclusiones <b class="caret"></b></a><div id="navigation-20" class="submenu panel-collapse collapse"><a class="list-group-item" href="./conclusiones.html">Conclusiones</a></div>
 <a class="list-group-item" href="#navigation-21" data-toggle="collapse" data-parent="#navigation">Anexos <b class="caret"></b></a><div id="navigation-21" class="submenu panel-collapse collapse"><a class="list-group-item" href="./anexos.html">Anexos</a></div></div>    </div>
     <div class="col-md-9 guide-content" role="main">
-        <h1>Decisiones adoptadas <span id="decisiones-adoptadas"></span><a href="#decisiones-adoptadas" class="hashlink">&para;</a></h1><p>Explicar, indicando en cada caso su justificación.</p>
+        <h1>Decisiones adoptadas <span id="decisiones-adoptadas"></span><a href="#decisiones-adoptadas" class="hashlink">&para;</a></h1><h3>Uso de widgets de Kartik Krajee para Yii2 <span id="uso-de-widgets-de-kartik-krajee-para-yii2"></span><a href="#uso-de-widgets-de-kartik-krajee-para-yii2" class="hashlink">&para;</a></h3><ul>
+<li>Quise agilizar y facilitar el desarrollo de la aplicación, y permitirle al usuario una interacción más agradable con algunos elementos de la app. Por lo que he usado <code>FileInput</code> y <code>DateControl</code>.</li>
+</ul>
+<h3>Cambios en requisitos <span id="cambios-en-requisitos"></span><a href="#cambios-en-requisitos" class="hashlink">&para;</a></h3><ul>
+<li>Debido a la evolución de la app, dos requisitos han quedado obsoletos respecto al planteamiento inicial.<ul>
+<li><a href="https://github.com/ezekie92/finestfitness/issues/58"># (R58) Ver rutina gimnasio</a> : En un momento de la aplicación, debido a dificultades encontradas, decidí que sólo los clientes podrían crear rutinas. Entonces había que tomar una decisión si quería satisfacer esta <em>issue</em>, crear dos tablas para rutinas, crear un cliente ficticio que fuese el propietario de las rutinas creadas por los administradores del gimnasio, o simplemente dejar esta <em>issue</em> sin realizar. Decidí esto último ya que las otras dos opciones no me parecían óptimas.</li>
+<li><a href="https://github.com/ezekie92/finestfitness/issues/46"># (R46) Eliminar no confirmados</a> : Esta <em>issue</em> se iba a satisfacer en un principio mediante un script de consola, pero debido a que no puedo ejecutarlos desde Heroku, decidí crear una acción en el controlador de clientes que comprobase aquellos no confirmados que llevasen un mes registrados, y ejecutar dicha acción cada vez que se dé de baja a un cliente.</li>
+</ul>
+</li>
+</ul>
         <div class="toplink"><a href="#" class="h1" title="go to top"><span class="glyphicon glyphicon-arrow-up"></a></div>
     </div>
 </div>
@@ -58,7 +67,7 @@
 </div>
 
 <footer class="footer">
-        <p class="pull-right"><small>Page generated on Mon, 10 Jun 2019 23:20:54 +0000</small></p>
+        <p class="pull-right"><small>Page generated on Tue, 11 Jun 2019 10:20:14 +0000</small></p>
     Powered by <a href="http://www.yiiframework.com/" rel="external">Yii Framework</a></footer>
 
 <script>jQuery(function ($) {
