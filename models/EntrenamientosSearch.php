@@ -19,7 +19,8 @@ class EntrenamientosSearch extends Entrenamientos
         return [
             [['cliente_id', 'monitor_id'], 'integer'],
             [['estado'], 'boolean'],
-            [['fecha', 'cliente.nombre', 'monitor.nombre'], 'safe'],
+            [['fecha'], 'date'],
+            [['cliente.nombre', 'monitor.nombre'], 'safe'],
         ];
     }
 

@@ -431,7 +431,7 @@ class ClientesController extends Controller
         $fecha = new \DateTime('now', new \DateTimeZone('UTC'));
         $pago->fecha = $fecha->format('Y-m-d H:i:s');
         $pago->concepto = 'Pago en mano';
-        $pago->cantidad = $cliente->tarifas->precio;
+        $pago->cantidad = $cliente->tarifaNombre->precio;
 
         return $pago->save();
     }

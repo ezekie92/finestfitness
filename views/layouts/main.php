@@ -188,9 +188,9 @@ if (!Yii::$app->user->isGuest) {
 
 <footer class="footer">
     <div class="container">
-        <p class="pull-left">&copy; My Company <?= date('Y') ?></p>
+        <p class="pull-left">&copy; FinestFitness </p>
 
-        <p class="pull-right"><?= Yii::powered() ?></p>
+        <p class="pull-right"><b>Vísitanos en:</b> Av. de Huelva, s/n, 11540 Sanlúcar de Barrameda, Cádiz</p>
     </div>
 </footer>
 

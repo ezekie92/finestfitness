@@ -4,7 +4,6 @@ namespace app\models;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\Tarifas;
 
 /**
  * TarifasSearch represents the model behind the search form of `app\models\Tarifas`.
@@ -18,7 +17,8 @@ class TarifasSearch extends Tarifas
     {
         return [
             [['id'], 'integer'],
-            [['tarifa', 'hora_entrada_min', 'hora_entrada_max'], 'safe'],
+            [['tarifa'], 'safe'],
+            [['hora_entrada_min', 'hora_entrada_max'], 'time'],
             [['precio'], 'number'],
         ];
     }
@@ -33,7 +33,7 @@ class TarifasSearch extends Tarifas
     }
 
     /**
-     * Creates data provider instance with search query applied
+     * Creates data provider instance with search query applied.
      *
      * @param array $params
      *

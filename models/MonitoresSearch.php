@@ -18,6 +18,8 @@ class MonitoresSearch extends Monitores
         return [
             [['id', 'especialidad'], 'integer'],
             [['nombre', 'email', 'contrasena', 'fecha_nac', 'foto', 'horario_entrada', 'horario_salida', 'esp.especialidad'], 'safe'],
+            [['horario_entrada', 'horario_salida'], 'time'],
+            [['fecha_nac'], 'date'],
             [['telefono'], 'number'],
             [['confirmado'], 'boolean'],
         ];

@@ -116,8 +116,11 @@ a.desc:after {
 
 .horario th, td {
     text-align: center;
-    border-right: 1px solid lightgrey;
-    border-bottom: 1px solid lightgrey;
+    border: 1px solid lightgrey;
+}
+
+.horario {
+    border: 1px solid lightgrey;
 }
 
 .horario th a:hover {
@@ -129,8 +132,8 @@ a.desc:after {
     width: auto;
 }
 
-table thead tr, .detail-view > tbody > tr > th, .detail-view > tbody > tr > td {
-    background-color: #F8F7EF;
+table thead tr, .detail-view > tbody > tr > th, .detail-view > tbody > tr > td, .breadcrumb {
+    background-color: #F8F0EE;
 }
 
 .detail-view > tbody > tr > th {
@@ -147,4 +150,18 @@ table thead tr, .detail-view > tbody > tr > th, .detail-view > tbody > tr > td {
 
 .dropdown-menu > li > a {
     color: #F8F7EF;
+}
+
+.table > tbody > tr > td {
+    vertical-align: middle;
+}
+
+.imagen {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.pesas {
+    height: 150px;
+    width: auto;
 }

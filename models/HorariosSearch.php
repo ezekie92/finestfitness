@@ -17,7 +17,7 @@ class HorariosSearch extends Horarios
     {
         return [
             [['id', 'dia'], 'integer'],
-            [['apertura', 'cierre'], 'safe'],
+            [['apertura', 'cierre'], 'time'],
         ];
     }
 

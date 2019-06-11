@@ -209,6 +209,7 @@ class Clientes extends \yii\db\ActiveRecord
                 $this->contrasena = $this->getOldAttribute('contrasena');
             } else {
                 salto:
+                $this->email = strtolower($this->email);
                 $this->contrasena = Yii::$app->security
                     ->generatePasswordHash($this->contrasena);
                 $this->token = Yii::$app->security->generateRandomString();

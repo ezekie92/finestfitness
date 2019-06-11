@@ -116,6 +116,7 @@ final class Identity implements IdentityInterface
      */
     public static function findIdentityByEmail($email)
     {
+        $email = strtolower($email);
         $model = Clientes::find()->where(['email' => $email])->one();
         if (!$model) {
             $model = Monitores::find()->where(['email' => $email])->one();

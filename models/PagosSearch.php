@@ -17,7 +17,8 @@ class PagosSearch extends Pagos
     {
         return [
             [['id', 'cliente_id'], 'integer'],
-            [['fecha', 'concepto', 'cliente.nombre'], 'safe'],
+            [['concepto', 'cliente.nombre'], 'string'],
+            [['fecha'], 'date'],
             [['cantidad'], 'number'],
         ];
     }
@@ -77,7 +78,7 @@ class PagosSearch extends Pagos
         ]);
 
         $query->andFilterWhere(['ilike', 'concepto', $this->concepto])
-              ->andFilterWhere(['ilike', 'clientes.nombre', $this->getAttribute('cliente.nombre')]);
+        ->andFilterWhere(['ilike', 'clientes.nombre', $this->getAttribute('cliente.nombre')]);
 
         return $dataProvider;
     }

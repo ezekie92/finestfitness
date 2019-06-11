@@ -17,7 +17,8 @@ class ClientesSearch extends Clientes
     {
         return [
             [['id', 'peso', 'altura', 'tarifa'], 'integer'],
-            [['nombre', 'email', 'contrasena', 'fecha_nac', 'foto', 'fecha_alta', 'tarifaNombre.tarifa'], 'safe'],
+            [['fecha_nac', 'fecha_alta'], 'date'],
+            [['nombre', 'email', 'contrasena', 'foto', 'tarifaNombre.tarifa'], 'safe'],
             [['telefono'], 'number'],
             [['confirmado'], 'boolean'],
         ];
