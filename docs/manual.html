@@ -49,7 +49,89 @@
 <a class="list-group-item" href="#navigation-8" data-toggle="collapse" data-parent="#navigation">Conclusiones <b class="caret"></b></a><div id="navigation-8" class="submenu panel-collapse collapse"><a class="list-group-item" href="./conclusiones.html">Conclusiones</a></div>
 <a class="list-group-item" href="#navigation-9" data-toggle="collapse" data-parent="#navigation">Anexos <b class="caret"></b></a><div id="navigation-9" class="submenu panel-collapse collapse"><a class="list-group-item" href="./anexos.html">Anexos</a></div></div>    </div>
     <div class="col-md-9 guide-content" role="main">
-        <h1>Manual de usuario <span id="manual-de-usuario"></span><a href="#manual-de-usuario" class="hashlink">&para;</a></h1><p>Explicar, incluyendo capturas de pantalla.</p>
+        <h1>Manual de usuario <span id="manual-de-usuario"></span><a href="#manual-de-usuario" class="hashlink">&para;</a></h1>
+<div class="toc"><ol><li><a href="#administrador">Administrador</a></li>
+<li><a href="#monitor">Monitor</a></li>
+<li><a href="#cliente">Cliente</a></li>
+<li><a href="#todos-los-usuarios">Todos los usuarios</a></li></ol></div>
+<h2>Administrador <span id="administrador"></span><a href="#administrador" class="hashlink">&para;</a></h2><h3>Horarios <span id="horarios"></span><a href="#horarios" class="hashlink">&para;</a></h3><p>El administrador tiene acceso al horario del gimnasio, así como a la edición del mismo.</p>
+<p>Clicando en el nombre del día el cual desea modificar, le redirige a un formulario donde podrá establecer los nuevos datos.
+<img src="images/horario.png" alt="horario" />
+<img src="images/horario_modificar.png" alt="horario_modificar" /></p>
+<h3>Tarifas <span id="tarifas"></span><a href="#tarifas" class="hashlink">&para;</a></h3><p>El administrador puede ver un listado de tarifas y filtrar por los datos que desee.
+<img src="images/tarifa.png" alt="tarifa" /></p>
+<p>También puede crear una nueva clicando en el botón <em>Añadir tarifa</em>
+<img src="images/tarifa_crear.png" alt="tarifa_crear" /></p>
+<p>También puede ver el detalle de una tarifa clicando en el icono de la derecha de la fila deseada en la vista <em>index</em> de tarifas.
+<img src="images/tarifa_ver.png" alt="tarifa_ver" /></p>
+<h3>Clases <span id="clases"></span><a href="#clases" class="hashlink">&para;</a></h3><p>El administrador puede elegir si ir al index de clases o al calendario.
+<img src="images/clases_menu.png" alt="clases_menu" /></p>
+<p>En el calendario verá un calendario semanal, puedo ser un calendario diario, de las clases que hay en la semana actual. Si clica en una clase, filtra por todas la clases de ese tipo.
+<img src="images/clases_cal.png" alt="clases_cal" /></p>
+<p>Si accede al index, verá un listado de las clases que hay, puedo filtrar por el criterio deseado, así como ver el detalle, crear una nueva clase, modificar una actual por completo o modificar sólo al monitor.
+<img src="images/clases_index.png" alt="clases_index" /></p>
+<p>Si crea una nueva clase tendrá que pasarle los datos que vemos en la siguiente imagen.
+<img src="images/clases_crear.png" alt="clases_crear" /></p>
+<p>Para modificar una clase existente tendrá que modifcar un formulario muy similar al anterior, pero si sólo quiere asignar otro monitor, lo podrá hacer clicando en el primer icono que vemos en la fila <em>(sombrerito)</em> y lo hará en la siguiente ventanda modal
+<img src="images/clases_monitor.png" alt="clases_monitor" /></p>
+<h3>Entrenos <span id="entrenos"></span><a href="#entrenos" class="hashlink">&para;</a></h3><p>En entrenos <em>(entrenamientos)</em> podrán ver los entrenamientos solicitados por los clientes, así como el estado, el cual hace cambiar el color de la fila en cuestión para una poder diferenciarlos rápidamente.
+<img src="images/entrenos.png" alt="entrenos" /></p>
+<h3>Administradores <span id="administradores"></span><a href="#administradores" class="hashlink">&para;</a></h3><p>Al acceder a administradores tienen dos opciones, dar de alta o gestionar (mismo menú desplegable que en clases).
+Si deciden gestionar, verán un index con los datos de los administradores.
+<img src="images/admin_index.png" alt="admin_index" /></p>
+<p>Si dedicen dar de alta, tendrán que rellenar el siguiente formulario.
+<img src="images/admin_crear.png" alt="admin_crear" /></p>
+<p>Más adelante veremos qué pasa cuando se da de alta a un usuario, sea del tipo que sea.</p>
+<h3>Monitores <span id="monitores"></span><a href="#monitores" class="hashlink">&para;</a></h3><p>Aquí el administrador vuelve a tener un menú desplegable, donde puede ver el index, dar de alta a un monitor o ver las especialidades que podrían tener los monitores.
+<img src="images/monitor_index.png" alt="monitor_index" />
+<img src="images/monitor_crear.png" alt="monitor_crear" /></p>
+<p>Si clican en perfil, pueden ver el perfil de este
+<img src="images/monitor_ver.png" alt="monitor_ver" /></p>
+<p>También pueden darlo de baja, modificar sus datos o convertirlo en cliente clicando en el botón <em>convertir</em>;
+Al clicar en convertir te pide confirmación y en caso de aceptar te muestra el siguiente formulario (el resto de datos ya los coge automáticamente)
+<img src="images/monitor_convertir.png" alt="monitor_convertir" /></p>
+<p>En caso de llevar a cabo con éxito la conversión, mostraría un mensaje confirmándolo, pero si el monitor tiene clases asignadas, tendría que asignar otro monitor a sus clases y luego realizar la conversión
+<img src="images/monitor_fallo.png" alt="monitor_fallo" /></p>
+<p>Si acceden a especialidad, ven un index de especialidades, y pueden tanto editar la especialidad que deseen <em>(editaría el nombre de la especialidad)</em>, como crear nuevas especialidades.
+<img src="images/esp_index.png" alt="esp_index" /></p>
+<h3>Clientes <span id="clientes"></span><a href="#clientes" class="hashlink">&para;</a></h3><p>Vuelve a tener un menú desplegable de opciones.
+Con un gestionar prácticamente idéntico al de monitor, mismas funciones, ver perfil, modificar, dar de baja y convertir.
+En ese caso, al convertir si el cliente estuviese inscrito a alguna clase, o tuviese entrenamientos, estos se cancelan directamente.
+Si accede al perfil del cliente, puede además cambiar la tarifa de este, o ingresar un pago realizado en mano en caso de que el cliente olvidase pasar la última mensualidad.
+En caso de ingresar un pago realizado en mano, se mostraría un formulario solicitando el concepto y la cantidad
+<img src="images/cliente_ver.png" alt="cliente_ver" />
+<img src="images/cliente_pago.png" alt="cliente_pago" /></p>
+<p>Para cambiar la tarifa simplemente se le mostrará un formulario con un único campo desplegable que muestra todas las tarifas, seleccionaría la nueva tarifa y se realizaría el cambio
+<img src="images/cliente_tarifa.png" alt="cliente_tarifa" /></p>
+<p>Otras funciones respecto a los clientes sería ver una tabla con todos los clientes inscritos a clases. Y poder filtrar por cliente o por clase.
+<img src="images/cliente_clase.png" alt="cliente_clase" /></p>
+<p>Así como ver los pagos que han realizado todos los clientes y filtrar por el criterio deseado.
+<img src="images/pagos.png" alt="pagos" /></p>
+<h2>Monitor <span id="monitor"></span><a href="#monitor" class="hashlink">&para;</a></h2><p>El monitor sólo tiene acceso a clases y entrenamientos.
+En lo que a clases se refiere, puede ver el index de clases visto anteriormente, el calendario, y una vista llamada mis clases dónde se le mostrarían todas las clases en las que él esté asignado como monitor.</p>
+<p>En cuanto a entrenamientos, puede ver el calendario o un índice con los entrenamientos que él haya aceptado, además permitirle aceptar o rechazar entrenamientos
+<img src="images/ent_solicitud.png" alt="ent_solicitud" /></p>
+<p>En caso de aceptar o rechazar se le notifica la acción realizada
+<img src="images/ent_msg.png" alt="ent_msg" /></p>
+<h2>Cliente <span id="cliente"></span><a href="#cliente" class="hashlink">&para;</a></h2><p>Los clientes tienen las opciones ya vistas de ver el index o el calendario de clases.
+Solo que en su caso, ellos pueden inscribirse ocupando una plaza, o decidir no asistir desocupando esa plaza
+<img src="images/clt_clases.png" alt="clt_clases" /></p>
+<p>En cuanto a entrenamientos, ven un index de entrenamientos los cuales han solicitado y han sido aceptados por el monitor en cuestión.
+Para solicitar un entrenamiento, lo hacen mediante una de las opciones desplegables del menú de navegación
+Y en la vista siguiente verían detalles del monitor y la opción de solicitar que ser entrenado
+<img src="images/clt_solicitar.png" alt="clt_solicitar" />
+<img src="images/clt_solicitud.png" alt="clt_solicitud" /></p>
+<p>Una opción exclusiva de clientes es la de crear rutinas
+El cliente crearía una rutina asignandole un nombre y luego podrá ir añadiéndole ejercicios
+<img src="images/rutina.png" alt="rutina" /></p>
+<p>Cuando accede al detalle de la rutina, podrá añadir ejercicios o ver los que ya la componen
+<img src="images/rutina_ej.png" alt="rutina_ej" /></p>
+<p>Si desea añadir ejercicios a la rutina, lo podrá hacer mendiante el siguiente formulario
+<img src="images/ej_crear.png" alt="ej_crear" /></p>
+<h2>Todos los usuarios <span id="todos-los-usuarios"></span><a href="#todos-los-usuarios" class="hashlink">&para;</a></h2><p>Los usuarios cuentan con la opción alternar entre modo noche/dia clicando en el símbolo que ven a la derecha de su pantalla.
+Si cierran el navegador en modo noche, la próxima vez que entren verán la app en modo noche, ya que este valor se guarda en almacenamiento local
+<img src="images/noche.png" alt="noche" /></p>
+<p>Cuando un usuario es dado de alta recibe un email de confirmación, el cual le redirige a la app y le solicita la contraseña, una vez establecida, ya puede acceder a la app usando su correo y contraseña.</p>
         <div class="toplink"><a href="#" class="h1" title="go to top"><span class="glyphicon glyphicon-arrow-up"></a></div>
     </div>
 </div>
@@ -58,7 +140,7 @@
 </div>
 
 <footer class="footer">
-        <p class="pull-right"><small>Page generated on Tue, 11 Jun 2019 11:26:21 +0000</small></p>
+        <p class="pull-right"><small>Page generated on Tue, 11 Jun 2019 12:56:17 +0000</small></p>
     Powered by <a href="http://www.yiiframework.com/" rel="external">Yii Framework</a></footer>
 
 <script>jQuery(function ($) {
