@@ -18,6 +18,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
+        'tableOptions' => ['class' => 'table table-bordered'],
+        'headerRowOptions' => ['class' => 'text-primary'],
         'columns' => [
             'cliente.nombre:text:Cliente',
             'fecha',

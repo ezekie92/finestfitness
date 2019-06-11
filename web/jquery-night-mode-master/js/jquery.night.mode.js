@@ -46,8 +46,8 @@
   "<i class='fa fa-check-circle large'></i>",
   "<i class='fa fa-adjust'></i>",
   "<i class='fa fa-spinner fa-spin'></i>",
-  "<i class='fa fa-moon-o'></i>",
-  "<i class='fa fa-sun-o'></i>"
+  "<i class='glyphicon glyphicon-adjust'></i>",
+  "<i class='glyphicon glyphicon-adjust'></i>"
 ];
 
 if (localStorage.getItem('modo') == 'noche') {
@@ -130,8 +130,8 @@ if (time >=0 && time <5 ||  time > 19){
 function nightModeEnable(){
    localStorage.setItem('modo', 'noche');
    $(nightObject).not(keepNormal).css({
-     'background' : '#414841',
-     'color' : 'rgba(240, 255, 240, 0.495049505)',
+     'background' : '#101010',
+     'color' : '#F6F1EB',
      'borderColor' : '#000',
     });
 
@@ -140,16 +140,18 @@ function nightModeEnable(){
      'background' : 'rgba(0, 0, 0, 0.3)',
    });
 $(nightTrigger).prop('disabled', false).html(modericon[4]).css({
-      'background' : '#fff',
-      'color' : '#FDD017'
+      'background' : '#010101',
+      'color' : '#F5D372'
 });
 }
 
 function nightModeOff(){
 localStorage.setItem('modo', 'dia');
 $(nightTrigger).prop('disabled', false).html(modericon[3]).css({
-      'background' : '#212121',
-      'color' : '#f2f2f2'
+      'background' : 'white',
+      'color' : '#101010',
+      'border' : '0.5px solid',
+      'borderColor': '#101010'
 });
     $(nightObject).css({
     'background' : '',//default

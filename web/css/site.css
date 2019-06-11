@@ -128,3 +128,23 @@ a.desc:after {
     height: 90px;
     width: auto;
 }
+
+table thead tr, .detail-view > tbody > tr > th, .detail-view > tbody > tr > td {
+    background-color: #F8F7EF;
+}
+
+.detail-view > tbody > tr > th {
+    color: black;
+}
+
+.fc-list-table tr:hover {
+    color: black;
+}
+
+.navbar-nav > li > .dropdown-menu {
+    background-color: #333333;
+}
+
+.dropdown-menu > li > a {
+    color: #F8F7EF;
+}

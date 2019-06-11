@@ -54,7 +54,7 @@ class ClientesController extends Controller
                     ],
                     [
                         'allow' => true,
-                        'actions' => ['create', 'update', 'delete', 'index', 'tarifa', 'convertir'],
+                        'actions' => ['create', 'update', 'delete', 'index', 'tarifa', 'convertir', 'view'],
                         'roles' => ['@'],
                         'matchCallback' => function ($rule, $action) {
                             $tipo = explode('-', Yii::$app->user->id);

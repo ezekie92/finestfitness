@@ -75,6 +75,8 @@ $this->registerJs($js);
         <?= GridView::widget([
             'dataProvider' => $dataProvider,
             'filterModel' => $searchModel,
+            'tableOptions' => ['class' => 'table table-bordered'],
+            'headerRowOptions' => ['class' => 'text-primary'],
             'columns' => [
                 [
                     'attribute' => 'nombre',

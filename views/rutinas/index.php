@@ -23,6 +23,8 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+        'tableOptions' => ['class' => 'table table-bordered'],
+        'headerRowOptions' => ['class' => 'text-primary'],
         'rowOptions' => function ($model, $index, $widget, $grid) use ($actual) {
             if ($model->id == $actual) {
                 return ['class' => 'success'];

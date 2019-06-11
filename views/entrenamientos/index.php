@@ -19,6 +19,8 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+        'tableOptions' => ['class' => 'table table-bordered'],
+        'headerRowOptions' => ['class' => 'text-primary'],
         'formatter' => ['class' => 'yii\i18n\Formatter','nullDisplay' => 'Pendiente'],
         'rowOptions' => function ($model, $index, $widget, $grid){
             if ($model->estado === true) {
