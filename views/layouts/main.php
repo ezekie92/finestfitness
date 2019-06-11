@@ -40,7 +40,7 @@ AppAsset::register($this);
 <body>
 <?php $this->beginBody() ?>
 
-<script type="text/javascript">
+<script>
 
     $("body").nightMode({
     // element(s) to keep normal styles
