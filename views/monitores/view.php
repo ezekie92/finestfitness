@@ -22,13 +22,18 @@ $this->params['breadcrumbs'][] = $this->title;
             <?= Html::a('Modificar datos', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
         <?php endif; ?>
 
-        <?php // Html::a('Dar de baja', ['delete', 'id' => $model->id], [
-            // 'class' => 'btn btn-danger',
-            // 'data' => [
-            //     'confirm' => 'Are you sure you want to delete this item?',
-            //     'method' => 'post',
-            // ],
-        //]) ?>
+        <?php if (Yii::$app->user->identity->getTipoId() == 'administradores'): ?>
+            <?=
+                Html::a('Dar de baja', ['delete', 'id' => $model->id], [
+                'class' => 'btn btn-danger',
+                'data' => [
+                    'confirm' => 'Are you sure you want to delete this item?',
+                    'method' => 'post',
+                ],
+                ])
+            ?>
+        <?php endif; ?>
+
     </p>
 
     <?= DetailView::widget([
