@@ -33,6 +33,11 @@ class AdministradoresController extends Controller
                             return Yii::$app->user->identity->getTipoId() == 'administradores';
                         },
                     ],
+                    [
+                        'allow' => true,
+                        'actions' => ['cambiar-contrasena', 'confirmar', 'email'],
+                        'roles' => ['?'],
+                    ],
                 ],
             ],
             'verbs' => [

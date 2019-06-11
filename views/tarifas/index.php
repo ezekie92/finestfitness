@@ -14,9 +14,11 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <p>
-        <?= Html::a('Añadir tarifa', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
+    <?php if (Yii::$app->user->identity->getTipoId() == 'administradores'): ?>
+        <p>
+            <?= Html::a('Añadir tarifa', ['create'], ['class' => 'btn btn-success']) ?>
+        </p>
+    <?php endif; ?>
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
@@ -32,7 +34,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
             [
                 'class' => 'yii\grid\ActionColumn',
-                'template' => '{view}{update}'
+                'template' => '{view}{update}',
+                'visible' => Yii::$app->user->identity->getTipoId() == 'administradores',
             ],
         ],
     ]); ?>

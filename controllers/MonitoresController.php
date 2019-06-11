@@ -37,7 +37,7 @@ class MonitoresController extends Controller
                 'rules' => [
                     [
                         'allow' => true,
-                        'actions' => ['update', 'view'],
+                        'actions' => ['update'],
                         'roles' => ['@'],
                         'matchCallback' => function ($rule, $action) {
                             $ruta = explode('/', Yii::$app->request->get('r'));
@@ -46,7 +46,7 @@ class MonitoresController extends Controller
                     ],
                     [
                         'allow' => true,
-                        'actions' => ['create', 'update', 'view', 'delete', 'index'],
+                        'actions' => ['create', 'update', 'delete', 'index'],
                         'roles' => ['@'],
                         'matchCallback' => function ($rule, $action) {
                             $tipo = explode('-', Yii::$app->user->id);
@@ -60,6 +60,11 @@ class MonitoresController extends Controller
                         'matchCallback' => function ($rule, $action) {
                             return Yii::$app->user->identity->getTipoId() == 'clientes';
                         },
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['view'],
+                        'roles' => ['@'],
                     ],
                 ],
             ],

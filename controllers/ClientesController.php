@@ -32,11 +32,11 @@ class ClientesController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::class,
-                'only' => ['update', 'create', 'view', 'delete', 'index'],
+                'only' => ['update', 'create', 'view', 'delete', 'index', 'tarifa', 'convertir'],
                 'rules' => [
                     [
                         'allow' => true,
-                        'actions' => ['update'],
+                        'actions' => ['update', 'view'],
                         'roles' => ['@'],
                         'matchCallback' => function ($rule, $action) {
                             $ruta = explode('/', Yii::$app->request->get('r'));
@@ -47,10 +47,14 @@ class ClientesController extends Controller
                         'allow' => true,
                         'actions' => ['view'],
                         'roles' => ['@'],
+                        'matchCallback' => function ($rule, $action) {
+                            $tipo = explode('-', Yii::$app->user->id);
+                            return $tipo[0] == 'monitores';
+                        },
                     ],
                     [
                         'allow' => true,
-                        'actions' => ['create', 'update', 'delete', 'index'],
+                        'actions' => ['create', 'update', 'delete', 'index', 'tarifa', 'convertir'],
                         'roles' => ['@'],
                         'matchCallback' => function ($rule, $action) {
                             $tipo = explode('-', Yii::$app->user->id);

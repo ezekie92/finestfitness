@@ -18,7 +18,10 @@ $this->params['breadcrumbs'][] = $this->title;
     <p>
         <?= Html::img(Yii::getAlias('@foto') . '/' . $model->foto, ['class' => 'mini']) ?>
 
-        <?= Html::a('Modificar datos', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+        <?php if (Yii::$app->user->identity->getTipoId() != 'clientes'): ?>
+            <?= Html::a('Modificar datos', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+        <?php endif; ?>
+
         <?php // Html::a('Dar de baja', ['delete', 'id' => $model->id], [
             // 'class' => 'btn btn-danger',
             // 'data' => [

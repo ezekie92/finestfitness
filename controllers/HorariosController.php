@@ -26,7 +26,7 @@ class HorariosController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::class,
-                'only' => ['update', 'view', 'index'],
+                'only' => ['update', 'view', 'index', 'create'],
                 'rules' => [
                     [
                         'allow' => true,
@@ -39,7 +39,7 @@ class HorariosController extends Controller
                     ],
                     [
                         'allow' => true,
-                        'actions' => ['update', 'view', 'index', 'create'],
+                        'actions' => ['update', 'view', 'index'],
                         'roles' => ['@'],
                         'matchCallback' => function ($rule, $action) {
                             $tipo = explode('-', Yii::$app->user->id);

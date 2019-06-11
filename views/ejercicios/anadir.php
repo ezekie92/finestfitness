@@ -26,7 +26,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= $form->field($model, 'repeticiones')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'descanso')->textInput() ?>
+    <?= $form->field($model, 'descanso')->textInput(['placeholder' => 'En segundos, ej: 90']) ?>
 
     <?= $form->field($model, 'peso')->textInput() ?>
 

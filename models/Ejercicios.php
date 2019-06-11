@@ -2,8 +2,6 @@
 
 namespace app\models;
 
-use Yii;
-
 /**
  * This is the model class for table "ejercicios".
  *
@@ -54,12 +52,12 @@ class Ejercicios extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'nombre' => 'Nombre',
-            'dia_id' => 'Dia ID',
+            'dia_id' => 'Día',
             'rutina_id' => 'Rutina ID',
             'series' => 'Series',
             'repeticiones' => 'Repeticiones',
             'descanso' => 'Descanso',
-            'peso' => 'Peso',
+            'peso' => 'Peso (kg)',
         ];
     }
 

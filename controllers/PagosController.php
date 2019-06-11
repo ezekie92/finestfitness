@@ -5,6 +5,7 @@ namespace app\controllers;
 use app\models\Pagos;
 use app\models\PagosSearch;
 use Yii;
+use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -20,6 +21,21 @@ class PagosController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::class,
+                'only' => ['index', 'view', 'create', 'manual', 'update', 'delete'],
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'actions' => ['manual', 'view', 'index'],
+                        'roles' => ['@'],
+                        'matchCallback' => function ($rule, $action) {
+                            $tipo = explode('-', Yii::$app->user->id);
+                            return $tipo[0] == 'administradores';
+                        },
+                    ],
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [

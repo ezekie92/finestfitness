@@ -25,7 +25,6 @@ class EjerciciosController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::class,
-                'only' => ['rutina', 'anadir'],
                 'rules' => [
                     [
                         'allow' => true,
