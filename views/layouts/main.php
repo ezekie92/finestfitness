@@ -59,11 +59,13 @@ if (!Yii::$app->user->isGuest) {
     if (Yii::$app->user->identity->getTipoId() == 'administradores') {
         $menu = [
             ['label' => 'Horario', 'url' => ['/horarios/index']],
+            ['label' => 'Tarifas', 'url' => ['/tarifas/index']],
             [
                 'label' => 'Clases',
                 'items' => [
                     ['label' => 'Clases', 'url' => ['/clases/index']],
                     ['label' => 'Calendario', 'url' => ['/clases/calendario']],
+
                 ],
             ],            ['label' => 'Entrenos', 'url' => ['/entrenamientos/index']],
             [
@@ -74,17 +76,20 @@ if (!Yii::$app->user->isGuest) {
                ],
            ],
            [
-               'label' => 'Clientes',
-               'items' => [
-                   ['label' => 'Gestionar', 'url' => ['/clientes/index']],
-                   ['label' => 'Alta Clientes', 'url' => ['/clientes/create']],
-               ],
-           ],
-           [
                'label' => 'Monitores',
                'items' => [
                    ['label' => 'Gestionar', 'url' => ['/monitores/index']],
                    ['label' => 'Alta Monitores', 'url' => ['/monitores/create']],
+                   ['label' => 'Especialidades', 'url' => ['/especialidades/index']],
+               ],
+           ],
+           [
+               'label' => 'Clientes',
+               'items' => [
+                   ['label' => 'Gestionar', 'url' => ['/clientes/index']],
+                   ['label' => 'Alta Clientes', 'url' => ['/clientes/create']],
+                   ['label' => 'Clientes inscritos en clases', 'url' => ['/clientes-clases/index']],
+                   ['label' => 'Pagos', 'url' => ['/pagos/index']],
                ],
            ],
         ];

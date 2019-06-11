@@ -47,7 +47,13 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'fecha:date',
             'fecha:time:Hora',
-            'monitorClase.nombre',
+            [
+                'attribute' => 'monitorClase.nombre',
+                'format' => 'raw',
+                'value' => function ($data) {
+                    return Html::a($data->monitorClase->nombre, ['monitores/view', 'id' => $data->monitorClase->id]);
+                },
+            ],
             'plazas',
         ],
     ]) ?>

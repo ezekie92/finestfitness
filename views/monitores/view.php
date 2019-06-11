@@ -32,11 +32,18 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'attributes' => [
             'email:email',
-            'fecha_nac',
+            'fecha_nac:date',
             'telefono',
-            'horario_salida',
-            'horario_entrada',
-            'esp.especialidad',
+            'horario_entrada:time',
+            'horario_salida:time',
+            [
+                'attribute' => 'esp.especialidad',
+                'format' => 'raw',
+                'value' => function ($data) {
+                    return Html::a($data->esp->especialidad, ['especialidades/view', 'id' => $data->esp->id]);
+                },
+
+            ],
         ],
     ]) ?>
 

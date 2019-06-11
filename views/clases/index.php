@@ -85,7 +85,13 @@ $this->registerJs($js);
 
                 ],
                 'fecha:datetime',
-                'monitorClase.nombre',
+                [
+                    'attribute' => 'monitorClase.nombre',
+                    'format' => 'raw',
+                    'value' => function ($data) {
+                        return Html::a($data->monitorClase->nombre, ['monitores/view', 'id' => $data->monitorClase->id]);
+                    },
+                ],
                 [
                     'attribute' => 'plazas',
                     'value' => function ($model) {

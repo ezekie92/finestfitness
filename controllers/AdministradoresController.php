@@ -27,7 +27,7 @@ class AdministradoresController extends Controller
                 'rules' => [
                     [
                         'allow' => true,
-                        'actions' => ['create', 'index', 'view', 'update'],
+                        'actions' => ['create', 'index', 'view', 'update', 'delete'],
                         'roles' => ['@'],
                         'matchCallback' => function ($rule, $action) {
                             return Yii::$app->user->identity->getTipoId() == 'administradores';

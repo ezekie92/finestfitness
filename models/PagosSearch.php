@@ -4,7 +4,6 @@ namespace app\models;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\Pagos;
 
 /**
  * PagosSearch represents the model behind the search form of `app\models\Pagos`.
@@ -18,9 +17,15 @@ class PagosSearch extends Pagos
     {
         return [
             [['id', 'cliente_id'], 'integer'],
-            [['fecha', 'concepto'], 'safe'],
+            [['fecha', 'concepto', 'cliente.nombre'], 'safe'],
             [['cantidad'], 'number'],
         ];
+    }
+
+
+    public function attributes()
+    {
+        return array_merge(parent::attributes(), ['cliente.nombre']);
     }
 
     /**
@@ -33,7 +38,7 @@ class PagosSearch extends Pagos
     }
 
     /**
-     * Creates data provider instance with search query applied
+     * Creates data provider instance with search query applied.
      *
      * @param array $params
      *
@@ -41,13 +46,19 @@ class PagosSearch extends Pagos
      */
     public function search($params)
     {
-        $query = Pagos::find();
+        $query = Pagos::find()->joinWith('cliente');
 
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
+
+        $dataProvider->sort->attributes['cliente.nombre'] = [
+           'asc' => ['clientes.nombre' => SORT_ASC],
+           'desc' => ['clientes.nombre' => SORT_DESC],
+        ];
+
 
         $this->load($params);
 
@@ -65,7 +76,8 @@ class PagosSearch extends Pagos
             'cantidad' => $this->cantidad,
         ]);
 
-        $query->andFilterWhere(['ilike', 'concepto', $this->concepto]);
+        $query->andFilterWhere(['ilike', 'concepto', $this->concepto])
+              ->andFilterWhere(['ilike', 'clientes.nombre', $this->getAttribute('cliente.nombre')]);
 
         return $dataProvider;
     }

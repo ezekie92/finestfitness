@@ -15,7 +15,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Create Especialidades', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Crear Especialidad', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
@@ -24,12 +24,18 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+            [
+                'attribute' => 'especialidad',
+                'format' => 'raw',
+                'value' => function ($data) {
+                    return Html::a($data->especialidad, ['especialidades/view', 'id' => $data->id]);
+                },
 
-            'id',
-            'especialidad',
-
-            ['class' => 'yii\grid\ActionColumn'],
+            ],
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'template' => '{view}{update}'
+            ],
         ],
     ]); ?>
 

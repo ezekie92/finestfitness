@@ -86,6 +86,10 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'attribute' => 'tarifaNombre.tarifa',
+                'format' => 'raw',
+                'value' => function ($data) {
+                    return Html::a($data->tarifaNombre->tarifa, ['tarifas/view', 'id' => $data->tarifaNombre->id]);
+                },
                 'visible' => Yii::$app->user->identity->getTipoId() != 'monitores',
             ],
             [

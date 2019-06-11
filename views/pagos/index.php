@@ -14,23 +14,28 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <p>
-        <?= Html::a('Create Pagos', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
-
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
-            
-            'fecha:date',
-            'cliente_id',
-            'concepto',
-            'cantidad',
 
-            ['class' => 'yii\grid\ActionColumn'],
+            'fecha:date',
+            [
+                'attribute' => 'cliente.nombre',
+                'format' => 'raw',
+                'value' => function ($data) {
+                    return Html::a($data->cliente->nombre, ['clientes/view', 'id' => $data->cliente->id]);
+                },
+            ],
+            'concepto',
+            'cantidad:currency',
+
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'template' => '{view}'
+            ],
         ],
     ]); ?>
 

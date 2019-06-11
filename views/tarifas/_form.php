@@ -12,13 +12,13 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'tarifa')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'tarifa')->textInput(['maxlength' => true])->label('Nombre de la tarifa') ?>
 
-    <?= $form->field($model, 'precio')->textInput() ?>
+    <?= $form->field($model, 'precio')->textInput(['placeholder' => '€']) ?>
 
-    <?= $form->field($model, 'hora_entrada_min')->textInput() ?>
+    <?= $form->field($model, 'hora_entrada_min')->textInput(['placeholder' => '00:00:00']) ?>
 
-    <?= $form->field($model, 'hora_entrada_max')->textInput() ?>
+    <?= $form->field($model, 'hora_entrada_max')->textInput(['placeholder' => '00:00:00']) ?>
 
     <div class="form-group">
         <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>

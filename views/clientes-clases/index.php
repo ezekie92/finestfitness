@@ -7,16 +7,12 @@ use yii\grid\GridView;
 /* @var $searchModel app\models\ClientesClasesSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Clientes Clases';
+$this->title = 'Clientes inscritos en clases';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="clientes-clases-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
-
-    <p>
-        <?= Html::a('Create Clientes Clases', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
@@ -24,12 +20,20 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
-            'cliente_id',
-            'clase_id',
-
-            ['class' => 'yii\grid\ActionColumn'],
+            [
+                'attribute' => 'cliente.nombre',
+                'format' => 'raw',
+                'value' => function ($data) {
+                    return Html::a($data->cliente->nombre, ['clientes/view', 'id' => $data->cliente->id]);
+                },
+            ],
+            [
+                'attribute' => 'clase.nombre',
+                'format' => 'raw',
+                'value' => function ($data) {
+                    return Html::a($data->clase->nombre, ['clases/view', 'id' => $data->clase->id]);
+                },
+            ],
         ],
     ]); ?>
 
