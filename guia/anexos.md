@@ -2,10 +2,10 @@
 
 **(R34) Validación HTML5, CSS3 y accesibilidad**
 
-![Html](html5.png)
-![Css](css.png)
-![Accesibilidad](accesibilidad1.png)
-![Accesibilidad](accesibilidad2.png)
+![Html](images/html5.png)
+![Css](images/css.png)
+![Accesibilidad](images/accesibilidad1.png)
+![Accesibilidad](images/accesibilidad2.png)
 
 **Prueba del seis**
 
@@ -43,6 +43,6 @@ El usuario puede ver en todo momento dónde se encuentra gracias a las migas de 
 La aplicación no cuenta con un buscador general, pero puedes buscar dentro de las tablas donde se visualizan los datos, escribiendo en un campo de búsqueda.
 
 **(R36) Varios navegadores**
-![Chrome](chrome.png)
-![Opera](opera.png)
-![Firefox](firefox.png)
+![Chrome](images/chrome.png)
+![Opera](images/opera.png)
+![Firefox](images/firefox.png)
