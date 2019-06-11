@@ -17,7 +17,7 @@ class ClasesSearch extends Clases
     {
         return [
             [['id', 'monitor', 'plazas'], 'integer'],
-            [['fecha'], 'date'],
+            [['fecha'], 'safe'],
             [['nombre', 'monitorClase.nombre'], 'safe'],
         ];
     }

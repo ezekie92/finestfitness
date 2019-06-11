@@ -116,8 +116,8 @@ class HorariosController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            $this->cancelarClases($model->apertura, $model->cierre, $model->dia);
-            $this->cancelarEntrenamientos($model->apertura, $model->cierre, $model->dia);
+            // $this->cancelarClases($model->apertura, $model->cierre, $model->dia);
+            // $this->cancelarEntrenamientos($model->apertura, $model->cierre, $model->dia);
             return $this->redirect(['index']);
         }
 
@@ -166,52 +166,55 @@ class HorariosController extends Controller
         return Dias::find()->select('dia')->indexBy('id')->column();
     }
 
-    /**
-     * Cancela las clases que se queden fuera del nuevo horario.
-     * @param  string $inicio La hora a la que abre el gimnasio
-     * @param  string $fin    La hora a la que abre el gimnasio
-     * @param  int $dia       El día de la semana en cuestión
-     */
-    private function cancelarClases($inicio, $fin, $dia)
-    {
-        $clases = Clases::find()
-                        ->where(['dia' => $dia])
-                        ->andWhere(['<', 'hora_inicio', $inicio])
-                        ->orWhere(['>', 'hora_fin', $fin])
-                        ->all();
-
-        foreach ($clases as $key => $value) {
-            $model = Clases::find()->where(['id' => $value->id])->one();
-            if ($model->plazas) {
-                $model->nombre = $model->nombre . ' (CANCELADA)';
-            }
-            $model->plazas = 0;
-            $model->update();
-        }
-    }
-
-    /**
-     * Cancela los entrenamientos que se queden fuera del nuevo horario.
-     * @param  string $inicio La hora a la que abre el gimnasio
-     * @param  string $fin    La hora a la que abre el gimnasio
-     * @param  int $dia       El día de la semana en cuestión
-     */
-    private function cancelarEntrenamientos($inicio, $fin, $dia)
-    {
-        $ent = Entrenamientos::find()
-                        ->where(['dia' => $dia])
-                        ->andWhere(['<', 'hora_inicio', $inicio])
-                        ->orWhere(['>', 'hora_fin', $fin])
-                        ->all();
-
-        foreach ($ent as $key => $value) {
-            $model = Entrenamientos::find()
-                        ->where(['cliente_id' => $value->cliente_id])
-                        ->andWhere(['monitor_id' => $value->monitor_id])
-                        ->one();
-            $model->hora_inicio = null;
-            $model->hora_fin = null;
-            $model->update();
-        }
-    }
+    // /**
+    //  * Cancela las clases que se queden fuera del nuevo horario.
+    //  * @param  string $inicio La hora a la que abre el gimnasio
+    //  * @param  string $fin    La hora a la que abre el gimnasio
+    //  * @param  int $dia       El día de la semana en cuestión
+    //  */
+    // private function cancelarClases($inicio, $fin, $dia)
+    // {
+    //     $clases = Clases::find()->select('fecha')->column();
+    //     var_dump();
+    //     die();
+    //     $clases = Clases::find()
+    //                     ->where(['dia' => $dia])
+    //                     ->andWhere(['<', 'hora_inicio', $inicio])
+    //                     ->orWhere(['>', 'hora_fin', $fin])
+    //                     ->all();
+    //
+    //     foreach ($clases as $key => $value) {
+    //         $model = Clases::find()->where(['id' => $value->id])->one();
+    //         if ($model->plazas) {
+    //             $model->nombre = $model->nombre . ' (CANCELADA)';
+    //         }
+    //         $model->plazas = 0;
+    //         $model->update();
+    //     }
+    // }
+    //
+    // /**
+    //  * Cancela los entrenamientos que se queden fuera del nuevo horario.
+    //  * @param  string $inicio La hora a la que abre el gimnasio
+    //  * @param  string $fin    La hora a la que abre el gimnasio
+    //  * @param  int $dia       El día de la semana en cuestión
+    //  */
+    // private function cancelarEntrenamientos($inicio, $fin, $dia)
+    // {
+    //     $ent = Entrenamientos::find()
+    //                     ->where(['dia' => $dia])
+    //                     ->andWhere(['<', 'hora_inicio', $inicio])
+    //                     ->orWhere(['>', 'hora_fin', $fin])
+    //                     ->all();
+    //
+    //     foreach ($ent as $key => $value) {
+    //         $model = Entrenamientos::find()
+    //                     ->where(['cliente_id' => $value->cliente_id])
+    //                     ->andWhere(['monitor_id' => $value->monitor_id])
+    //                     ->one();
+    //         $model->hora_inicio = null;
+    //         $model->hora_fin = null;
+    //         $model->update();
+    //     }
+    // }
 }

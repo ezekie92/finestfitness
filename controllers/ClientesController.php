@@ -174,7 +174,7 @@ class ClientesController extends Controller
         $model->contrasena = '';
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            Yii::$app->session->setFlash('success', 'Tarifa cambiada a: Tarifa ' . $model->tarifas->tarifa);
+            Yii::$app->session->setFlash('success', 'Tarifa cambiada a: Tarifa ' . $model->tarifaNombre->tarifa);
             return $this->redirect(['view', 'id' => $model->id]);
         }
 

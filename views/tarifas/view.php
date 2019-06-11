@@ -15,12 +15,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <?php if (Yii::$app->user->identity->getTipoId() == 'administradores'): ?>
-        <p>
-            <?= Html::a('Modificar', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        </p>
-    <?php endif; ?>
-
     <?= DetailView::widget([
         'model' => $model,
         'options' => ['class' => 'table'],
